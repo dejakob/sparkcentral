@@ -1,0 +1,17 @@
+/*
+
+Theme Name: Sparkcentral
+Theme URI: http://www.sparkcentral.com
+Author: Davy Kestens
+Author URI: http://www.sparkcentral.com
+Description: The base Sparkcentral blog theme
+Version: 1.0
+
+*/
+@import url("css/flexslider.css");
+@import url("css/magnific-popup.css");
+@import url("css/hl-styles/monokai_sublime.css");
+
+body .not-home div.jumbotron h1 {
+font-size: 2.5em;
+}
