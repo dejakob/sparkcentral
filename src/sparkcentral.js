@@ -8,8 +8,9 @@ function SparkCentral (window)
 {
     const elements = {};
 
-    this.design = generateDefaultDesign();
+    this.design = initDefaultDesign();
     this.elements = cacheElements;
+    this.timeline = initTimeline();
 
     /**
      * Cache all the elements needed
@@ -24,7 +25,7 @@ function SparkCentral (window)
      * Set all the defaults for styling
      * @returns {Object}
      */
-    function generateDefaultDesign ()
+    function initDefaultDesign ()
     {
         const SPARK_CENTRAL_BLUE = '#468FDC';
         const DARK_BLUE = '';
@@ -36,5 +37,16 @@ function SparkCentral (window)
         };
 
         return design;
+    }
+
+    /**
+     * Initialize the timeline
+     * @returns {Timeline}
+     */
+    function initTimeline ()
+    {
+        const timeline = new Timeline();
+
+        return timeline;
     }
 }

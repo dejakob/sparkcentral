@@ -51,8 +51,6 @@ RgbColor.fromHex = function (hexString)
 
     const splittedHex = hexString.match(/.{2}/g);
 
-    console.log('splitted', splittedHex);
-
     if (Array.isArray(splittedHex) && splittedHex.length === 3) {
         const decimalColors = splittedHex.map(colorHex => parseInt(colorHex, 16));
 

@@ -60,8 +60,6 @@ RgbColor.fromHex = function (hexString) {
 
     var splittedHex = hexString.match(/.{2}/g);
 
-    console.log('splitted', splittedHex);
-
     if (Array.isArray(splittedHex) && splittedHex.length === 3) {
         var decimalColors = splittedHex.map(function (colorHex) {
             return parseInt(colorHex, 16);
@@ -83,22 +81,25 @@ SparkCentral(window);
 function SparkCentral(window) {
     var elements = {};
 
-    this.design = generateDefaultDesign();
+    this.design = initDefaultDesign();
     this.elements = cacheElements;
+    this.timeline = initTimeline();
 
     /**
      * Cache all the elements needed
      */
     function cacheElements() {
         elements.mainHeader = document.querySelector('.main-header');
+        elements.homeJumbotron = document.querySelector('.jumbotron.home');
     }
 
     /**
      * Set all the defaults for styling
      * @returns {Object}
      */
-    function generateDefaultDesign() {
+    function initDefaultDesign() {
         var SPARK_CENTRAL_BLUE = '#468FDC';
+        var DARK_BLUE = '';
 
         var design = {};
 
@@ -106,8 +107,42 @@ function SparkCentral(window) {
             blue: RgbColor.fromHex(SPARK_CENTRAL_BLUE)
         };
 
-        console.log('design', design);
-
         return design;
     }
+
+    /**
+     * Initialize the timeline
+     * @returns {Timeline}
+     */
+    function initTimeline() {
+        var timeline = new Timeline();
+
+        return timeline;
+    }
 }
+'use strict';
+
+/**
+ * Timeline for the application
+ * @constructor
+ */
+function Timeline() {
+    this.items = {};
+}
+
+Timeline.prototype = {
+
+    /**
+     * Add behaviour to the timeline
+     * @param when
+     * @param callback
+     */
+
+    add: function add(when, callback) {
+        if (typeof this.items[when] === 'undefined') {
+            this.items[when] = [callback];
+        } else {
+            this.items.push(callback);
+        }
+    }
+};
