@@ -10,7 +10,7 @@ function SparkCentral (window)
 
     this.design = initDefaultDesign();
     this.elements = cacheElements;
-    this.timeline = initTimeline();
+    this.timeline = initTimeline.call(this);
 
     /**
      * Cache all the elements needed
@@ -28,12 +28,13 @@ function SparkCentral (window)
     function initDefaultDesign ()
     {
         const SPARK_CENTRAL_BLUE = '#468FDC';
-        const DARK_BLUE = '';
+        const DARK_BLUE = '#3358A2';
 
         const design = {};
 
         design.colors = {
-            blue: RgbColor.fromHex(SPARK_CENTRAL_BLUE)
+            blue: RgbColor.fromHex(SPARK_CENTRAL_BLUE),
+            darkBlue: DARK_BLUE
         };
 
         return design;
@@ -46,6 +47,11 @@ function SparkCentral (window)
     function initTimeline ()
     {
         const timeline = new Timeline();
+        const animationSequence = [
+            [ 2000, new ColorAnimation({ from: this.design.colors.blue, to: this.design.colors.darkBlue }) ]
+        ];
+
+        animationSequence.forEach(animationPoint => timeline.add(...animationPoint));
 
         return timeline;
     }
