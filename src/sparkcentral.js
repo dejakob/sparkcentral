@@ -2,14 +2,12 @@
  * @author Jakob Kerkhove
  * @description Code example for job application
  */
-(SparkCentral)(window);
+SparkCentral.call({}, window);
 
 function SparkCentral (window)
 {
-    const elements = {};
-
     this.design = initDefaultDesign();
-    this.elements = cacheElements;
+    this.elements = cacheElements();
     this.timeline = initTimeline.call(this);
 
     /**
@@ -17,8 +15,12 @@ function SparkCentral (window)
      */
     function cacheElements ()
     {
+        const elements = {};
+
         elements.mainHeader = document.querySelector('.main-header');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
+
+        return elements;
     }
 
     /**
@@ -34,7 +36,7 @@ function SparkCentral (window)
 
         design.colors = {
             blue: RgbColor.fromHex(SPARK_CENTRAL_BLUE),
-            darkBlue: DARK_BLUE
+            darkBlue: RgbColor.fromHex(DARK_BLUE)
         };
 
         return design;
@@ -48,10 +50,19 @@ function SparkCentral (window)
     {
         const timeline = new Timeline();
         const animationSequence = [
-            [ 2000, new ColorAnimation({ from: this.design.colors.blue, to: this.design.colors.darkBlue }) ]
+            [
+                2000,
+                3000,
+                new ColorAnimation({
+                    from: this.design.colors.blue,
+                    to: this.design.colors.darkBlue,
+                    onChange: color => {this.elements.homeJumbotron.innerHTML = color; console.log('jumbo', color, this.elements.homeJumbotron);}
+                })
+            ]
         ];
 
-        animationSequence.forEach(animationPoint => timeline.add(...animationPoint));
+        timeline.insert(animationSequence);
+        timeline.start();
 
         return timeline;
     }

@@ -4,15 +4,35 @@
  *  @param {RgbColor} options.from
  *  @param {RgbColor} options.to
  *  @param {Number} options.duration
+ * @extends {Animation}
  * @constructor
  */
-function ColorAnimation (options = {})
+class ColorAnimation extends Animation
 {
-    if (!(options.from instanceof RgbColor && options.to instanceof RgbColor)) {
-        throw new Error('from and to option should be defined to create a color animation.')
+    constructor (options = {})
+    {
+        if (!(options.from instanceof RgbColor && options.to instanceof RgbColor)) {
+            throw new Error('from and to option should be defined to create a color animation.')
+        }
+
+        super(options);
+
+        this.type = ANIMATION_TYPE.COLOR;
+        this.from = options.from;
+        this.to = options.to;
     }
 
+    /**
+     * @param {Number} percentageComplete
+     */
+    onTick (percentageComplete)
+    {
+        const red = (this.to.red - this.from.red) * (percentageComplete) + this.from.red;
+        const green = (this.to.green - this.from.green) * (percentageComplete) + this.from.green;
+        const blue = (this.to.blue - this.from.blue) * (percentageComplete) + this.from.blue;
 
+        this.currentValue = new RgbColor(red, green, blue).toString();
+
+        super.onTick();
+    }
 }
-
-ColorAnimation.prototype = Animation.prototype;

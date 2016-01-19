@@ -2,35 +2,25 @@ const ANIMATION_TYPE = {
     COLOR: 'color'
 };
 
-/**
- * Animation constructor
- * @param {Object} [options]
- *  @param {String} [options.type]
- * @constructor
- */
-function Animation (options = {})
+class Animation
 {
-    this._interval = null;
+    /**
+     * Animation constructor
+     * @param {Object} [options]
+     *  @param {String} [options.type]
+     *  @param {Function} [options.onChange]
+     */
+    constructor (options = {})
+    {
+        this.type = options.type;
+        this.onChange = options.onChange;
+        this.currentValue = null;
+    }
 
-    switch (options.type) {
-        case ANIMATION_TYPE.COLOR:
-            return new ColorAnimation(options);
-
-        default:
-            break;
+    onTick ()
+    {
+        if (typeof this.onChange === 'function') {
+            this.onChange(this.currentValue);
+        }
     }
 }
-
-Animation.prototype = {
-    start () {
-
-    },
-
-    stop () {
-        if (this._interval !== null) {
-            clearInterval(this._interval);
-        }
-
-        throw new Error('Could not stop animation');
-    }
-};

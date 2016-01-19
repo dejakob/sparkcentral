@@ -1,62 +1,59 @@
-/**
- * RgbColor Object
- * @param red
- * @param green
- * @param blue
- * @constructor
- */
-function RgbColor (red, green, blue)
+class RgbColor
 {
-    this.red = red;
-    this.green = green;
-    this.blue = blue;
-
-    return this;
-}
-
-/**
- * Methods of the RgbColor Object
- * @type {Object}
- */
-RgbColor.prototype = {
+    /**
+     * RgbColor Constuctor
+     * @param {Number} red
+     * @param {Number} green
+     * @param {Number} blue
+     * @constructor
+     */
+    constructor (red, green, blue)
+    {
+        this.red = parseInt(red, 10);
+        this.green = parseInt(green, 10);
+        this.blue = parseInt(blue, 10);
+    }
 
     /**
      * toString method
      * @override
      */
-    toString: () => `rgb(${this.red}, ${this.green}, ${this.blue});`
-};
-
-/**
- *
- * @param {String} hexString
- * @returns {RgbColor}
- */
-RgbColor.fromHex = function (hexString)
-{
-    const hexStringLength = hexString.length;
-
-    if (hexString.indexOf('#') === 0)
+    toString ()
     {
-        hexString = hexString.substr(1, hexStringLength - 1);
+        return `rgb(${this.red}, ${this.green}, ${this.blue});`;
     }
 
-    if (hexString.length === 3)
+    /**
+     * Create rgbColor from hexString
+     * @param {String} hexString
+     * @returns {RgbColor}
+     */
+    static fromHex (hexString)
     {
-        hexString = hexString
-            .split('')
-            .map(tint => `${tint}${tint}`)
-            .join('');
-    }
+        const hexStringLength = hexString.length;
 
-    const splittedHex = hexString.match(/.{2}/g);
+        if (hexString.indexOf('#') === 0)
+        {
+            hexString = hexString.substr(1, hexStringLength - 1);
+        }
 
-    if (Array.isArray(splittedHex) && splittedHex.length === 3) {
-        const decimalColors = splittedHex.map(colorHex => parseInt(colorHex, 16));
+        if (hexString.length === 3)
+        {
+            hexString = hexString
+                .split('')
+                .map(tint => `${tint}${tint}`)
+                .join('');
+        }
 
-        return new RgbColor(...decimalColors);
+        const splittedHex = hexString.match(/.{2}/g);
+
+        if (Array.isArray(splittedHex) && splittedHex.length === 3) {
+            const decimalColors = splittedHex.map(colorHex => parseInt(colorHex, 16));
+
+            return new RgbColor(...decimalColors);
+        }
+        else {
+            throw new Error(`${hexString} is not a valid hex color value`);
+        }
     }
-    else {
-        throw new Error(`${hexString} is not a valid hex color value`);
-    }
-};
+}
