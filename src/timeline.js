@@ -111,6 +111,8 @@ class Timeline
 
             if (currentTick > timelineVm._endTimeOfSequence) {
                 clearInterval(timelineVm._interval);
+                timelineVm._timelineMapping = {};
+                timelineVm.items = {};
             }
         }
 

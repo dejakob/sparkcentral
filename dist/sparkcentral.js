@@ -362,6 +362,8 @@ var Timeline = function () {
 
                 if (currentTick > timelineVm._endTimeOfSequence) {
                     clearInterval(timelineVm._interval);
+                    timelineVm._timelineMapping = {};
+                    timelineVm.items = {};
                 }
             }
 
@@ -387,6 +389,96 @@ var Timeline = function () {
     }]);
 
     return Timeline;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Helper methods for DOM manipulation
+ */
+
+var DomHelper = function () {
+    function DomHelper() {
+        _classCallCheck(this, DomHelper);
+    }
+
+    _createClass(DomHelper, null, [{
+        key: 'attachStyle',
+
+        /**
+         * Attach style properties to a DOM element
+         * @param {HTMLElement} element
+         * @param {Object} styleProps
+         */
+        value: function attachStyle(element, styleProps) {
+            var originalStyleString = element.getAttribute('style') || '';
+            var allProps = {};
+
+            if (originalStyleString.trim() === '') {
+                allProps = styleProps;
+            } else {
+                originalStyleString.split(';').filter(function (declaration) {
+                    return declaration.trim() !== '';
+                }).map(function (declaration) {
+                    return declaration.split(':').map(function (prop) {
+                        return prop.trim();
+                    });
+                }).forEach(function (property) {
+                    return allProps[dashToCamel(property[0])] = property[1];
+                });
+
+                Object.keys(styleProps).forEach(function (propName) {
+                    if (styleProps.hasOwnProperty(propName)) {
+                        allProps[dashToCamel(propName)] = styleProps[propName];
+                    }
+                });
+            }
+
+            console.log('all props', allProps);
+
+            var styleString = Object.keys(allProps).filter(function (propName) {
+                return allProps.hasOwnProperty(propName);
+            }).map(function (propName) {
+                return camelToDash(propName) + ':' + allProps[propName];
+            }).join(';');
+
+            console.log('style string', styleString);
+
+            element.setAttribute('style', styleString);
+
+            /**
+             * Convert camel case format to dash CSS format
+             * @param {String} value
+             */
+            function camelToDash(value) {
+                var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
+                var camelMatches = value.match(CAMEL_REGEX);
+
+                return camelMatches.map(function (camelMatch) {
+                    return camelMatch.toLowerCase();
+                }).join('-');
+            }
+
+            /**
+             * Convert dash CSS format to camel case format
+             * @param {String} value
+             */
+            function dashToCamel(value) {
+                var valueParts = value.split('-');
+
+                return valueParts[0] + value.split('-').filter(function (valuePart) {
+                    return valuePart !== valueParts[0];
+                }).map(function (valuePart) {
+                    return '' + valuePart[0].toUpperCase() + valuePart.substring(1, valuePart.length);
+                }).join('');
+            }
+        }
+    }]);
+
+    return DomHelper;
 }();
 'use strict';
 
@@ -448,14 +540,14 @@ function SparkCentral(window) {
         var animationSequence = [[2000, 3000, new ColorAnimation({
             from: this.design.colors.blue,
             to: this.design.colors.darkBlue,
-            onChange: function onChange(color) {
-                return _this.elements.homeJumbotron.setAttribute('style', 'background-color: ' + color + ';');
+            onChange: function onChange(backgroundColor) {
+                return DomHelper.attachStyle(_this.elements.homeJumbotron, { backgroundColor: backgroundColor });
             }
         })], [2500, 3500, new SizeAnimation({
             from: this.design.fontSizes.hiringBanner,
             to: this.design.fontSizes.average,
             onChange: function onChange(fontSize) {
-                return _this.elements.hiringBanner.setAttribute('style', 'font-size: ' + fontSize + ';');
+                return DomHelper.attachStyle(_this.elements.hiringBanner, { fontSize: fontSize });
             }
         })]];
 

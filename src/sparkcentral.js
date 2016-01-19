@@ -62,7 +62,7 @@ function SparkCentral (window)
                 new ColorAnimation({
                     from: this.design.colors.blue,
                     to: this.design.colors.darkBlue,
-                    onChange: color => this.elements.homeJumbotron.setAttribute('style', `background-color: ${color};`)
+                    onChange: backgroundColor => DomHelper.attachStyle(this.elements.homeJumbotron, { backgroundColor })
                 })
             ],
             [
@@ -71,7 +71,7 @@ function SparkCentral (window)
                 new SizeAnimation({
                     from: this.design.fontSizes.hiringBanner,
                     to: this.design.fontSizes.average,
-                    onChange: fontSize => this.elements.hiringBanner.setAttribute('style', `font-size: ${fontSize};`)
+                    onChange: fontSize => DomHelper.attachStyle(this.elements.hiringBanner, { fontSize })
                 })
             ]
         ];

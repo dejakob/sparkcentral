@@ -17,6 +17,7 @@ function defaultTask ()
             './src/animation/*.js',
             './src/rgbcolor.js',
             './src/timeline.js',
+            './src/dom-helper.js',
             './src/sparkcentral.js'
         ])
         .pipe(babel())
