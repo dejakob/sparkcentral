@@ -1,7 +1,7 @@
 const ANIMATION_SEQUENCE = (design, elements) => [
     [
+        500,
         2000,
-        3000,
         new ColorAnimation({
             from: design.colors.blue,
             to: design.colors.darkBlue,
@@ -14,8 +14,8 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         })
     ],
     [
+        1000,
         2000,
-        3000,
         new SizeAnimation({
             from: design.sizes.homeHeight,
             to: design.sizes.height,
@@ -24,8 +24,8 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         })
     ],
     [
+        1500,
         2500,
-        3500,
         new SizeAnimation({
             from: design.fontSizes.hiringBanner,
             to: design.fontSizes.average,

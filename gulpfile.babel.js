@@ -16,6 +16,7 @@ function defaultTask ()
             './src/sequence.config.js',
             './src/animation/animation.js',
             './src/animation/*.js',
+            './src/hunt/*.js',
             './src/rgbcolor.js',
             './src/timeline.js',
             './src/dom-helper.js',

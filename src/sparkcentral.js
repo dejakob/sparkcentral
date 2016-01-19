@@ -10,6 +10,10 @@ function SparkCentral (window)
     this.design = initDefaultDesign.call(this);
     this.timeline = initTimeline.call(this);
 
+    this.startHunting = startHunting;
+
+    this.elements.homePrimaryButton.addEventListener('click', this.startHunting.bind(this));
+
     /**
      * Cache all the elements needed
      */
@@ -22,6 +26,7 @@ function SparkCentral (window)
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
+        elements.homeContainer = elements.homeJumbotron.querySelector('.container');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
@@ -57,17 +62,7 @@ function SparkCentral (window)
             height: window.innerHeight + 20
         };
 
-        window.addEventListener('resize', onWindowResize);
-
         return design;
-
-        /**
-         * When the window resizes
-         */
-        function onWindowResize ()
-        {
-            design.height = window.innerHeight + 20;
-        }
     }
 
     /**
@@ -82,5 +77,22 @@ function SparkCentral (window)
         timeline.start();
 
         return timeline;
+    }
+
+    function startHunting ()
+    {
+        const top = '150px';
+        const left = `${Math.round(0.1 * window.innerWidth)}px`;
+        const position = 'absolute';
+        const border = '1px #fff solid';
+        const borderRadius = '3px';
+        const backgroundColor = this.design.colors.blue;
+        const height = window.innerHeight - 200;
+        const width = window.innerWidth * 0.8;
+
+        const huntGame = new HuntGame(height, width, { top, left, position, border, borderRadius, backgroundColor });
+
+        DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
+        huntGame.init(this.elements.homeJumbotron);
     }
 }

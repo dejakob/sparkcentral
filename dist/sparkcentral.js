@@ -9,7 +9,7 @@
 'use strict';
 
 var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
-    return [[2000, 3000, new ColorAnimation({
+    return [[500, 2000, new ColorAnimation({
         from: design.colors.blue,
         to: design.colors.darkBlue,
         onChange: function onChange(backgroundColor) {
@@ -21,7 +21,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
                 link.setAttribute('onclick', '');
             });
         }
-    })], [2000, 3000, new SizeAnimation({
+    })], [1000, 2000, new SizeAnimation({
         from: design.sizes.homeHeight,
         to: design.sizes.height,
         onChange: function onChange(height) {
@@ -32,7 +32,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
                 return section.parentNode.removeChild(section);
             });
         }
-    })], [2500, 3500, new SizeAnimation({
+    })], [1500, 2500, new SizeAnimation({
         from: design.fontSizes.hiringBanner,
         to: design.fontSizes.average,
         onChange: function onChange(fontSize) {
@@ -372,6 +372,57 @@ var TextAnimation = function (_Animation) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * HuntGame class
+ */
+
+var HuntGame = function () {
+    /**
+     * Constructor HuntGame
+     * @param {Number} height
+     * @param {Number} width
+     * @param {Object} [style]
+     */
+
+    function HuntGame(height, width) {
+        var style = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+        _classCallCheck(this, HuntGame);
+
+        this._height = height;
+        this._width = width;
+        this._style = style;
+        this._canvas = null;
+    }
+
+    /**
+     * Initialize the game
+     * @param rootElement
+     */
+
+    _createClass(HuntGame, [{
+        key: 'init',
+        value: function init(rootElement) {
+            var canvas = document.createElement('canvas');
+
+            canvas.height = this._height;
+            canvas.width = this._width;
+            DomHelper.attachStyle(canvas, this._style);
+
+            rootElement.appendChild(canvas);
+
+            this._canvas = canvas;
+        }
+    }]);
+
+    return HuntGame;
+}();
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -693,6 +744,10 @@ function SparkCentral(window) {
     this.design = initDefaultDesign.call(this);
     this.timeline = initTimeline.call(this);
 
+    this.startHunting = startHunting;
+
+    this.elements.homePrimaryButton.addEventListener('click', this.startHunting.bind(this));
+
     /**
      * Cache all the elements needed
      */
@@ -704,6 +759,7 @@ function SparkCentral(window) {
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
+        elements.homeContainer = elements.homeJumbotron.querySelector('.container');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
@@ -738,16 +794,7 @@ function SparkCentral(window) {
             height: window.innerHeight + 20
         };
 
-        window.addEventListener('resize', onWindowResize);
-
         return design;
-
-        /**
-         * When the window resizes
-         */
-        function onWindowResize() {
-            design.height = window.innerHeight + 20;
-        }
     }
 
     /**
@@ -761,5 +808,21 @@ function SparkCentral(window) {
         timeline.start();
 
         return timeline;
+    }
+
+    function startHunting() {
+        var top = '150px';
+        var left = Math.round(0.1 * window.innerWidth) + 'px';
+        var position = 'absolute';
+        var border = '1px #fff solid';
+        var borderRadius = '3px';
+        var backgroundColor = this.design.colors.blue;
+        var height = window.innerHeight - 200;
+        var width = window.innerWidth * 0.8;
+
+        var huntGame = new HuntGame(height, width, { top: top, left: left, position: position, border: border, borderRadius: borderRadius, backgroundColor: backgroundColor });
+
+        DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
+        huntGame.init(this.elements.homeJumbotron);
     }
 }
