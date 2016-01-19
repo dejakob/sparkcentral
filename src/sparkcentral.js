@@ -6,8 +6,8 @@ SparkCentral.call({}, window);
 
 function SparkCentral (window)
 {
-    this.design = initDefaultDesign();
     this.elements = cacheElements();
+    this.design = initDefaultDesign.call(this);
     this.timeline = initTimeline.call(this);
 
     /**
@@ -20,6 +20,9 @@ function SparkCentral (window)
         elements.mainHeader = document.querySelector('.main-header');
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
+        elements.homeTitle = elements.homeJumbotron.querySelector('h1');
+        elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.sectionsAndHr = document.querySelectorAll('section,hr');
 
         return elements;
     }
@@ -45,7 +48,24 @@ function SparkCentral (window)
             average: '30px'
         };
 
+        design.sizes = {
+            homeHeight: this.elements.homeJumbotron.clientHeight,
+            height: window.innerHeight + 20
+        };
+
+        window.addEventListener('resize', onWindowResize);
+
         return design;
+
+        /**
+         * When the window resizes
+         */
+        function onWindowResize ()
+        {
+            console.log('jajaja');
+
+            design.height = window.innerHeight + 20;
+        }
     }
 
     /**
@@ -54,29 +74,11 @@ function SparkCentral (window)
      */
     function initTimeline ()
     {
-        const timeline = new Timeline();
-        const animationSequence = [
-            [
-                2000,
-                3000,
-                new ColorAnimation({
-                    from: this.design.colors.blue,
-                    to: this.design.colors.darkBlue,
-                    onChange: backgroundColor => DomHelper.attachStyle(this.elements.homeJumbotron, { backgroundColor })
-                })
-            ],
-            [
-                2500,
-                3500,
-                new SizeAnimation({
-                    from: this.design.fontSizes.hiringBanner,
-                    to: this.design.fontSizes.average,
-                    onChange: fontSize => DomHelper.attachStyle(this.elements.hiringBanner, { fontSize })
-                })
-            ]
-        ];
+        console.log('init');
 
-        timeline.insert(animationSequence);
+        const timeline = new Timeline();
+
+        timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));
         timeline.start();
 
         return timeline;

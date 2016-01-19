@@ -132,8 +132,11 @@ class Timeline
             }
 
             const percentage = (currentTick - from) / (to - from);
-
             animation.onTick(percentage);
+
+            if (currentTick > to - timelineVm.tick) {
+                animation.onComplete();
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 const ANIMATION_TYPE = {
     COLOR: 'color',
-    SIZE: 'size'
+    SIZE: 'size',
+    TEXT: 'text'
 };
 
 class Animation
@@ -10,18 +11,27 @@ class Animation
      * @param {Object} [options]
      *  @param {String} [options.type]
      *  @param {Function} [options.onChange]
+     *  @param {Function} [options.onComplete]
      */
     constructor (options = {})
     {
         this.type = options.type;
-        this.onChange = options.onChange;
+        this._onChange = options.onChange;
+        this._onComplete = options.onComplete;
         this.currentValue = null;
     }
 
     onTick ()
     {
-        if (typeof this.onChange === 'function') {
-            this.onChange(this.currentValue);
+        if (typeof this._onChange === 'function') {
+            this._onChange(this.currentValue || '&nbsp;');
+        }
+    }
+
+    onComplete ()
+    {
+        if (typeof this._onComplete === 'function') {
+            this._onComplete();
         }
     }
 }

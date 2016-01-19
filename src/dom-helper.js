@@ -31,14 +31,10 @@ class DomHelper
                 });
         }
 
-        console.log('all props', allProps);
-
         const styleString = Object.keys(allProps)
             .filter(propName => allProps.hasOwnProperty(propName))
             .map(propName => `${camelToDash(propName)}:${allProps[propName]}`)
             .join(';');
-
-        console.log('style string', styleString);
 
         element.setAttribute('style', styleString);
 

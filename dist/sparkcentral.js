@@ -8,13 +8,66 @@
 "use strict";
 'use strict';
 
+var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
+    return [[2000, 3000, new ColorAnimation({
+        from: design.colors.blue,
+        to: design.colors.darkBlue,
+        onChange: function onChange(backgroundColor) {
+            return DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor: backgroundColor });
+        }
+    })], [2000, 3000, new SizeAnimation({
+        from: design.sizes.homeHeight,
+        to: design.sizes.height,
+        onChange: function onChange(height) {
+            return DomHelper.attachStyle(elements.homeJumbotron, { height: height });
+        },
+        onComplete: function onComplete() {
+            return Array.prototype.forEach.call(elements.sectionsAndHr, function (section) {
+                return section.parentNode.removeChild(section);
+            });
+        }
+    })], [2500, 3500, new SizeAnimation({
+        from: design.fontSizes.hiringBanner,
+        to: design.fontSizes.average,
+        onChange: function onChange(fontSize) {
+            return DomHelper.attachStyle(elements.hiringBanner, { fontSize: fontSize });
+        }
+    })], [2000, 3000, new TextAnimation({
+        from: elements.homeTitle.innerText,
+        to: '',
+        onChange: function onChange(text) {
+            return elements.homeTitle.innerHTML = text;
+        }
+    })], [3000, 4000, new TextAnimation({
+        from: '',
+        to: 'Sparkcentral is hiring!',
+        onChange: function onChange(text) {
+            return elements.homeTitle.innerHTML = text;
+        }
+    })], [2500, 3500, new TextAnimation({
+        from: elements.homeParagraph.innerText,
+        to: '',
+        onChange: function onChange(text) {
+            return elements.homeParagraph.innerHTML = text;
+        }
+    })], [2500, 3500, new TextAnimation({
+        from: '',
+        to: 'You can help them a hand by finding the perfect fit...',
+        onChange: function onChange(text) {
+            return elements.homeParagraph.innerHTML = text;
+        }
+    })]];
+};
+'use strict';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ANIMATION_TYPE = {
     COLOR: 'color',
-    SIZE: 'size'
+    SIZE: 'size',
+    TEXT: 'text'
 };
 
 var Animation = function () {
@@ -23,6 +76,7 @@ var Animation = function () {
      * @param {Object} [options]
      *  @param {String} [options.type]
      *  @param {Function} [options.onChange]
+     *  @param {Function} [options.onComplete]
      */
 
     function Animation() {
@@ -31,15 +85,23 @@ var Animation = function () {
         _classCallCheck(this, Animation);
 
         this.type = options.type;
-        this.onChange = options.onChange;
+        this._onChange = options.onChange;
+        this._onComplete = options.onComplete;
         this.currentValue = null;
     }
 
     _createClass(Animation, [{
         key: 'onTick',
         value: function onTick() {
-            if (typeof this.onChange === 'function') {
-                this.onChange(this.currentValue);
+            if (typeof this._onChange === 'function') {
+                this._onChange(this.currentValue || '&nbsp;');
+            }
+        }
+    }, {
+        key: 'onComplete',
+        value: function onComplete() {
+            if (typeof this._onComplete === 'function') {
+                this._onComplete();
             }
         }
     }]);
@@ -166,6 +228,90 @@ var SizeAnimation = function (_Animation) {
     }]);
 
     return SizeAnimation;
+}(Animation);
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TEXT_ANIMATION_DIRECTIONS = {
+    ADD: 'add',
+    REMOVE: 'remove'
+};
+
+/**
+ * Color Animation constructor
+ * @param {Object} [options]
+ *  @param {RgbColor} options.from
+ *  @param {RgbColor} options.to
+ * @extends {Animation}
+ * @constructor
+ */
+
+var TextAnimation = function (_Animation) {
+    _inherits(TextAnimation, _Animation);
+
+    function TextAnimation() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        _classCallCheck(this, TextAnimation);
+
+        if (typeof options.from !== 'string' || typeof options.to !== 'string') {
+            throw new Error('from and to option should be strings to create a text animation.');
+        }
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextAnimation).call(this, options));
+
+        _this.type = ANIMATION_TYPE.TEXT;
+        _this.from = options.from;
+        _this.to = options.to;
+
+        if (_this.to.length > _this.from.length) {
+            _this.textDifference = _this.to.substring(_this.from.length - 1, _this.to.length);
+            _this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
+        } else {
+            _this.textDifference = _this.from.substring(_this.to.length - 1, _this.from.length);
+            _this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
+        }
+
+        console.log('diff', _this.textDifference);
+        return _this;
+    }
+
+    /**
+     * @param {Number} percentageComplete
+     */
+
+    _createClass(TextAnimation, [{
+        key: 'onTick',
+        value: function onTick(percentageComplete) {
+            var text = null;
+
+            if (this.animationDirection === TEXT_ANIMATION_DIRECTIONS.ADD) {
+                var lengthOfDifference = Math.round(this.textDifference.length * percentageComplete);
+
+                text = this.from + this.textDifference.substring(0, lengthOfDifference);
+            } else {
+                var lengthOfDifference = Math.round(this.textDifference.length * (1 - percentageComplete));
+
+                text = this.to + this.textDifference.substring(0, lengthOfDifference);
+            }
+
+            console.log('TEXT', text);
+
+            this.currentValue = text;
+            _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
+        }
+    }]);
+
+    return TextAnimation;
 }(Animation);
 'use strict';
 
@@ -382,8 +528,11 @@ var Timeline = function () {
                 }
 
                 var percentage = (currentTick - from) / (to - from);
-
                 animation.onTick(percentage);
+
+                if (currentTick > to - timelineVm.tick) {
+                    animation.onComplete();
+                }
             }
         }
     }]);
@@ -437,15 +586,11 @@ var DomHelper = function () {
                 });
             }
 
-            console.log('all props', allProps);
-
             var styleString = Object.keys(allProps).filter(function (propName) {
                 return allProps.hasOwnProperty(propName);
             }).map(function (propName) {
                 return camelToDash(propName) + ':' + allProps[propName];
             }).join(';');
-
-            console.log('style string', styleString);
 
             element.setAttribute('style', styleString);
 
@@ -489,8 +634,8 @@ var DomHelper = function () {
 SparkCentral.call({}, window);
 
 function SparkCentral(window) {
-    this.design = initDefaultDesign();
     this.elements = cacheElements();
+    this.design = initDefaultDesign.call(this);
     this.timeline = initTimeline.call(this);
 
     /**
@@ -502,6 +647,9 @@ function SparkCentral(window) {
         elements.mainHeader = document.querySelector('.main-header');
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
+        elements.homeTitle = elements.homeJumbotron.querySelector('h1');
+        elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.sectionsAndHr = document.querySelectorAll('section,hr');
 
         return elements;
     }
@@ -526,7 +674,23 @@ function SparkCentral(window) {
             average: '30px'
         };
 
+        design.sizes = {
+            homeHeight: this.elements.homeJumbotron.clientHeight,
+            height: window.innerHeight + 20
+        };
+
+        window.addEventListener('resize', onWindowResize);
+
         return design;
+
+        /**
+         * When the window resizes
+         */
+        function onWindowResize() {
+            console.log('jajaja');
+
+            design.height = window.innerHeight + 20;
+        }
     }
 
     /**
@@ -534,24 +698,11 @@ function SparkCentral(window) {
      * @returns {Timeline}
      */
     function initTimeline() {
-        var _this = this;
+        console.log('init');
 
         var timeline = new Timeline();
-        var animationSequence = [[2000, 3000, new ColorAnimation({
-            from: this.design.colors.blue,
-            to: this.design.colors.darkBlue,
-            onChange: function onChange(backgroundColor) {
-                return DomHelper.attachStyle(_this.elements.homeJumbotron, { backgroundColor: backgroundColor });
-            }
-        })], [2500, 3500, new SizeAnimation({
-            from: this.design.fontSizes.hiringBanner,
-            to: this.design.fontSizes.average,
-            onChange: function onChange(fontSize) {
-                return DomHelper.attachStyle(_this.elements.hiringBanner, { fontSize: fontSize });
-            }
-        })]];
 
-        timeline.insert(animationSequence);
+        timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));
         timeline.start();
 
         return timeline;
