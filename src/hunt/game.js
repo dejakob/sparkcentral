@@ -36,6 +36,7 @@ class HuntGame
         this._context = this._canvas.getContext('2d');
         this._background = new GameBackground(this._canvas, this._context);
 
+        this._canvas.addEventListener('click', this._onClick.bind(this));
         this.repaint();
 
         /**
@@ -95,6 +96,7 @@ class HuntGame
     stop ()
     {
         clearInterval(this._interval);
+        this._canvas.removeEventListener('click', this._onClick.bind(this));
     }
 
     /**
@@ -158,7 +160,12 @@ class HuntGame
         }
     }
 
-    _onClick ()
+    /**
+     * When the canvas gets clicked
+     * @param {MouseEvent} eventData
+     * @private
+     */
+    _onClick (eventData)
     {
         
     }
