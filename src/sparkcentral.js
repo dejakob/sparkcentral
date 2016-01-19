@@ -18,13 +18,15 @@ function SparkCentral (window)
         const elements = {};
 
         elements.mainHeader = document.querySelector('.main-header');
+        elements.headerMenu = elements.mainHeader.querySelector('.menu');
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
-        elements.sectionsAndHr = document.querySelectorAll('section,hr');
+        elements.sectionsAndHrAndFooter = document.querySelectorAll('section,hr,footer');
+        elements.allLinks = document.querySelectorAll('a');
 
         return elements;
     }
@@ -64,8 +66,6 @@ function SparkCentral (window)
          */
         function onWindowResize ()
         {
-            console.log('jajaja');
-
             design.height = window.innerHeight + 20;
         }
     }
@@ -76,8 +76,6 @@ function SparkCentral (window)
      */
     function initTimeline ()
     {
-        console.log('init');
-
         const timeline = new Timeline();
 
         timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));

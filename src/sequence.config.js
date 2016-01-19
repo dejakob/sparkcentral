@@ -5,7 +5,12 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         new ColorAnimation({
             from: design.colors.blue,
             to: design.colors.darkBlue,
-            onChange: backgroundColor => DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor })
+            onChange: backgroundColor => DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor }),
+            onComplete: () =>
+                Array.prototype.forEach.call(elements.allLinks, link => {
+                    link.setAttribute('href', '#');
+                    link.setAttribute('onclick', '');
+                })
         })
     ],
     [
@@ -15,7 +20,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
             from: design.sizes.homeHeight,
             to: design.sizes.height,
             onChange: height => DomHelper.attachStyle(elements.homeJumbotron, { height }),
-            onComplete: () => Array.prototype.forEach.call(elements.sectionsAndHr, section => section.parentNode.removeChild(section))
+            onComplete: () => Array.prototype.forEach.call(elements.sectionsAndHrAndFooter, section => section.parentNode.removeChild(section))
         })
     ],
     [
@@ -55,6 +60,15 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         })
     ],
     [
+        3400,
+        4400,
+        new Animation({
+            from: 1,
+            to: 0.2,
+            onChange: opacity => DomHelper.attachStyle(elements.headerMenu, { opacity })
+        })
+    ],
+    [
         3500,
         4500,
         new TextAnimation({
@@ -66,7 +80,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
     ],
     [
         3700,
-        4700,
+        4200,
         new TextAnimation({
             from: elements.homePrimaryButton.innerText,
             to: '',
@@ -74,8 +88,8 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         })
     ],
     [
+        4200,
         4700,
-        5100,
         new TextAnimation({
             from: '',
             to: 'Start hunting',

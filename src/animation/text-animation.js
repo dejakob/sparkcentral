@@ -26,12 +26,7 @@ class TextAnimation extends Animation
         this.to = options.to;
 
         if (this.to.length > this.from.length) {
-            console.log('this.to', this.to);
-
             this.textDifference = this.to.substring(this.from.length - 1, this.to.length);
-
-            console.log('diff', this.textDifference);
-
             this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
         }
         else {
@@ -48,15 +43,11 @@ class TextAnimation extends Animation
         let text = null;
 
         if (this.animationDirection === TEXT_ANIMATION_DIRECTIONS.ADD) {
-            console.log('PER', this.to, percentageComplete);
-
             const lengthOfDifference = Math.round(this.textDifference.length * percentageComplete);
-
             text = this.from + this.textDifference.substring(0, lengthOfDifference);
         }
         else {
             const lengthOfDifference = Math.round(this.textDifference.length * (1 - percentageComplete));
-
             text = this.to + this.textDifference.substring(0, lengthOfDifference);
         }
 

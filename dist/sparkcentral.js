@@ -14,6 +14,12 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         to: design.colors.darkBlue,
         onChange: function onChange(backgroundColor) {
             return DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor: backgroundColor });
+        },
+        onComplete: function onComplete() {
+            return Array.prototype.forEach.call(elements.allLinks, function (link) {
+                link.setAttribute('href', '#');
+                link.setAttribute('onclick', '');
+            });
         }
     })], [2000, 3000, new SizeAnimation({
         from: design.sizes.homeHeight,
@@ -22,7 +28,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return DomHelper.attachStyle(elements.homeJumbotron, { height: height });
         },
         onComplete: function onComplete() {
-            return Array.prototype.forEach.call(elements.sectionsAndHr, function (section) {
+            return Array.prototype.forEach.call(elements.sectionsAndHrAndFooter, function (section) {
                 return section.parentNode.removeChild(section);
             });
         }
@@ -50,6 +56,12 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
         }
+    })], [3400, 4400, new Animation({
+        from: 1,
+        to: 0.2,
+        onChange: function onChange(opacity) {
+            return DomHelper.attachStyle(elements.headerMenu, { opacity: opacity });
+        }
     })], [3500, 4500, new TextAnimation({
         from: '',
         to: 'You can help them a hand by finding the perfect fit...',
@@ -59,13 +71,13 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         onComplete: function onComplete() {
             return elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton);
         }
-    })], [3700, 4700, new TextAnimation({
+    })], [3700, 4200, new TextAnimation({
         from: elements.homePrimaryButton.innerText,
         to: '',
         onChange: function onChange(text) {
             return elements.homePrimaryButton.innerHTML = text;
         }
-    })], [4700, 5100, new TextAnimation({
+    })], [4200, 4700, new TextAnimation({
         from: '',
         to: 'Start hunting',
         onChange: function onChange(text) {
@@ -92,6 +104,8 @@ var Animation = function () {
      *  @param {String} [options.type]
      *  @param {Function} [options.onChange]
      *  @param {Function} [options.onComplete]
+     *  @param {Function} [options.from]
+     *  @param {Function} [options.to]
      */
 
     function Animation() {
@@ -103,15 +117,35 @@ var Animation = function () {
         this._onChange = options.onChange;
         this._onComplete = options.onComplete;
         this.currentValue = null;
+
+        if (typeof options.from === 'number' && typeof options.to === 'number') {
+            this.from = options.from;
+            this.to = options.to;
+        }
     }
+
+    /**
+     * Event gets triggered on each tick
+     * @param {Number} percentageComplete
+     */
 
     _createClass(Animation, [{
         key: 'onTick',
-        value: function onTick() {
+        value: function onTick(percentageComplete) {
+            if (typeof percentageComplete === 'number') {
+                var value = (this.to - this.from) * percentageComplete + this.from;
+                this.currentValue = Math.round(value * 100) / 100;
+            }
+
             if (typeof this._onChange === 'function') {
                 this._onChange(this.currentValue);
             }
         }
+
+        /**
+         * When the animation is complete
+         */
+
     }, {
         key: 'onComplete',
         value: function onComplete() {
@@ -289,12 +323,7 @@ var TextAnimation = function (_Animation) {
         _this.to = options.to;
 
         if (_this.to.length > _this.from.length) {
-            console.log('this.to', _this.to);
-
             _this.textDifference = _this.to.substring(_this.from.length - 1, _this.to.length);
-
-            console.log('diff', _this.textDifference);
-
             _this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
         } else {
             _this.textDifference = _this.from.substring(_this.to.length - 1, _this.from.length);
@@ -313,20 +342,21 @@ var TextAnimation = function (_Animation) {
             var text = null;
 
             if (this.animationDirection === TEXT_ANIMATION_DIRECTIONS.ADD) {
-                console.log('PER', this.to, percentageComplete);
-
                 var lengthOfDifference = Math.round(this.textDifference.length * percentageComplete);
-
                 text = this.from + this.textDifference.substring(0, lengthOfDifference);
             } else {
                 var lengthOfDifference = Math.round(this.textDifference.length * (1 - percentageComplete));
-
                 text = this.to + this.textDifference.substring(0, lengthOfDifference);
             }
 
             this.currentValue = text || '&nbsp;';
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
         }
+
+        /**
+         * Make sure all the text is shown when the animation ended
+         */
+
     }, {
         key: 'onComplete',
         value: function onComplete() {
@@ -670,13 +700,15 @@ function SparkCentral(window) {
         var elements = {};
 
         elements.mainHeader = document.querySelector('.main-header');
+        elements.headerMenu = elements.mainHeader.querySelector('.menu');
         elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
-        elements.sectionsAndHr = document.querySelectorAll('section,hr');
+        elements.sectionsAndHrAndFooter = document.querySelectorAll('section,hr,footer');
+        elements.allLinks = document.querySelectorAll('a');
 
         return elements;
     }
@@ -714,8 +746,6 @@ function SparkCentral(window) {
          * When the window resizes
          */
         function onWindowResize() {
-            console.log('jajaja');
-
             design.height = window.innerHeight + 20;
         }
     }
@@ -725,8 +755,6 @@ function SparkCentral(window) {
      * @returns {Timeline}
      */
     function initTimeline() {
-        console.log('init');
-
         var timeline = new Timeline();
 
         timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));
