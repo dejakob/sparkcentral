@@ -13,11 +13,14 @@ class HuntGame
     {
         this._height = height;
         this._width = width;
+        this._top = parseInt(style.top || 0, 10);
+        this._left = parseInt(style.left || 0, 10);
         this._style = style;
         this._canvas = null;
         this._context = null;
         this._profiles = [];
 
+        this._score = 0;
         this._interval = null;
         this._currentTick = 0;
         this._timesToAddProfile = Object.keys(GAME_LEVEL).map(time => Number(time));
@@ -167,6 +170,21 @@ class HuntGame
      */
     _onClick (eventData)
     {
-        
+        let hitted = false;
+
+        this._profiles.forEach(profile => {
+            if (
+                hitted === false &&
+                profile.hitTest(- this._left + eventData.clientX, - this._top + eventData.clientY)
+            ) {
+                hitted = true;
+                this._score += profile.speed * 10;
+                this._profiles.splice(this._profiles.indexOf(profile), 1);
+            }
+        });
+
+        if (hitted) {
+            this.repaint();
+        }
     }
 }

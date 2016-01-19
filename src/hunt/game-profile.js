@@ -27,4 +27,20 @@ class GameProfile
         context.stroke();
         context.closePath();
     }
+
+    /**
+     * Test if x and y are within the profile
+     * @param {Number} x
+     * @param {Number} y
+     */
+    hitTest (x, y)
+    {
+        if (this.x < x && this.x + this.width > x) {
+            if (this.y < y && this.y + this.height > y) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

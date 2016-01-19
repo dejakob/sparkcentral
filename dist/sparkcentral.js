@@ -368,6 +368,24 @@ var GameProfile = function () {
             context.stroke();
             context.closePath();
         }
+
+        /**
+         * Test if x and y are within the profile
+         * @param {Number} x
+         * @param {Number} y
+         */
+
+    }, {
+        key: 'hitTest',
+        value: function hitTest(x, y) {
+            if (this.x < x && this.x + this.width > x) {
+                if (this.y < y && this.y + this.height > y) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }]);
 
     return GameProfile;
@@ -433,8 +451,13 @@ var GAME_LEVEL = {
     2: new GameProfile(GAME_DIRECTION.LTR),
     8: new GameProfile(GAME_DIRECTION.RTL),
     52: new GameProfile(GAME_DIRECTION.RTL),
-    90: new GameProfile(GAME_DIRECTION.RTL),
-    135: new GameProfile(GAME_DIRECTION.RTL)
+    90: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    135: new GameProfile(GAME_DIRECTION.RTL),
+    235: new GameProfile(GAME_DIRECTION.LTR),
+    255: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    275: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    300: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    315: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED) //
 };
 /**
  * HuntGame class
@@ -455,11 +478,14 @@ var HuntGame = function () {
 
         this._height = height;
         this._width = width;
+        this._top = parseInt(style.top || 0, 10);
+        this._left = parseInt(style.left || 0, 10);
         this._style = style;
         this._canvas = null;
         this._context = null;
         this._profiles = [];
 
+        this._score = 0;
         this._interval = null;
         this._currentTick = 0;
         this._timesToAddProfile = Object.keys(GAME_LEVEL).map(function (time) {
@@ -482,6 +508,7 @@ var HuntGame = function () {
             this._context = this._canvas.getContext('2d');
             this._background = new GameBackground(this._canvas, this._context);
 
+            this._canvas.addEventListener('click', this._onClick.bind(this));
             this.repaint();
 
             /**
@@ -545,6 +572,7 @@ var HuntGame = function () {
         key: 'stop',
         value: function stop() {
             clearInterval(this._interval);
+            this._canvas.removeEventListener('click', this._onClick.bind(this));
         }
 
         /**
@@ -556,8 +584,6 @@ var HuntGame = function () {
         key: '_onTick',
         value: function _onTick() {
             var profileToAdd = GAME_LEVEL[this._currentTick];
-
-            console.log('TICK', this._profiles);
 
             if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
                 addNewProfile.call(this);
@@ -604,6 +630,32 @@ var HuntGame = function () {
                         this._profiles.splice(this._profiles.indexOf(profile), 1);
                     }
                 }
+            }
+        }
+
+        /**
+         * When the canvas gets clicked
+         * @param {MouseEvent} eventData
+         * @private
+         */
+
+    }, {
+        key: '_onClick',
+        value: function _onClick(eventData) {
+            var _this4 = this;
+
+            var hitted = false;
+
+            this._profiles.forEach(function (profile) {
+                if (hitted === false && profile.hitTest(-_this4._left + eventData.clientX, -_this4._top + eventData.clientY)) {
+                    hitted = true;
+                    _this4._score += profile.speed * 10;
+                    _this4._profiles.splice(_this4._profiles.indexOf(profile), 1);
+                }
+            });
+
+            if (hitted) {
+                this.repaint();
             }
         }
     }]);

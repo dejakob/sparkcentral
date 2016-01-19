@@ -14,6 +14,11 @@ const GAME_LEVEL = {
     2: new GameProfile(GAME_DIRECTION.LTR),
     8: new GameProfile(GAME_DIRECTION.RTL),
     52: new GameProfile(GAME_DIRECTION.RTL),
-    90: new GameProfile(GAME_DIRECTION.RTL),
-    135: new GameProfile(GAME_DIRECTION.RTL)
+    90: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    135: new GameProfile(GAME_DIRECTION.RTL),
+    235: new GameProfile(GAME_DIRECTION.LTR),
+    255: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    275: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    300: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    315: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED)//
 };
