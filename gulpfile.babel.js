@@ -16,14 +16,16 @@ function defaultTask ()
             './src/sequence.config.js',
             './src/animation/animation.js',
             './src/animation/*.js',
+            './src/hunt/game-profile.js',
+            './src/hunt/game-background.js',
             './src/hunt/*.js',
             './src/rgbcolor.js',
             './src/timeline.js',
             './src/dom-helper.js',
             './src/sparkcentral.js'
         ])
-        .pipe(babel())
         .pipe(concat('./dist/sparkcentral.js'))
+        .pipe(babel())
         .pipe(gulp.dest('.'))
 }
 

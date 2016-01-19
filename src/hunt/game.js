@@ -17,6 +17,9 @@ class HuntGame
         this._canvas = null;
         this._context = null;
         this._profiles = [];
+
+        this._interval = null;
+        this._currentTick = 0;
     }
 
     /**
@@ -25,21 +28,35 @@ class HuntGame
      */
     init (rootElement)
     {
-        const canvas = document.createElement('canvas');
+        const gameVM = this;
 
-        canvas.height = this._height;
-        canvas.width = this._width;
-        DomHelper.attachStyle(canvas, this._style);
-
-        rootElement.appendChild(canvas);
-
-        this._canvas = canvas;
-        this._context = canvas.getContext('2d');
+        this._canvas = addCanvasToDOM();
+        this._context = this._canvas.getContext('2d');
         this._background = new GameBackground(this._canvas, this._context);
 
         this.repaint();
+
+        /**
+         * Add a new canvas element to the DOM
+         * @returns {HTMLCanvasElement}
+         */
+        function addCanvasToDOM ()
+        {
+            const canvas = document.createElement('canvas');
+
+            canvas.height = gameVM._height;
+            canvas.width = gameVM._width;
+            DomHelper.attachStyle(canvas, gameVM._style);
+
+            rootElement.appendChild(canvas);
+
+            return canvas;
+        }
     }
 
+    /**
+     * Clean and paint frame
+     */
     repaint ()
     {
         this._context.clearRect(0, 0, this._width, this._height);
@@ -55,5 +72,34 @@ class HuntGame
         {
             profile.paint();
         }
+    }
+
+    /**
+     * Start the game
+     */
+    start ()
+    {
+        const TICK = Math.round(1000 / GAME_FPS);
+
+        this._interval = setInterval(this._onTick, TICK);
+    }
+
+    /**
+     * Stop the game
+     */
+    stop ()
+    {
+        clearInterval(this._interval);
+    }
+
+    /**
+     * Tick event for each interval tick
+     * @private
+     */
+    _onTick ()
+    {
+        
+
+        this._currentTick++;
     }
 }
