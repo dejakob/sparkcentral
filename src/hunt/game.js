@@ -16,6 +16,7 @@ class HuntGame
         this._style = style;
         this._canvas = null;
         this._context = null;
+        this._profiles = [];
     }
 
     /**
@@ -36,6 +37,23 @@ class HuntGame
         this._context = canvas.getContext('2d');
         this._background = new GameBackground(this._canvas, this._context);
 
+        this.repaint();
+    }
+
+    repaint ()
+    {
+        this._context.clearRect(0, 0, this._width, this._height);
         this._background.paint();
+
+        this._profiles.forEach(paintProfile);
+
+        /**
+         * Paint a profile/target on the canvas
+         * @param {GameProfile} profile
+         */
+        function paintProfile (profile)
+        {
+            profile.paint();
+        }
     }
 }

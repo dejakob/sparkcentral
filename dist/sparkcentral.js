@@ -374,6 +374,62 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var GAME_BACKGROUND_LAYOUT = {
+    COLORS: {
+        GRASS: '#B0EE6C'
+    }
+};
+
+/**
+ * GameBackground class
+ */
+
+var GameBackground = function () {
+    /**
+     * @param {HTMLCanvasElement} canvasElement
+     * @param {CanvasRenderingContext2D} context
+     */
+
+    function GameBackground(canvasElement, context) {
+        _classCallCheck(this, GameBackground);
+
+        this._canvas = canvasElement;
+        this._context = context;
+    }
+
+    /**
+     * Paint the background
+     */
+
+    _createClass(GameBackground, [{
+        key: 'paint',
+        value: function paint() {
+            var height = this._canvas.height;
+            var width = this._canvas.width;
+
+            this._context.beginPath();
+            this._context.fillStyle = GAME_BACKGROUND_LAYOUT.COLORS.GRASS;
+            this._context.rect(0, height - 50, width, height);
+            this._context.fill();
+            this._context.closePath();
+        }
+    }]);
+
+    return GameBackground;
+}();
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GameProfile = function GameProfile() {
+  _classCallCheck(this, GameProfile);
+};
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /**
  * HuntGame class
  */
@@ -395,6 +451,8 @@ var HuntGame = function () {
         this._width = width;
         this._style = style;
         this._canvas = null;
+        this._context = null;
+        this._profiles = [];
     }
 
     /**
@@ -414,6 +472,24 @@ var HuntGame = function () {
             rootElement.appendChild(canvas);
 
             this._canvas = canvas;
+            this._context = canvas.getContext('2d');
+            this._background = new GameBackground(this._canvas, this._context);
+
+            this.repaint();
+        }
+    }, {
+        key: 'repaint',
+        value: function repaint() {
+            this._context.clearRect(0, 0, this._width, this._height);
+            this._background.paint();
+
+            this._profiles.forEach(paintProfile);
+
+            /**
+             * Paint a profile/target on the canvas
+             * @param {GameProfile} profile
+             */
+            function paintProfile(profile) {}
         }
     }]);
 
