@@ -5,12 +5,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         new ColorAnimation({
             from: design.colors.blue,
             to: design.colors.darkBlue,
-            onChange: backgroundColor => DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor }),
-            onComplete: () =>
-                Array.prototype.forEach.call(elements.allLinks, link => {
-                    link.setAttribute('href', '#');
-                    link.setAttribute('onclick', '');
-                })
+            onChange: backgroundColor => DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor })
         })
     ],
     [

@@ -20,11 +20,13 @@ class HuntGame
 
         this._interval = null;
         this._currentTick = 0;
+        this._timesToAddProfile = Object.keys(GAME_LEVEL).map(time => Number(time));
+        this._lastProfileTick = this._timesToAddProfile[this._timesToAddProfile.length - 1];
     }
 
     /**
      * Initialize the game
-     * @param rootElement
+     * @param {HTMLElement} rootElement
      */
     init (rootElement)
     {
@@ -59,6 +61,8 @@ class HuntGame
      */
     repaint ()
     {
+        const gameVM = this;
+
         this._context.clearRect(0, 0, this._width, this._height);
         this._background.paint();
 
@@ -70,7 +74,7 @@ class HuntGame
          */
         function paintProfile (profile)
         {
-            profile.paint();
+            profile.paint(gameVM._context);
         }
     }
 
@@ -79,9 +83,10 @@ class HuntGame
      */
     start ()
     {
-        const TICK = Math.round(1000 / GAME_FPS);
+        console.log('START THE GAME', this);
 
-        this._interval = setInterval(this._onTick, TICK);
+        const TICK = Math.round(1000 / GAME_FPS);
+        this._interval = setInterval(this._onTick.bind(this), TICK);
     }
 
     /**
@@ -98,8 +103,63 @@ class HuntGame
      */
     _onTick ()
     {
-        
+        const profileToAdd = GAME_LEVEL[this._currentTick];
+
+        if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
+            addNewProfile.call(this);
+        }
+
+        if (this._profiles.length > 0) {
+            this._profiles.forEach(moveProfile.bind(this));
+            this.repaint();
+        }
+        else if (this._currentTick > this._lastProfileTick) {
+            this.stop();
+        }
 
         this._currentTick++;
+
+        /**
+         * Add a new profile to the list of profiles
+         */
+        function addNewProfile ()
+        {
+            if (profileToAdd.direction === GAME_DIRECTION.LTR) {
+                profileToAdd.x = - profileToAdd.width;
+            }
+            else {
+                profileToAdd.x = this._width + profileToAdd.width;
+            }
+
+            profileToAdd.y = Math.round(Math.random() * this._height * 0.8);
+            this._profiles.push(profileToAdd);
+        }
+
+        /**
+         * Move the profile one step in the right direction
+         * @param {GameProfile} profile
+         */
+        function moveProfile (profile)
+        {
+            if (profile.direction === GAME_DIRECTION.LTR) {
+                profile.x += profile.speed;
+
+                if (profile.x > this._width + profile.width) {
+                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                }
+            }
+            else {
+                profile.x -= profile.speed;
+
+                if (profile.x < - profile.width) {
+                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                }
+            }
+        }
+    }
+
+    _onClick ()
+    {
+        
     }
 }

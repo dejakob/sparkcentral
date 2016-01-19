@@ -5,9 +5,15 @@ const GAME_DIRECTION = {
     RTL: 'right to left'
 };
 
-const GAME_LEVEL = [
+const GAME_DEFAULT_SPEED = 5;
+const GAME_FAST_SPEED = 10;
+const GAME_FASTER_SPEED = 20;
+const GAME_FASTEST_SPEED = 35;
 
-    // Start, pixels par frame
-    [ 2, 1, new GameProfile() ],
-    [ 8, 1, new GameProfile() ]
-];
+const GAME_LEVEL = {
+    2: new GameProfile(GAME_DIRECTION.LTR),
+    8: new GameProfile(GAME_DIRECTION.RTL),
+    52: new GameProfile(GAME_DIRECTION.RTL),
+    90: new GameProfile(GAME_DIRECTION.RTL),
+    135: new GameProfile(GAME_DIRECTION.RTL)
+};

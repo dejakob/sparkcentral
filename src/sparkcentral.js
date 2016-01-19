@@ -13,6 +13,10 @@ function SparkCentral (window)
     this.startHunting = startHunting;
 
     this.elements.homePrimaryButton.addEventListener('click', this.startHunting.bind(this));
+    Array.prototype.forEach.call(this.elements.allLinks, link => {
+        link.setAttribute('href', '#');
+        link.setAttribute('onclick', '');
+    });
 
     /**
      * Cache all the elements needed
@@ -94,5 +98,6 @@ function SparkCentral (window)
 
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);
+        setTimeout(huntGame.start.bind(huntGame), 1000);
     }
 }

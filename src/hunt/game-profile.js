@@ -6,12 +6,13 @@ class GameProfile
     /**
      * Constructor for GameProfile
      */
-    constructor (direction = GAME_DIRECTION.LTR)
+    constructor (direction = GAME_DIRECTION.LTR, speed = GAME_DEFAULT_SPEED)
     {
         this.direction = direction;
         this.height = this.width = 50;
         this.x = 0;
         this.y = 0;
+        this.speed = speed;
     }
 
     /**

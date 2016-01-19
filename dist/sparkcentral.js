@@ -27,12 +27,6 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         to: design.colors.darkBlue,
         onChange: function onChange(backgroundColor) {
             return DomHelper.attachStyle(elements.homeJumbotron, { backgroundColor: backgroundColor });
-        },
-        onComplete: function onComplete() {
-            return Array.prototype.forEach.call(elements.allLinks, function (link) {
-                link.setAttribute('href', '#');
-                link.setAttribute('onclick', '');
-            });
         }
     })], [1000, 2000, new SizeAnimation({
         from: design.sizes.homeHeight,
@@ -349,6 +343,7 @@ var GameProfile = function () {
 
     function GameProfile() {
         var direction = arguments.length <= 0 || arguments[0] === undefined ? GAME_DIRECTION.LTR : arguments[0];
+        var speed = arguments.length <= 1 || arguments[1] === undefined ? GAME_DEFAULT_SPEED : arguments[1];
 
         _classCallCheck(this, GameProfile);
 
@@ -356,6 +351,7 @@ var GameProfile = function () {
         this.height = this.width = 50;
         this.x = 0;
         this.y = 0;
+        this.speed = speed;
     }
 
     /**
@@ -428,10 +424,18 @@ var GAME_DIRECTION = {
     RTL: 'right to left'
 };
 
-var GAME_LEVEL = [
+var GAME_DEFAULT_SPEED = 5;
+var GAME_FAST_SPEED = 10;
+var GAME_FASTER_SPEED = 20;
+var GAME_FASTEST_SPEED = 35;
 
-// Start, pixels par frame
-[2, 1, new GameProfile()], [8, 1, new GameProfile()]];
+var GAME_LEVEL = {
+    2: new GameProfile(GAME_DIRECTION.LTR),
+    8: new GameProfile(GAME_DIRECTION.RTL),
+    52: new GameProfile(GAME_DIRECTION.RTL),
+    90: new GameProfile(GAME_DIRECTION.RTL),
+    135: new GameProfile(GAME_DIRECTION.RTL)
+};
 /**
  * HuntGame class
  */
@@ -458,11 +462,15 @@ var HuntGame = function () {
 
         this._interval = null;
         this._currentTick = 0;
+        this._timesToAddProfile = Object.keys(GAME_LEVEL).map(function (time) {
+            return Number(time);
+        });
+        this._lastProfileTick = this._timesToAddProfile[this._timesToAddProfile.length - 1];
     }
 
     /**
      * Initialize the game
-     * @param rootElement
+     * @param {HTMLElement} rootElement
      */
 
     _createClass(HuntGame, [{
@@ -500,6 +508,8 @@ var HuntGame = function () {
     }, {
         key: 'repaint',
         value: function repaint() {
+            var gameVM = this;
+
             this._context.clearRect(0, 0, this._width, this._height);
             this._background.paint();
 
@@ -510,7 +520,7 @@ var HuntGame = function () {
              * @param {GameProfile} profile
              */
             function paintProfile(profile) {
-                profile.paint();
+                profile.paint(gameVM._context);
             }
         }
 
@@ -521,9 +531,10 @@ var HuntGame = function () {
     }, {
         key: 'start',
         value: function start() {
-            var TICK = Math.round(1000 / GAME_FPS);
+            console.log('START THE GAME', this);
 
-            this._interval = setInterval(this._onTick, TICK);
+            var TICK = Math.round(1000 / GAME_FPS);
+            this._interval = setInterval(this._onTick.bind(this), TICK);
         }
 
         /**
@@ -544,8 +555,56 @@ var HuntGame = function () {
     }, {
         key: '_onTick',
         value: function _onTick() {
+            var profileToAdd = GAME_LEVEL[this._currentTick];
+
+            console.log('TICK', this._profiles);
+
+            if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
+                addNewProfile.call(this);
+            }
+
+            if (this._profiles.length > 0) {
+                this._profiles.forEach(moveProfile.bind(this));
+                this.repaint();
+            } else if (this._currentTick > this._lastProfileTick) {
+                this.stop();
+            }
 
             this._currentTick++;
+
+            /**
+             * Add a new profile to the list of profiles
+             */
+            function addNewProfile() {
+                if (profileToAdd.direction === GAME_DIRECTION.LTR) {
+                    profileToAdd.x = -profileToAdd.width;
+                } else {
+                    profileToAdd.x = this._width + profileToAdd.width;
+                }
+
+                profileToAdd.y = Math.round(Math.random() * this._height * 0.8);
+                this._profiles.push(profileToAdd);
+            }
+
+            /**
+             * Move the profile one step in the right direction
+             * @param {GameProfile} profile
+             */
+            function moveProfile(profile) {
+                if (profile.direction === GAME_DIRECTION.LTR) {
+                    profile.x += profile.speed;
+
+                    if (profile.x > this._width + profile.width) {
+                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                    }
+                } else {
+                    profile.x -= profile.speed;
+
+                    if (profile.x < -profile.width) {
+                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                    }
+                }
+            }
         }
     }]);
 
@@ -860,6 +919,10 @@ function SparkCentral(window) {
     this.startHunting = startHunting;
 
     this.elements.homePrimaryButton.addEventListener('click', this.startHunting.bind(this));
+    Array.prototype.forEach.call(this.elements.allLinks, function (link) {
+        link.setAttribute('href', '#');
+        link.setAttribute('onclick', '');
+    });
 
     /**
      * Cache all the elements needed
@@ -937,5 +1000,6 @@ function SparkCentral(window) {
 
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);
+        setTimeout(huntGame.start.bind(huntGame), 1000);
     }
 }
