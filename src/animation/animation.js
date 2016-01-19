@@ -1,5 +1,6 @@
 const ANIMATION_TYPE = {
-    COLOR: 'color'
+    COLOR: 'color',
+    SIZE: 'size'
 };
 
 class Animation

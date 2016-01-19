@@ -14,7 +14,7 @@ function defaultTask ()
     return gulp.src([
             './src/description.js',
             './src/animation/animation.js',
-            './src/animation/color-animation.js',
+            './src/animation/*.js',
             './src/rgbcolor.js',
             './src/timeline.js',
             './src/sparkcentral.js'

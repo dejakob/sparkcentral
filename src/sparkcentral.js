@@ -18,6 +18,7 @@ function SparkCentral (window)
         const elements = {};
 
         elements.mainHeader = document.querySelector('.main-header');
+        elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
 
         return elements;
@@ -39,6 +40,11 @@ function SparkCentral (window)
             darkBlue: RgbColor.fromHex(DARK_BLUE)
         };
 
+        design.fontSizes = {
+            hiringBanner: '12px',
+            average: '30px'
+        };
+
         return design;
     }
 
@@ -56,7 +62,16 @@ function SparkCentral (window)
                 new ColorAnimation({
                     from: this.design.colors.blue,
                     to: this.design.colors.darkBlue,
-                    onChange: color => {this.elements.homeJumbotron.innerHTML = color; console.log('jumbo', color, this.elements.homeJumbotron);}
+                    onChange: color => this.elements.homeJumbotron.setAttribute('style', `background-color: ${color};`)
+                })
+            ],
+            [
+                2500,
+                3500,
+                new SizeAnimation({
+                    from: this.design.fontSizes.hiringBanner,
+                    to: this.design.fontSizes.average,
+                    onChange: fontSize => this.elements.hiringBanner.setAttribute('style', `font-size: ${fontSize};`)
                 })
             ]
         ];

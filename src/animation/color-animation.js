@@ -3,7 +3,6 @@
  * @param {Object} [options]
  *  @param {RgbColor} options.from
  *  @param {RgbColor} options.to
- *  @param {Number} options.duration
  * @extends {Animation}
  * @constructor
  */

@@ -13,7 +13,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ANIMATION_TYPE = {
-    COLOR: 'color'
+    COLOR: 'color',
+    SIZE: 'size'
 };
 
 var Animation = function () {
@@ -62,7 +63,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * @param {Object} [options]
  *  @param {RgbColor} options.from
  *  @param {RgbColor} options.to
- *  @param {Number} options.duration
  * @extends {Animation}
  * @constructor
  */
@@ -108,6 +108,67 @@ var ColorAnimation = function (_Animation) {
 }(Animation);
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Resize Animation constructor
+ * @param {Object} [options]
+ *  @param {RgbColor} options.from
+ *  @param {RgbColor} options.to
+ * @extends {Animation}
+ * @constructor
+ */
+
+var SizeAnimation = function (_Animation) {
+    _inherits(SizeAnimation, _Animation);
+
+    function SizeAnimation() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        _classCallCheck(this, SizeAnimation);
+
+        var VALID_TYPES = ['number', 'string'];
+
+        if (VALID_TYPES.indexOf(_typeof(options.from)) === -1 || VALID_TYPES.indexOf(_typeof(options.to)) === -1) {
+            throw new Error('from and to option should be defined to create a resize animation.');
+        }
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SizeAnimation).call(this, options));
+
+        _this.type = ANIMATION_TYPE.SIZE;
+        _this.from = parseInt(options.from, 10);
+        _this.to = parseInt(options.to, 10);
+        return _this;
+    }
+
+    /**
+     * @param {Number} percentageComplete
+     */
+
+    _createClass(SizeAnimation, [{
+        key: 'onTick',
+        value: function onTick(percentageComplete) {
+            var size = (this.to - this.from) * percentageComplete + this.from;
+
+            this.currentValue = size + 'px';
+            _get(Object.getPrototypeOf(SizeAnimation.prototype), 'onTick', this).call(this);
+        }
+    }]);
+
+    return SizeAnimation;
+}(Animation);
+'use strict';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -139,7 +200,7 @@ var RgbColor = function () {
     _createClass(RgbColor, [{
         key: 'toString',
         value: function toString() {
-            return 'rgb(' + this.red + ', ' + this.green + ', ' + this.blue + ');';
+            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ');';
         }
 
         /**
@@ -347,6 +408,7 @@ function SparkCentral(window) {
         var elements = {};
 
         elements.mainHeader = document.querySelector('.main-header');
+        elements.hiringBanner = elements.mainHeader.querySelector('.hiring-banner');
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
 
         return elements;
@@ -367,6 +429,11 @@ function SparkCentral(window) {
             darkBlue: RgbColor.fromHex(DARK_BLUE)
         };
 
+        design.fontSizes = {
+            hiringBanner: '12px',
+            average: '30px'
+        };
+
         return design;
     }
 
@@ -382,7 +449,13 @@ function SparkCentral(window) {
             from: this.design.colors.blue,
             to: this.design.colors.darkBlue,
             onChange: function onChange(color) {
-                _this.elements.homeJumbotron.innerHTML = color;console.log('jumbo', color, _this.elements.homeJumbotron);
+                return _this.elements.homeJumbotron.setAttribute('style', 'background-color: ' + color + ';');
+            }
+        })], [2500, 3500, new SizeAnimation({
+            from: this.design.fontSizes.hiringBanner,
+            to: this.design.fontSizes.average,
+            onChange: function onChange(fontSize) {
+                return _this.elements.hiringBanner.setAttribute('style', 'font-size: ' + fontSize + ';');
             }
         })]];
 
