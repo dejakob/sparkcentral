@@ -22,6 +22,8 @@ function SparkCentral (window)
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
+        elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
         elements.sectionsAndHr = document.querySelectorAll('section,hr');
 
         return elements;
@@ -45,7 +47,7 @@ function SparkCentral (window)
 
         design.fontSizes = {
             hiringBanner: '12px',
-            average: '30px'
+            average: '20px'
         };
 
         design.sizes = {

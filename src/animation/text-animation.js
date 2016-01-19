@@ -26,15 +26,18 @@ class TextAnimation extends Animation
         this.to = options.to;
 
         if (this.to.length > this.from.length) {
+            console.log('this.to', this.to);
+
             this.textDifference = this.to.substring(this.from.length - 1, this.to.length);
+
+            console.log('diff', this.textDifference);
+
             this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
         }
         else {
             this.textDifference = this.from.substring(this.to.length - 1, this.from.length);
             this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
         }
-
-        console.log('diff', this.textDifference);
     }
 
     /**
@@ -45,6 +48,8 @@ class TextAnimation extends Animation
         let text = null;
 
         if (this.animationDirection === TEXT_ANIMATION_DIRECTIONS.ADD) {
+            console.log('PER', this.to, percentageComplete);
+
             const lengthOfDifference = Math.round(this.textDifference.length * percentageComplete);
 
             text = this.from + this.textDifference.substring(0, lengthOfDifference);
@@ -55,9 +60,17 @@ class TextAnimation extends Animation
             text = this.to + this.textDifference.substring(0, lengthOfDifference);
         }
 
-        console.log('TEXT', text);
-
-        this.currentValue = text;
+        this.currentValue = text || '&nbsp;';
         super.onTick();
+    }
+
+    /**
+     * Make sure all the text is shown when the animation ended
+     */
+    onComplete ()
+    {
+        this.currentValue = this.to;
+        super.onTick();
+        super.onComplete();
     }
 }

@@ -55,12 +55,31 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         })
     ],
     [
-        2500,
         3500,
+        4500,
         new TextAnimation({
             from: '',
             to: 'You can help them a hand by finding the perfect fit...',
-            onChange: text => elements.homeParagraph.innerHTML = text
+            onChange: text => elements.homeParagraph.innerHTML = text,
+            onComplete: () => elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton)
+        })
+    ],
+    [
+        3700,
+        4700,
+        new TextAnimation({
+            from: elements.homePrimaryButton.innerText,
+            to: '',
+            onChange: text => elements.homePrimaryButton.innerHTML = text
+        })
+    ],
+    [
+        4700,
+        5100,
+        new TextAnimation({
+            from: '',
+            to: 'Start hunting',
+            onChange: text => elements.homePrimaryButton.innerHTML = text
         })
     ]
 ];

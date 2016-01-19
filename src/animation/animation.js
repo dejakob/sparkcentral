@@ -24,7 +24,7 @@ class Animation
     onTick ()
     {
         if (typeof this._onChange === 'function') {
-            this._onChange(this.currentValue || '&nbsp;');
+            this._onChange(this.currentValue);
         }
     }
 

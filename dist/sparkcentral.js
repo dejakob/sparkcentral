@@ -50,11 +50,26 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
         }
-    })], [2500, 3500, new TextAnimation({
+    })], [3500, 4500, new TextAnimation({
         from: '',
         to: 'You can help them a hand by finding the perfect fit...',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
+        },
+        onComplete: function onComplete() {
+            return elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton);
+        }
+    })], [3700, 4700, new TextAnimation({
+        from: elements.homePrimaryButton.innerText,
+        to: '',
+        onChange: function onChange(text) {
+            return elements.homePrimaryButton.innerHTML = text;
+        }
+    })], [4700, 5100, new TextAnimation({
+        from: '',
+        to: 'Start hunting',
+        onChange: function onChange(text) {
+            return elements.homePrimaryButton.innerHTML = text;
         }
     })]];
 };
@@ -94,7 +109,7 @@ var Animation = function () {
         key: 'onTick',
         value: function onTick() {
             if (typeof this._onChange === 'function') {
-                this._onChange(this.currentValue || '&nbsp;');
+                this._onChange(this.currentValue);
             }
         }
     }, {
@@ -274,14 +289,17 @@ var TextAnimation = function (_Animation) {
         _this.to = options.to;
 
         if (_this.to.length > _this.from.length) {
+            console.log('this.to', _this.to);
+
             _this.textDifference = _this.to.substring(_this.from.length - 1, _this.to.length);
+
+            console.log('diff', _this.textDifference);
+
             _this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
         } else {
             _this.textDifference = _this.from.substring(_this.to.length - 1, _this.from.length);
             _this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
         }
-
-        console.log('diff', _this.textDifference);
         return _this;
     }
 
@@ -295,6 +313,8 @@ var TextAnimation = function (_Animation) {
             var text = null;
 
             if (this.animationDirection === TEXT_ANIMATION_DIRECTIONS.ADD) {
+                console.log('PER', this.to, percentageComplete);
+
                 var lengthOfDifference = Math.round(this.textDifference.length * percentageComplete);
 
                 text = this.from + this.textDifference.substring(0, lengthOfDifference);
@@ -304,10 +324,15 @@ var TextAnimation = function (_Animation) {
                 text = this.to + this.textDifference.substring(0, lengthOfDifference);
             }
 
-            console.log('TEXT', text);
-
-            this.currentValue = text;
+            this.currentValue = text || '&nbsp;';
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
+        }
+    }, {
+        key: 'onComplete',
+        value: function onComplete() {
+            this.currentValue = this.to;
+            _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
+            _get(Object.getPrototypeOf(TextAnimation.prototype), 'onComplete', this).call(this);
         }
     }]);
 
@@ -649,6 +674,8 @@ function SparkCentral(window) {
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
+        elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
         elements.sectionsAndHr = document.querySelectorAll('section,hr');
 
         return elements;
@@ -671,7 +698,7 @@ function SparkCentral(window) {
 
         design.fontSizes = {
             hiringBanner: '12px',
-            average: '30px'
+            average: '20px'
         };
 
         design.sizes = {
