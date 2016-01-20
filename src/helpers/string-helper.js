@@ -14,7 +14,7 @@ class StringHelper
             throw new Error(`${value} should be a string.`);
         }
 
-        const CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
+        const CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])*)/g;
         const camelMatches = value.match(CAMEL_REGEX);
 
         if (camelMatches === null || camelMatches.length === 0) {
