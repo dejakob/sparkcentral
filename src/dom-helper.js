@@ -7,6 +7,7 @@ class DomHelper
      * Attach style properties to a DOM element
      * @param {HTMLElement} element
      * @param {Object} styleProps
+     * @static
      */
     static attachStyle (element, styleProps)
     {
@@ -66,5 +67,24 @@ class DomHelper
                 .map(valuePart => `${valuePart[0].toUpperCase()}${valuePart.substring(1, valuePart.length)}`)
                 .join('');
         }
+    }
+
+    /**
+     * Create a button (link HTML element)
+     * @param {String} link
+     * @param {String} description
+     * @returns {Element}
+     * @static
+     */
+    static createButton (link, description)
+    {
+        const webButton = document.createElement('a');
+
+        webButton.setAttribute('class', 'btn btn-secondary');
+        webButton.setAttribute('target', '_blank');
+        webButton.setAttribute('href', link);
+        webButton.innerHTML = description;
+
+        return webButton;
     }
 }

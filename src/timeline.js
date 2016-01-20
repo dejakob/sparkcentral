@@ -139,4 +139,13 @@ class Timeline
             }
         }
     }
+
+
+    /**
+     * Stop the timeline sequence
+     */
+    stop ()
+    {
+        clearInterval(this._interval);
+    }
 }

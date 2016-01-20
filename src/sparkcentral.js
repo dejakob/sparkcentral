@@ -2,26 +2,38 @@
  * @author Jakob Kerkhove
  * @description Code example for job application
  */
-SparkCentral.call({}, window);
-
-function SparkCentral (window)
+class SparkCentral
 {
-    this.elements = cacheElements();
-    this.design = initDefaultDesign.call(this);
-    this.timeline = initTimeline.call(this);
+    /**
+     * Constructor for SparkCentral class
+     * @cascade
+     */
+    constructor ()
+    {
+        this.elements = null;
+        this.design = null;
+        this.timeline = null;
 
-    this.startHunting = startHunting;
+        this._cacheElements();
+        this._initDefaultDesign();
+        this._initTimeline();
 
-    this.elements.homePrimaryButton.addEventListener('click', this.startHunting.bind(this));
-    Array.prototype.forEach.call(this.elements.allLinks, link => {
-        link.setAttribute('href', '#');
-        link.setAttribute('onclick', '');
-    });
+        this.elements.homePrimaryButton.addEventListener('click', this.hunt.bind(this));
+
+        Array.prototype.forEach.call(this.elements.allLinks, link => {
+            link.setAttribute('href', '#');
+            link.setAttribute('onclick', '');
+        });
+
+        return this;
+    }
+
 
     /**
      * Cache all the elements needed
+     * @private
      */
-    function cacheElements ()
+    _cacheElements ()
     {
         const elements = {};
 
@@ -32,19 +44,20 @@ function SparkCentral (window)
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeContainer = elements.homeJumbotron.querySelector('.container');
         elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.homeButtonGroup = elements.homeJumbotron.querySelector('.btn-container');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
         elements.sectionsAndHrAndFooter = document.querySelectorAll('section,hr,footer');
         elements.allLinks = document.querySelectorAll('a');
 
-        return elements;
+        this.elements = elements;
     }
 
     /**
      * Set all the defaults for styling
-     * @returns {Object}
+     * @private
      */
-    function initDefaultDesign ()
+    _initDefaultDesign ()
     {
         const SPARK_CENTRAL_BLUE = '#468FDC';
         const DARK_BLUE = '#3358A2';
@@ -66,24 +79,28 @@ function SparkCentral (window)
             height: window.innerHeight + 20
         };
 
-        return design;
+        this.design = design;
     }
 
     /**
      * Initialize the timeline
-     * @returns {Timeline}
+     * @private
      */
-    function initTimeline ()
+    _initTimeline ()
     {
         const timeline = new Timeline();
 
         timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));
         timeline.start();
 
-        return timeline;
+        this.timeline = timeline;
     }
 
-    function startHunting ()
+    /**
+     * Hunt for job candidates
+     * @cascade
+     */
+    hunt ()
     {
         const vm = this;
 
@@ -116,6 +133,8 @@ function SparkCentral (window)
         vm.huntGame.init(vm.elements.homeJumbotron);
         setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
 
+        return this;
+
         /**
          * When the user won the game
          */
@@ -123,52 +142,6 @@ function SparkCentral (window)
         {
             destroyGame();
             showWinnersPage();
-
-            /**
-             * Clean everything related to the game
-             */
-            function destroyGame ()
-            {
-                vm.huntGame.destroy();
-                delete vm.huntGame;
-            }
-
-            /**
-             * Show the winners page
-             */
-            function showWinnersPage ()
-            {
-
-                vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' +
-                    'You found a perfect fit for the job \'Front End Developer\'.';
-                vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
-
-                const buttonGroup = vm.elements.homePrimaryButton.parentNode;
-
-                buttonGroup.innerHTML = '';
-                buttonGroup.appendChild(createButton('http://dejakob.com/?sparkcentral', 'Web'));
-                buttonGroup.appendChild(createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
-                buttonGroup.appendChild(createButton('http://github.com/dejakob', 'GitHub'));
-
-                DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
-
-                /**
-                 * Create a button (link HTML element)
-                 * @param {String} link
-                 * @param {String} description
-                 * @returns {HTMLAnchorElement}
-                 */
-                function createButton (link, description)
-                {
-                    const webButton = document.createElement('a');
-
-                    webButton.setAttribute('class', 'btn btn-secondary');
-                    webButton.setAttribute('href', link);
-                    webButton.innerHTML = description;
-
-                    return webButton;
-                }
-            }
         }
 
         /**
@@ -176,7 +149,64 @@ function SparkCentral (window)
          */
         function onFail ()
         {
+            destroyGame();
+            showLosersPage();
+        }
+
+        /**
+         * Clean everything related to the game
+         */
+        function destroyGame ()
+        {
+            vm.huntGame.destroy();
+            delete vm.huntGame;
+        }
+
+        /**
+         * Show the winners page
+         */
+        function showWinnersPage ()
+        {
+
+            vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' +
+                'You found a perfect fit for the job \'Front End Developer\'.';
+            vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
+
+            const buttonGroup = vm.elements.homeButtonGroup;
+
+            buttonGroup.innerHTML = '';
+            buttonGroup.appendChild(DomHelper.createButton('http://dejakob.com/?sparkcentral', 'Web'));
+            buttonGroup.appendChild(DomHelper.createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+            buttonGroup.appendChild(DomHelper.createButton('http://github.com/dejakob', 'GitHub'));
+
+            DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
+        }
+
+        /**
+         * Show the winners page
+         */
+        function showLosersPage ()
+        {
+
+            vm.elements.homeTitle.innerHTML = 'Game over!';
+            vm.elements.homeParagraph.innerHTML = 'You failed, but remember: <br />' +
+                'Success is the result of perfection, ' +
+                'hard work, learning from failure, loyalty, and persistence. (Colin Powell)';
+
+            const buttonGroup = vm.elements.homeButtonGroup;
+            const tryAgainButton = document.createElement('a');
+
+            tryAgainButton.setAttribute('class', 'btn btn-primary');
+            tryAgainButton.setAttribute('href', '#');
+            tryAgainButton.innerHTML = 'Try again';
+            tryAgainButton.onclick = () => vm.hunt();
+
+            buttonGroup.innerHTML = '';
+            buttonGroup.appendChild(tryAgainButton);
+
             DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
         }
     }
 }
+
+window.SparkCentralJobApplication = new SparkCentral();
