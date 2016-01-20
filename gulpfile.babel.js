@@ -2,6 +2,8 @@ import gulp from 'gulp';
 import babel from 'gulp-babel';
 import concat from 'gulp-concat';
 import watch from 'gulp-watch';
+import uglify from 'gulp-uglify';
+import rename from 'gulp-rename';
 
 gulp.task('default', defaultTask);
 gulp.task('watch', watchTask);
@@ -26,6 +28,9 @@ function defaultTask ()
         .pipe(concat('./dist/sparkcentral.js'))
         .pipe(babel())
         .pipe(gulp.dest('.'))
+        .pipe(uglify())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('.'));
 }
 
 function watchTask ()

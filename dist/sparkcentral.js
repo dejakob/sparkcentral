@@ -50,6 +50,9 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         to: '',
         onChange: function onChange(text) {
             return elements.homeTitle.innerHTML = text;
+        },
+        onComplete: function onComplete() {
+            return elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton);
         }
     })], [3000, 4000, new TextAnimation({
         from: '',
@@ -74,9 +77,6 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         to: 'You can help them a hand by finding the perfect fit...',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
-        },
-        onComplete: function onComplete() {
-            return elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton);
         }
     })], [3700, 4200, new TextAnimation({
         from: elements.homePrimaryButton.innerText,

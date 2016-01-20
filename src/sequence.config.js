@@ -33,7 +33,8 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         new TextAnimation({
             from: elements.homeTitle.innerText,
             to: '',
-            onChange: text => elements.homeTitle.innerHTML = text
+            onChange: text => elements.homeTitle.innerHTML = text,
+            onComplete: () => elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton)
         })
     ],
     [
@@ -69,8 +70,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         new TextAnimation({
             from: '',
             to: 'You can help them a hand by finding the perfect fit...',
-            onChange: text => elements.homeParagraph.innerHTML = text,
-            onComplete: () => elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton)
+            onChange: text => elements.homeParagraph.innerHTML = text
         })
     ],
     [
