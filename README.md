@@ -7,3 +7,13 @@ Code sample for my job application for Sparkcentral
 2. Go to [sparkcentral.com](http://sparkcentral.com)
 3. Open the browser console
 4. Paste the code and press enter
+
+## Set up for development
+```
+npm i dejakob/sparkcentral
+```
+
+## Build
+```
+gulp
+```
