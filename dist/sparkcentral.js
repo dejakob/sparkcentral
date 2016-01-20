@@ -495,8 +495,16 @@ var StringHelper = function () {
          * @static
          */
         value: function camelToDash(value) {
+            if (typeof value !== 'string') {
+                throw new Error(value + ' should be a string.');
+            }
+
             var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
             var camelMatches = value.match(CAMEL_REGEX);
+
+            if (camelMatches === null || camelMatches.length === 0) {
+                throw new Error(value + ' is not a valid string in camelCase.');
+            }
 
             return camelMatches.map(function (camelMatch) {
                 return camelMatch.toLowerCase();

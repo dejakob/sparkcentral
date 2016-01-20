@@ -10,8 +10,16 @@ class StringHelper
      */
     static camelToDash (value)
     {
+        if (typeof value !== 'string') {
+            throw new Error(`${value} should be a string.`);
+        }
+
         const CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
         const camelMatches = value.match(CAMEL_REGEX);
+
+        if (camelMatches === null || camelMatches.length === 0) {
+            throw new Error(`${value} is not a valid string in camelCase.`);
+        }
 
         return camelMatches
             .map(camelMatch => camelMatch.toLowerCase())
