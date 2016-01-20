@@ -169,7 +169,20 @@ class HuntGame
     {
         let hitted = false;
 
-        this._profiles.forEach(profile => {
+        this._profiles.forEach(testHit.bind(this));
+
+        if (hitted) {
+            this.repaint();
+
+            console.log(this._score);
+
+            if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
+                console.log('YOU WON');
+            }
+        }
+
+        function testHit (profile)
+        {
             if (
                 hitted === false &&
                 profile.hitTest(- this._left + eventData.clientX, - this._top + eventData.clientY)
@@ -178,10 +191,6 @@ class HuntGame
                 this._score += profile.speed * 10;
                 this._profiles.splice(this._profiles.indexOf(profile), 1);
             }
-        });
-
-        if (hitted) {
-            this.repaint();
         }
     }
 }
