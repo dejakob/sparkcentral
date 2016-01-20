@@ -208,5 +208,3 @@ class SparkCentral
         }
     }
 }
-
-window.SparkCentralJobApplication = new SparkCentral();

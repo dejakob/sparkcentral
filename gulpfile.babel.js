@@ -19,7 +19,10 @@ gulp.task('karma', [ 'test' ]);
  */
 function defaultTask ()
 {
-    return gulp.src(paths.src)
+    const allFiles = paths.src;
+    paths.exec.forEach(runPath => allFiles.push(runPath));
+
+    return gulp.src(allFiles)
         .pipe(concat('./dist/sparkcentral.js'))
         .pipe(babel())
         .pipe(gulp.dest('.'))

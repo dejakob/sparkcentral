@@ -758,6 +758,8 @@ var RgbColor = function () {
     }], [{
         key: 'fromHex',
         value: function fromHex(hexString) {
+            console.log('from HEX', hexString);
+
             var hexStringLength = hexString.length;
 
             if (hexString.indexOf('#') === 0) {
@@ -776,6 +778,8 @@ var RgbColor = function () {
                 var decimalColors = splittedHex.map(function (colorHex) {
                     return parseInt(colorHex, 16);
                 });
+
+                console.log('decimal colors', decimalColors);
 
                 return new (Function.prototype.bind.apply(RgbColor, [null].concat(_toConsumableArray(decimalColors))))();
             } else {
@@ -1257,5 +1261,8 @@ var SparkCentral = function () {
 
     return SparkCentral;
 }();
+/**
+ * Start the application
+ */
 
 window.SparkCentralJobApplication = new SparkCentral();

@@ -11,14 +11,17 @@ function KarmaConfigCreator (karmaConfig) {
     var port = 8666;
     var autoWatch = false;
     var basePath = './../';
-    var files = paths.test;
+    var files = paths.mocks;
+    
+    paths.src.forEach(function (srcFile) { files.push(srcFile) });
+    paths.tests.forEach(function (testFile) { files.push(testFile) });
 
     var frameworks = [ 'jasmine' ];
     var browsers = [ 'PhantomJS' ];
 
     var preprocessors = {
         './src/**/*.js': [ 'babel', 'coverage' ],
-        './example/**/*.html': [ 'html2js' ]
+        './spec/**/*.js': [ 'babel' ]
     };
     var babelPreprocessor = {
         options: {

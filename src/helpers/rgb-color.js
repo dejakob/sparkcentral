@@ -30,6 +30,8 @@ class RgbColor
      */
     static fromHex (hexString)
     {
+        console.log('from HEX', hexString);
+
         const hexStringLength = hexString.length;
 
         if (hexString.indexOf('#') === 0)
@@ -49,6 +51,8 @@ class RgbColor
 
         if (Array.isArray(splittedHex) && splittedHex.length === 3) {
             const decimalColors = splittedHex.map(colorHex => parseInt(colorHex, 16));
+
+            console.log('decimal colors', decimalColors);
 
             return new RgbColor(...decimalColors);
         }
