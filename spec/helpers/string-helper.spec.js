@@ -20,5 +20,13 @@ describe('StringHelper class ', () => {
             expect(() => StringHelper.camelToDash('845346556')).toThrowError('845346556 is not a valid string in camelCase.');
             expect(() => StringHelper.camelToDash('$€§( 690')).toThrowError('$€§( 690 is not a valid string in camelCase.');
         });
+
+        it('should return a dash format string', () => {
+            expect(StringHelper.camelToDash('opacity')).toBe('opacity');
+            expect(StringHelper.camelToDash('backgroundImage')).toBe('background-image');
+            expect(StringHelper.camelToDash('backgroundColor')).toBe('background-color');
+            expect(StringHelper.camelToDash('OverflowX')).toBe('overflow-x');
+            expect(StringHelper.camelToDash('backgroundMultipleThings')).toBe('background-multiple-things');
+        });
     });
 });
