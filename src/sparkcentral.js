@@ -85,6 +85,8 @@ function SparkCentral (window)
 
     function startHunting ()
     {
+        const vm = this;
+
         const top = '150px';
         const left = `${Math.round(0.1 * window.innerWidth)}px`;
         const position = 'absolute';
@@ -98,12 +100,11 @@ function SparkCentral (window)
         const height = window.innerHeight - 200;
         const width = window.innerWidth * 0.8;
 
-        const huntGame = new HuntGame(
+        vm.huntGame = new HuntGame(
             height,
             width,
             {
-                onWin,
-                onFail
+                onWin, onFail
             },
             {
                 top, left, position, border, borderRadius, cursor,
@@ -111,16 +112,63 @@ function SparkCentral (window)
             }
         );
 
-        DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
-        huntGame.init(this.elements.homeJumbotron);
-        setTimeout(huntGame.start.bind(huntGame), 1000);
+        DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
+        vm.huntGame.init(vm.elements.homeJumbotron);
+        setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
 
         /**
          * When the user won the game
          */
         function onWin ()
         {
+            destroyGame();
+            showWinnersPage();
 
+            /**
+             * Clean everything related to the game
+             */
+            function destroyGame ()
+            {
+                vm.huntGame.destroy();
+                delete vm.huntGame;
+            }
+
+            /**
+             * Show the winners page
+             */
+            function showWinnersPage ()
+            {
+
+                vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' +
+                    'You found a perfect fit for the job \'Front End Developer\'.';
+                vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
+
+                const buttonGroup = vm.elements.homePrimaryButton.parentNode;
+
+                buttonGroup.innerHTML = '';
+                buttonGroup.appendChild(createButton('http://dejakob.com/?sparkcentral', 'Web'));
+                buttonGroup.appendChild(createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+                buttonGroup.appendChild(createButton('http://github.com/dejakob', 'GitHub'));
+
+                DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
+
+                /**
+                 * Create a button (link HTML element)
+                 * @param {String} link
+                 * @param {String} description
+                 * @returns {HTMLAnchorElement}
+                 */
+                function createButton (link, description)
+                {
+                    const webButton = document.createElement('a');
+
+                    webButton.setAttribute('class', 'btn btn-secondary');
+                    webButton.setAttribute('href', link);
+                    webButton.innerHTML = description;
+
+                    return webButton;
+                }
+            }
         }
 
         /**
@@ -128,7 +176,7 @@ function SparkCentral (window)
          */
         function onFail ()
         {
-
+            DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
         }
     }
 }

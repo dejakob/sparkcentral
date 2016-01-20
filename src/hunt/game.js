@@ -128,6 +128,16 @@ class HuntGame
     }
 
     /**
+     * Destroy the game
+     */
+    destroy ()
+    {
+        this._canvas.parentNode.removeChild(this._canvas);
+        this._scoreBoard.parentNode.removeChild(this._scoreBoard);
+        delete this._context;
+    }
+
+    /**
      * Tick event for each interval tick
      * @private
      */

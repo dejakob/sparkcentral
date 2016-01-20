@@ -394,7 +394,7 @@ var GameProfile = function () {
 var GAME_PROFILE_IMAGE = new Image();
 GAME_PROFILE_IMAGE.src = 'data:image/jpeg;base64,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';
 var GAME_FPS = 30;
-var GAME_SCORE_NEEDED_TO_WIN = 1000;
+var GAME_SCORE_NEEDED_TO_WIN = 100;
 
 var GAME_DIRECTION = {
     LTR: 'left to right',
@@ -601,6 +601,18 @@ var HuntGame = function () {
             } else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
                 this._options.onWin.call(this);
             }
+        }
+
+        /**
+         * Destroy the game
+         */
+
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            this._canvas.parentNode.removeChild(this._canvas);
+            this._scoreBoard.parentNode.removeChild(this._scoreBoard);
+            delete this._context;
         }
 
         /**
@@ -1085,6 +1097,8 @@ function SparkCentral(window) {
     }
 
     function startHunting() {
+        var vm = this;
+
         var top = '150px';
         var left = Math.round(0.1 * window.innerWidth) + 'px';
         var position = 'absolute';
@@ -1098,26 +1112,72 @@ function SparkCentral(window) {
         var height = window.innerHeight - 200;
         var width = window.innerWidth * 0.8;
 
-        var huntGame = new HuntGame(height, width, {
-            onWin: onWin,
-            onFail: onFail
+        vm.huntGame = new HuntGame(height, width, {
+            onWin: onWin, onFail: onFail
         }, {
             top: top, left: left, position: position, border: border, borderRadius: borderRadius, cursor: cursor,
             backgroundImage: backgroundImage, backgroundSize: backgroundSize, backgroundRepeat: backgroundRepeat, backgroundPostion: backgroundPostion
         });
 
-        DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
-        huntGame.init(this.elements.homeJumbotron);
-        setTimeout(huntGame.start.bind(huntGame), 1000);
+        DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
+        vm.huntGame.init(vm.elements.homeJumbotron);
+        setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
 
         /**
          * When the user won the game
          */
-        function onWin() {}
+        function onWin() {
+            destroyGame();
+            showWinnersPage();
+
+            /**
+             * Clean everything related to the game
+             */
+            function destroyGame() {
+                vm.huntGame.destroy();
+                delete vm.huntGame;
+            }
+
+            /**
+             * Show the winners page
+             */
+            function showWinnersPage() {
+
+                vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' + 'You found a perfect fit for the job \'Front End Developer\'.';
+                vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
+
+                var buttonGroup = vm.elements.homePrimaryButton.parentNode;
+
+                buttonGroup.innerHTML = '';
+                buttonGroup.appendChild(createButton('http://dejakob.com/?sparkcentral', 'Web'));
+                buttonGroup.appendChild(createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+                buttonGroup.appendChild(createButton('http://github.com/dejakob', 'GitHub'));
+
+                DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
+
+                /**
+                 * Create a button (link HTML element)
+                 * @param {String} link
+                 * @param {String} description
+                 * @returns {HTMLAnchorElement}
+                 */
+                function createButton(link, description) {
+                    var webButton = document.createElement('a');
+
+                    webButton.setAttribute('class', 'btn btn-secondary');
+                    webButton.setAttribute('href', link);
+                    webButton.innerHTML = description;
+
+                    return webButton;
+                }
+            }
+        }
 
         /**
          * Game over...
          */
-        function onFail() {}
+        function onFail() {
+            DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
+        }
     }
 }

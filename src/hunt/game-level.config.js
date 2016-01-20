@@ -1,5 +1,5 @@
 const GAME_FPS = 30;
-const GAME_SCORE_NEEDED_TO_WIN = 1000;
+const GAME_SCORE_NEEDED_TO_WIN = 100;
 
 const GAME_DIRECTION = {
     LTR: 'left to right',
