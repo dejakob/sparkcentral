@@ -7,9 +7,12 @@ class HuntGame
      * Constructor HuntGame
      * @param {Number} height
      * @param {Number} width
+     * @param {Object} [options]
+     *  @param {Function} [options.onWin]
+     *  @param {Function} [options.onFail]
      * @param {Object} [style]
      */
-    constructor (height, width, style = {})
+    constructor (height, width, options = {}, style = {})
     {
         this._height = height;
         this._width = width;
@@ -20,6 +23,7 @@ class HuntGame
         this._context = null;
         this._profiles = [];
 
+        this._options = options;
         this._score = 0;
         this._interval = null;
         this._currentTick = 0;
@@ -36,6 +40,7 @@ class HuntGame
         const gameVM = this;
 
         this._canvas = addCanvasToDOM();
+        this._scoreBoard = addScoreBoardToDOM.call(this);
         this._context = this._canvas.getContext('2d');
 
         this._canvas.addEventListener('click', this._onClick.bind(this));
@@ -56,6 +61,21 @@ class HuntGame
             rootElement.appendChild(canvas);
 
             return canvas;
+        }
+
+        function addScoreBoardToDOM ()
+        {
+            const div = document.createElement('div');
+            const style = GAME_LAYOUT.SCORE_BOARD;
+
+            style.top = `${this._top + 10}px`;
+            style.right = `${this._left + 5}px`;
+
+            DomHelper.attachStyle(div, style);
+            div.innerHTML = this._score;
+            rootElement.appendChild(div);
+
+            return div;
         }
     }
 
@@ -92,11 +112,19 @@ class HuntGame
 
     /**
      * Stop the game
+     * @param {Boolean} [reason]
      */
-    stop ()
+    stop (reason = GAME_STOP_REASON.LOOSE)
     {
         clearInterval(this._interval);
         this._canvas.removeEventListener('click', this._onClick.bind(this));
+
+        if (reason === GAME_STOP_REASON.LOOSE && typeof this._options.onFail === 'function') {
+            this._options.onFail.call(this);
+        }
+        else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
+            this._options.onWin.call(this);
+        }
     }
 
     /**
@@ -177,7 +205,7 @@ class HuntGame
             console.log(this._score);
 
             if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
-                console.log('YOU WON');
+                this.stop(GAME_STOP_REASON.WIN);
             }
         }
 
@@ -189,8 +217,18 @@ class HuntGame
             ) {
                 hitted = true;
                 this._score += profile.speed * 10;
+                this._updateScore();
                 this._profiles.splice(this._profiles.indexOf(profile), 1);
             }
         }
+    }
+
+    /**
+     * Notify the DOM that the score changed
+     * @private
+     */
+    _updateScore ()
+    {
+        this._scoreBoard.innerHTML = this._score;
     }
 }

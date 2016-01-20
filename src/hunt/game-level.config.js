@@ -6,6 +6,20 @@ const GAME_DIRECTION = {
     RTL: 'right to left'
 };
 
+const GAME_LAYOUT = {
+    SCORE_BOARD: {
+        position: 'absolute',
+        color: '#ffffff',
+        textAlign: 'right',
+        fontSize: '22px'
+    }
+};
+
+const GAME_STOP_REASON = {
+    WIN: true,
+    LOOSE: false
+};
+
 const GAME_DEFAULT_SPEED = 5;
 const GAME_FAST_SPEED = 10;
 const GAME_FASTER_SPEED = 20;

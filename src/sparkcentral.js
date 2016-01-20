@@ -98,7 +98,13 @@ function SparkCentral (window)
         const height = window.innerHeight - 200;
         const width = window.innerWidth * 0.8;
 
-        const huntGame = new HuntGame(height, width,
+        const huntGame = new HuntGame(
+            height,
+            width,
+            {
+                onWin,
+                onFail
+            },
             {
                 top, left, position, border, borderRadius, cursor,
                 backgroundImage, backgroundSize, backgroundRepeat, backgroundPostion
@@ -108,5 +114,21 @@ function SparkCentral (window)
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);
         setTimeout(huntGame.start.bind(huntGame), 1000);
+
+        /**
+         * When the user won the game
+         */
+        function onWin ()
+        {
+
+        }
+
+        /**
+         * Game over...
+         */
+        function onFail ()
+        {
+
+        }
     }
 }

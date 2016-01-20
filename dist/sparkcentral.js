@@ -401,6 +401,20 @@ var GAME_DIRECTION = {
     RTL: 'right to left'
 };
 
+var GAME_LAYOUT = {
+    SCORE_BOARD: {
+        position: 'absolute',
+        color: '#ffffff',
+        textAlign: 'right',
+        fontSize: '22px'
+    }
+};
+
+var GAME_STOP_REASON = {
+    WIN: true,
+    LOOSE: false
+};
+
 var GAME_DEFAULT_SPEED = 5;
 var GAME_FAST_SPEED = 10;
 var GAME_FASTER_SPEED = 20;
@@ -456,11 +470,15 @@ var HuntGame = function () {
      * Constructor HuntGame
      * @param {Number} height
      * @param {Number} width
+     * @param {Object} [options]
+     *  @param {Function} [options.onWin]
+     *  @param {Function} [options.onFail]
      * @param {Object} [style]
      */
 
     function HuntGame(height, width) {
-        var style = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        var style = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
         _classCallCheck(this, HuntGame);
 
@@ -473,6 +491,7 @@ var HuntGame = function () {
         this._context = null;
         this._profiles = [];
 
+        this._options = options;
         this._score = 0;
         this._interval = null;
         this._currentTick = 0;
@@ -493,6 +512,7 @@ var HuntGame = function () {
             var gameVM = this;
 
             this._canvas = addCanvasToDOM();
+            this._scoreBoard = addScoreBoardToDOM.call(this);
             this._context = this._canvas.getContext('2d');
 
             this._canvas.addEventListener('click', this._onClick.bind(this));
@@ -512,6 +532,20 @@ var HuntGame = function () {
                 rootElement.appendChild(canvas);
 
                 return canvas;
+            }
+
+            function addScoreBoardToDOM() {
+                var div = document.createElement('div');
+                var style = GAME_LAYOUT.SCORE_BOARD;
+
+                style.top = this._top + 10 + 'px';
+                style.right = this._left + 5 + 'px';
+
+                DomHelper.attachStyle(div, style);
+                div.innerHTML = this._score;
+                rootElement.appendChild(div);
+
+                return div;
             }
         }
 
@@ -551,13 +585,22 @@ var HuntGame = function () {
 
         /**
          * Stop the game
+         * @param {Boolean} [reason]
          */
 
     }, {
         key: 'stop',
         value: function stop() {
+            var reason = arguments.length <= 0 || arguments[0] === undefined ? GAME_STOP_REASON.LOOSE : arguments[0];
+
             clearInterval(this._interval);
             this._canvas.removeEventListener('click', this._onClick.bind(this));
+
+            if (reason === GAME_STOP_REASON.LOOSE && typeof this._options.onFail === 'function') {
+                this._options.onFail.call(this);
+            } else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
+                this._options.onWin.call(this);
+            }
         }
 
         /**
@@ -637,7 +680,7 @@ var HuntGame = function () {
                 console.log(this._score);
 
                 if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
-                    console.log('YOU WON');
+                    this.stop(GAME_STOP_REASON.WIN);
                 }
             }
 
@@ -645,9 +688,21 @@ var HuntGame = function () {
                 if (hitted === false && profile.hitTest(-this._left + eventData.clientX, -this._top + eventData.clientY)) {
                     hitted = true;
                     this._score += profile.speed * 10;
+                    this._updateScore();
                     this._profiles.splice(this._profiles.indexOf(profile), 1);
                 }
             }
+        }
+
+        /**
+         * Notify the DOM that the score changed
+         * @private
+         */
+
+    }, {
+        key: '_updateScore',
+        value: function _updateScore() {
+            this._scoreBoard.innerHTML = this._score;
         }
     }]);
 
@@ -1044,6 +1099,9 @@ function SparkCentral(window) {
         var width = window.innerWidth * 0.8;
 
         var huntGame = new HuntGame(height, width, {
+            onWin: onWin,
+            onFail: onFail
+        }, {
             top: top, left: left, position: position, border: border, borderRadius: borderRadius, cursor: cursor,
             backgroundImage: backgroundImage, backgroundSize: backgroundSize, backgroundRepeat: backgroundRepeat, backgroundPostion: backgroundPostion
         });
@@ -1051,5 +1109,15 @@ function SparkCentral(window) {
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);
         setTimeout(huntGame.start.bind(huntGame), 1000);
+
+        /**
+         * When the user won the game
+         */
+        function onWin() {}
+
+        /**
+         * Game over...
+         */
+        function onFail() {}
     }
 }
