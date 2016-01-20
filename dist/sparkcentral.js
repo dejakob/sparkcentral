@@ -364,7 +364,7 @@ var GameProfile = function () {
         value: function paint(context) {
             context.beginPath();
             context.strokeStyle = '#fff';
-            context.rect(this.x, this.y, this.width, this.height);
+            context.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
             context.stroke();
             context.closePath();
         }
@@ -391,50 +391,8 @@ var GameProfile = function () {
     return GameProfile;
 }();
 
-var GAME_BACKGROUND_LAYOUT = {
-    COLORS: {
-        GRASS: '#B0EE6C'
-    }
-};
-
-/**
- * GameBackground class
- */
-
-var GameBackground = function () {
-    /**
-     * @param {HTMLCanvasElement} canvasElement
-     * @param {CanvasRenderingContext2D} context
-     */
-
-    function GameBackground(canvasElement, context) {
-        _classCallCheck(this, GameBackground);
-
-        this._canvas = canvasElement;
-        this._context = context;
-    }
-
-    /**
-     * Paint the background
-     */
-
-    _createClass(GameBackground, [{
-        key: 'paint',
-        value: function paint() {
-            var height = this._canvas.height;
-            var width = this._canvas.width;
-
-            this._context.beginPath();
-            this._context.fillStyle = GAME_BACKGROUND_LAYOUT.COLORS.GRASS;
-            this._context.rect(0, height - 50, width, height);
-            this._context.fill();
-            this._context.closePath();
-        }
-    }]);
-
-    return GameBackground;
-}();
-
+var GAME_PROFILE_IMAGE = new Image();
+GAME_PROFILE_IMAGE.src = 'data:image/jpeg;base64,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';
 var GAME_FPS = 30;
 
 var GAME_DIRECTION = {
@@ -457,7 +415,20 @@ var GAME_LEVEL = {
     255: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
     275: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
     300: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
-    315: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED) //
+    315: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    355: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    375: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTER_SPEED),
+    395: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    400: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    405: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    410: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
+    425: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTER_SPEED),
+    440: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
+    460: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTER_SPEED),
+    585: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTER_SPEED),
+    600: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTER_SPEED),
+    610: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTER_SPEED),
+    625: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTEST_SPEED)
 };
 /**
  * HuntGame class
@@ -506,7 +477,6 @@ var HuntGame = function () {
 
             this._canvas = addCanvasToDOM();
             this._context = this._canvas.getContext('2d');
-            this._background = new GameBackground(this._canvas, this._context);
 
             this._canvas.addEventListener('click', this._onClick.bind(this));
             this.repaint();
@@ -538,8 +508,6 @@ var HuntGame = function () {
             var gameVM = this;
 
             this._context.clearRect(0, 0, this._width, this._height);
-            this._background.paint();
-
             this._profiles.forEach(paintProfile);
 
             /**
@@ -1044,11 +1012,18 @@ function SparkCentral(window) {
         var position = 'absolute';
         var border = '1px #fff solid';
         var borderRadius = '3px';
-        var backgroundColor = this.design.colors.blue;
+        var cursor = 'pointer';
+        var backgroundImage = 'url(http://i.imgur.com/s7GuTWV.jpg)';
+        var backgroundSize = 'cover';
+        var backgroundPostion = 'center center';
+        var backgroundRepeat = 'no-repeat';
         var height = window.innerHeight - 200;
         var width = window.innerWidth * 0.8;
 
-        var huntGame = new HuntGame(height, width, { top: top, left: left, position: position, border: border, borderRadius: borderRadius, backgroundColor: backgroundColor });
+        var huntGame = new HuntGame(height, width, {
+            top: top, left: left, position: position, border: border, borderRadius: borderRadius, cursor: cursor,
+            backgroundImage: backgroundImage, backgroundSize: backgroundSize, backgroundRepeat: backgroundRepeat, backgroundPostion: backgroundPostion
+        });
 
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);

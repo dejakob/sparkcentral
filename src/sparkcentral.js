@@ -90,11 +90,20 @@ function SparkCentral (window)
         const position = 'absolute';
         const border = '1px #fff solid';
         const borderRadius = '3px';
-        const backgroundColor = this.design.colors.blue;
+        const cursor = 'pointer';
+        const backgroundImage = 'url(http://i.imgur.com/s7GuTWV.jpg)';
+        const backgroundSize = 'cover';
+        const backgroundPostion = 'center center';
+        const backgroundRepeat = 'no-repeat';
         const height = window.innerHeight - 200;
         const width = window.innerWidth * 0.8;
 
-        const huntGame = new HuntGame(height, width, { top, left, position, border, borderRadius, backgroundColor });
+        const huntGame = new HuntGame(height, width,
+            {
+                top, left, position, border, borderRadius, cursor,
+                backgroundImage, backgroundSize, backgroundRepeat, backgroundPostion
+            }
+        );
 
         DomHelper.attachStyle(this.elements.homeContainer, { visibility: 'hidden' });
         huntGame.init(this.elements.homeJumbotron);

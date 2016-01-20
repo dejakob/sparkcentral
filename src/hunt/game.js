@@ -37,7 +37,6 @@ class HuntGame
 
         this._canvas = addCanvasToDOM();
         this._context = this._canvas.getContext('2d');
-        this._background = new GameBackground(this._canvas, this._context);
 
         this._canvas.addEventListener('click', this._onClick.bind(this));
         this.repaint();
@@ -68,8 +67,6 @@ class HuntGame
         const gameVM = this;
 
         this._context.clearRect(0, 0, this._width, this._height);
-        this._background.paint();
-
         this._profiles.forEach(paintProfile);
 
         /**

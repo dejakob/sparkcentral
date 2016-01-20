@@ -17,7 +17,6 @@ function defaultTask ()
             './src/animation/animation.js',
             './src/animation/*.js',
             './src/hunt/game-profile.js',
-            './src/hunt/game-background.js',
             './src/hunt/*.js',
             './src/rgbcolor.js',
             './src/timeline.js',

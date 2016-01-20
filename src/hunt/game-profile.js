@@ -23,7 +23,7 @@ class GameProfile
     {
         context.beginPath();
         context.strokeStyle = '#fff';
-        context.rect(this.x, this.y, this.width, this.height);
+        context.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
         context.stroke();
         context.closePath();
     }
