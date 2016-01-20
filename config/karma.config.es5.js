@@ -20,8 +20,8 @@ function KarmaConfigCreator (karmaConfig) {
     var browsers = [ 'PhantomJS' ];
 
     var preprocessors = {
-        './src/**/*.js': [ 'babel', 'coverage' ],
-        './spec/**/*.js': [ 'babel' ]
+        './spec/**/*.js': [ 'babel' ],
+        './src/**/*.js': [ 'babel', 'coverage' ]
     };
     var babelPreprocessor = {
         options: {
@@ -44,7 +44,7 @@ function KarmaConfigCreator (karmaConfig) {
         'karma-coverage'
     ];
 
-    var reporters = ['dots', 'coverage'];
+    var reporters = [ 'coverage', 'dots' ];
     var coverageReporter = {
         reporters: [{
             type: 'cobertura',

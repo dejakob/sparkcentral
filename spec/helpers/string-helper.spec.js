@@ -29,4 +29,20 @@ describe('StringHelper class ', () => {
             expect(StringHelper.camelToDash('backgroundMultipleThings')).toBe('background-multiple-things');
         });
     });
+
+    describe('dashToCamel method ', () => {
+        it('should exist', () => {
+            expect(StringHelper.dashToCamel).toBeDefined();
+        });
+
+        it('should return a camelCase format string', () => {
+            expect(StringHelper.dashToCamel('opacity')).toBe('opacity');
+            expect(StringHelper.dashToCamel('background-image')).toBe('backgroundImage');
+            expect(StringHelper.dashToCamel('background-color')).toBe('backgroundColor');
+            expect(StringHelper.dashToCamel('overflow-x')).toBe('overflowX');
+            expect(StringHelper.dashToCamel('background-multiple-things')).toBe('backgroundMultipleThings');
+            expect(StringHelper.dashToCamel('background-897fezf')).toBe('background897fezf');
+            expect(StringHelper.dashToCamel('background_yolo')).toBe('background_yolo');
+        });
+    });
 });
