@@ -333,6 +333,198 @@ var TextAnimation = function (_Animation3) {
     return TextAnimation;
 }(Animation);
 /**
+ * Helper methods for DOM manipulation
+ */
+
+var DomHelper = function () {
+    function DomHelper() {
+        _classCallCheck(this, DomHelper);
+    }
+
+    _createClass(DomHelper, null, [{
+        key: 'attachStyle',
+
+        /**
+         * Attach style properties to a DOM element
+         * @param {HTMLElement} element
+         * @param {Object} styleProps
+         * @static
+         */
+        value: function attachStyle(element, styleProps) {
+            var originalStyleString = element.getAttribute('style') || '';
+            var allProps = {};
+
+            if (originalStyleString.trim() === '') {
+                allProps = styleProps;
+            } else {
+                originalStyleString.split(';').filter(function (declaration) {
+                    return declaration.trim() !== '';
+                }).map(function (declaration) {
+                    return declaration.split(':').map(function (prop) {
+                        return prop.trim();
+                    });
+                }).forEach(function (property) {
+                    return allProps[StringHelper.dashToCamel(property[0])] = property[1];
+                });
+
+                Object.keys(styleProps).forEach(function (propName) {
+                    if (styleProps.hasOwnProperty(propName)) {
+                        allProps[StringHelper.dashToCamel(propName)] = styleProps[propName];
+                    }
+                });
+            }
+
+            var styleString = Object.keys(allProps).filter(function (propName) {
+                return allProps.hasOwnProperty(propName);
+            }).map(function (propName) {
+                return StringHelper.camelToDash(propName) + ':' + allProps[propName];
+            }).join(';');
+
+            element.setAttribute('style', styleString);
+        }
+
+        /**
+         * Create a button (link HTML element)
+         * @param {String} link
+         * @param {String} description
+         * @returns {Element}
+         * @static
+         */
+
+    }, {
+        key: 'createButton',
+        value: function createButton(link, description) {
+            var webButton = document.createElement('a');
+
+            webButton.setAttribute('class', 'btn btn-secondary');
+            webButton.setAttribute('target', '_blank');
+            webButton.setAttribute('href', link);
+            webButton.innerHTML = description;
+
+            return webButton;
+        }
+    }]);
+
+    return DomHelper;
+}();
+
+var RgbColor = function () {
+    /**
+     * RgbColor Constuctor
+     * @param {Number} red
+     * @param {Number} green
+     * @param {Number} blue
+     * @constructor
+     */
+
+    function RgbColor(red, green, blue) {
+        _classCallCheck(this, RgbColor);
+
+        this.red = parseInt(red, 10);
+        this.green = parseInt(green, 10);
+        this.blue = parseInt(blue, 10);
+    }
+
+    /**
+     * toString method
+     * @override
+     */
+
+    _createClass(RgbColor, [{
+        key: 'toString',
+        value: function toString() {
+            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ');';
+        }
+
+        /**
+         * Create rgbColor from hexString
+         * @param {String} hexString
+         * @returns {RgbColor}
+         */
+
+    }], [{
+        key: 'fromHex',
+        value: function fromHex(hexString) {
+            console.log('from HEX', hexString);
+
+            var hexStringLength = hexString.length;
+
+            if (hexString.indexOf('#') === 0) {
+                hexString = hexString.substr(1, hexStringLength - 1);
+            }
+
+            if (hexString.length === 3) {
+                hexString = hexString.split('').map(function (tint) {
+                    return '' + tint + tint;
+                }).join('');
+            }
+
+            var splittedHex = hexString.match(/.{2}/g);
+
+            if (Array.isArray(splittedHex) && splittedHex.length === 3) {
+                var decimalColors = splittedHex.map(function (colorHex) {
+                    return parseInt(colorHex, 16);
+                });
+
+                console.log('decimal colors', decimalColors);
+
+                return new (Function.prototype.bind.apply(RgbColor, [null].concat(_toConsumableArray(decimalColors))))();
+            } else {
+                throw new Error(hexString + ' is not a valid hex color value');
+            }
+        }
+    }]);
+
+    return RgbColor;
+}();
+/**
+ * Helper methods for String manipulation
+ */
+
+var StringHelper = function () {
+    function StringHelper() {
+        _classCallCheck(this, StringHelper);
+    }
+
+    _createClass(StringHelper, null, [{
+        key: 'camelToDash',
+
+        /**
+         * Convert camel case format to dash CSS format
+         * @param {String} value
+         * @static
+         */
+        value: function camelToDash(value) {
+            var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
+            var camelMatches = value.match(CAMEL_REGEX);
+
+            return camelMatches.map(function (camelMatch) {
+                return camelMatch.toLowerCase();
+            }).join('-');
+        }
+
+        /**
+         * Convert dash CSS format to camel case format
+         * @param {String} value
+         * @static
+         */
+
+    }, {
+        key: 'dashToCamel',
+        value: function dashToCamel(value) {
+            var valueParts = value.split('-');
+
+            return valueParts[0] + value.split('-').filter(function (valuePart) {
+                return valuePart !== valueParts[0];
+            }).map(function (valuePart) {
+                return '' + valuePart[0].toUpperCase() + valuePart.substring(1, valuePart.length);
+            }).join('');
+        }
+    }]);
+
+    return StringHelper;
+}();
+/**
  * GameProfile class
  */
 
@@ -721,76 +913,6 @@ var HuntGame = function () {
     return HuntGame;
 }();
 
-var RgbColor = function () {
-    /**
-     * RgbColor Constuctor
-     * @param {Number} red
-     * @param {Number} green
-     * @param {Number} blue
-     * @constructor
-     */
-
-    function RgbColor(red, green, blue) {
-        _classCallCheck(this, RgbColor);
-
-        this.red = parseInt(red, 10);
-        this.green = parseInt(green, 10);
-        this.blue = parseInt(blue, 10);
-    }
-
-    /**
-     * toString method
-     * @override
-     */
-
-    _createClass(RgbColor, [{
-        key: 'toString',
-        value: function toString() {
-            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ');';
-        }
-
-        /**
-         * Create rgbColor from hexString
-         * @param {String} hexString
-         * @returns {RgbColor}
-         */
-
-    }], [{
-        key: 'fromHex',
-        value: function fromHex(hexString) {
-            console.log('from HEX', hexString);
-
-            var hexStringLength = hexString.length;
-
-            if (hexString.indexOf('#') === 0) {
-                hexString = hexString.substr(1, hexStringLength - 1);
-            }
-
-            if (hexString.length === 3) {
-                hexString = hexString.split('').map(function (tint) {
-                    return '' + tint + tint;
-                }).join('');
-            }
-
-            var splittedHex = hexString.match(/.{2}/g);
-
-            if (Array.isArray(splittedHex) && splittedHex.length === 3) {
-                var decimalColors = splittedHex.map(function (colorHex) {
-                    return parseInt(colorHex, 16);
-                });
-
-                console.log('decimal colors', decimalColors);
-
-                return new (Function.prototype.bind.apply(RgbColor, [null].concat(_toConsumableArray(decimalColors))))();
-            } else {
-                throw new Error(hexString + ' is not a valid hex color value');
-            }
-        }
-    }]);
-
-    return RgbColor;
-}();
-
 var Timeline = function () {
     /**
      * Timeline constructor
@@ -947,108 +1069,6 @@ var Timeline = function () {
     }]);
 
     return Timeline;
-}();
-/**
- * Helper methods for DOM manipulation
- */
-
-var DomHelper = function () {
-    function DomHelper() {
-        _classCallCheck(this, DomHelper);
-    }
-
-    _createClass(DomHelper, null, [{
-        key: 'attachStyle',
-
-        /**
-         * Attach style properties to a DOM element
-         * @param {HTMLElement} element
-         * @param {Object} styleProps
-         * @static
-         */
-        value: function attachStyle(element, styleProps) {
-            var originalStyleString = element.getAttribute('style') || '';
-            var allProps = {};
-
-            if (originalStyleString.trim() === '') {
-                allProps = styleProps;
-            } else {
-                originalStyleString.split(';').filter(function (declaration) {
-                    return declaration.trim() !== '';
-                }).map(function (declaration) {
-                    return declaration.split(':').map(function (prop) {
-                        return prop.trim();
-                    });
-                }).forEach(function (property) {
-                    return allProps[dashToCamel(property[0])] = property[1];
-                });
-
-                Object.keys(styleProps).forEach(function (propName) {
-                    if (styleProps.hasOwnProperty(propName)) {
-                        allProps[dashToCamel(propName)] = styleProps[propName];
-                    }
-                });
-            }
-
-            var styleString = Object.keys(allProps).filter(function (propName) {
-                return allProps.hasOwnProperty(propName);
-            }).map(function (propName) {
-                return camelToDash(propName) + ':' + allProps[propName];
-            }).join(';');
-
-            element.setAttribute('style', styleString);
-
-            /**
-             * Convert camel case format to dash CSS format
-             * @param {String} value
-             */
-            function camelToDash(value) {
-                var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
-                var camelMatches = value.match(CAMEL_REGEX);
-
-                return camelMatches.map(function (camelMatch) {
-                    return camelMatch.toLowerCase();
-                }).join('-');
-            }
-
-            /**
-             * Convert dash CSS format to camel case format
-             * @param {String} value
-             */
-            function dashToCamel(value) {
-                var valueParts = value.split('-');
-
-                return valueParts[0] + value.split('-').filter(function (valuePart) {
-                    return valuePart !== valueParts[0];
-                }).map(function (valuePart) {
-                    return '' + valuePart[0].toUpperCase() + valuePart.substring(1, valuePart.length);
-                }).join('');
-            }
-        }
-
-        /**
-         * Create a button (link HTML element)
-         * @param {String} link
-         * @param {String} description
-         * @returns {Element}
-         * @static
-         */
-
-    }, {
-        key: 'createButton',
-        value: function createButton(link, description) {
-            var webButton = document.createElement('a');
-
-            webButton.setAttribute('class', 'btn btn-secondary');
-            webButton.setAttribute('target', '_blank');
-            webButton.setAttribute('href', link);
-            webButton.innerHTML = description;
-
-            return webButton;
-        }
-    }]);
-
-    return DomHelper;
 }();
 /**
  * @author Jakob Kerkhove

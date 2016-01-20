@@ -22,51 +22,22 @@ class DomHelper
                 .split(';')
                 .filter(declaration => declaration.trim() !== '')
                 .map(declaration => declaration.split(':').map(prop => prop.trim()))
-                .forEach(property => allProps[dashToCamel(property[0])] = property[1]);
+                .forEach(property => allProps[ StringHelper.dashToCamel(property[0]) ] = property[1]);
 
             Object.keys(styleProps)
                 .forEach(propName => {
                     if (styleProps.hasOwnProperty(propName)) {
-                        allProps[dashToCamel(propName)] = styleProps[propName];
+                        allProps[ StringHelper.dashToCamel(propName) ] = styleProps[propName];
                     }
                 });
         }
 
         const styleString = Object.keys(allProps)
             .filter(propName => allProps.hasOwnProperty(propName))
-            .map(propName => `${camelToDash(propName)}:${allProps[propName]}`)
+            .map(propName => `${StringHelper.camelToDash(propName)}:${allProps[propName]}`)
             .join(';');
 
         element.setAttribute('style', styleString);
-
-        /**
-         * Convert camel case format to dash CSS format
-         * @param {String} value
-         */
-        function camelToDash (value)
-        {
-            const CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
-            const camelMatches = value.match(CAMEL_REGEX);
-
-            return camelMatches
-                .map(camelMatch => camelMatch.toLowerCase())
-                .join('-');
-        }
-
-        /**
-         * Convert dash CSS format to camel case format
-         * @param {String} value
-         */
-        function dashToCamel (value)
-        {
-            const valueParts = value.split('-');
-
-            return valueParts[0] + value
-                .split('-')
-                .filter(valuePart => valuePart !== valueParts[0])
-                .map(valuePart => `${valuePart[0].toUpperCase()}${valuePart.substring(1, valuePart.length)}`)
-                .join('');
-        }
     }
 
     /**
