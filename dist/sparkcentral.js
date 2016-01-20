@@ -74,7 +74,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         }
     })], [3500, 4500, new TextAnimation({
         from: '',
-        to: 'You can help them a hand by finding the perfect fit...',
+        to: 'You can help the company by finding the perfect fit...',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
         }
