@@ -8,6 +8,9 @@ Code sample for my job application for Sparkcentral
 3. Open the browser console
 4. Paste the code and press enter
 
+## Screencast
+http://www.youtube.com/embed/7RG3r-W1ysA (spoiler alert)
+
 ## Set up for development
 ```
 npm i dejakob/sparkcentral
