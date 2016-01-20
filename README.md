@@ -2,7 +2,7 @@
 Code sample for my job application for Sparkcentral
 
 ## How to Reproduce
-1. Copy this code of this file:
+1. Copy all code of this file:
 [sparkcentral.min.js](https://raw.githubusercontent.com/dejakob/sparkcentral/master/dist/sparkcentral.min.js)
 2. Go to [sparkcentral.com](http://sparkcentral.com)
 3. Open the browser console
