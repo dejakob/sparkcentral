@@ -1,2 +1,9 @@
-# sparkcentral
-Job application for sparkcentral
+# Sparkcentral job application
+Code sample for my job application for Sparkcentral
+
+## How to Reproduce
+1. Copy this code of this file:
+[sparkcentral.min.js](https://raw.githubusercontent.com/dejakob/sparkcentral/master/dist/sparkcentral.min.js)
+2. Go to [sparkcentral.com](http://sparkcentral.com)
+3. Open the browser console
+4. Paste the code and press enter
