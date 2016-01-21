@@ -1,4 +1,4 @@
-# Sparkcentral job application [![build status](https://api.travis-ci.org/dejakob/sparkcentral.svg)](https://travis-ci.org/dejakob/sparkcentral)
+# Sparkcentral job application [![build status](https://travis-ci.org/dejakob/sparkcentral.svg?branch=master)](https://travis-ci.org/dejakob/sparkcentral)
 Code sample for my job application for Sparkcentral
 
 ## How to Reproduce
