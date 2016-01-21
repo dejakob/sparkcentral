@@ -53,6 +53,9 @@ function KarmaConfigCreator (karmaConfig) {
         }, {
             type: 'html',
             dir: './test/coverage/html/'
+        }, {
+            type: 'lcov',
+            dir: './test/coverage/lcov/'
         }]
     };
 
