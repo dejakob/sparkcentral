@@ -178,4 +178,46 @@ describe('Game class ', () => {
             expect(game._scoreBoard).not.toBeDefined();
         });
     });
+
+    describe('onTick event', () => {
+        let game = null;
+
+        beforeEach(() => {
+            const div = document.createElement('div');
+            game = new Game(500, 500);
+            game.init(div);
+        });
+
+        it('should be defined', () => {
+            expect(game._onTick).toBeDefined();
+        });
+
+        it('should move the profiles', () => {
+            game._profiles = [
+                new GameProfile(GAME_DIRECTION.LTR, GAME_DEFAULT_SPEED),
+                new GameProfile(GAME_DIRECTION.RTL, GAME_DEFAULT_SPEED),
+                new GameProfile(GAME_DIRECTION.LTR, GAME_FASTER_SPEED)
+            ];
+
+            game._onTick();
+            expect(game._profiles[0].x).toBe(GAME_DEFAULT_SPEED);
+
+            game._onTick();
+            expect(game._profiles[0].x).toBe(GAME_DEFAULT_SPEED * 2);
+        });
+    });
+
+    describe('onClick event', () => {
+        let game = null;
+
+        beforeEach(() => {
+            const div = document.createElement('div');
+            game = new Game(500, 500);
+            game.init(div);
+        });
+
+        it('should be defined', () => {
+            expect(game._onClick).toBeDefined();
+        });
+    });
 });

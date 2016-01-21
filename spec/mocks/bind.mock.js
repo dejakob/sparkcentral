@@ -9,15 +9,27 @@
     }
 
     /**
-     * Bind compability method
+     * Bind fallback
      * @param thisArg
-     * @returns {Function}
+     * @returns {Function} binder
      */
     function bind (thisArg)
     {
-        const method = this;
-        const args = Array.prototype.filter.call(arguments, argument => argument !== thisArg);
+        const bindArgs = Array.prototype.splice.call(arguments, 1);
+        const vm = this;
 
-        return () => method.apply(thisArg, args);
+        binder.prototype = vm.prototype;
+        return binder;
+
+        function binder ()
+        {
+            const args = bindArgs.concat(Array.prototype.splice.call(arguments, 0));
+
+            if (!(this instanceof binder)) {
+                return vm.apply(thisArg, args);
+            }
+
+            vm.apply(this, args);
+        }
     }
 })(Function);
