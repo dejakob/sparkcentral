@@ -38,16 +38,22 @@ function watchTask ()
 
 function testTask (done)
 {
+    const shell = false;
     const exec = childProcess.exec;
 
-    return exec('node node_modules/karma/bin/karma start ./config/karma.config.es5.js', (error, stdout, stderr) => {
+    return exec(
+        `node ${__dirname}/node_modules/karma/bin/karma start ${__dirname}/config/karma.config.es5.js`,
+        { shell },
+        printKarmaResult
+    );
+
+    function printKarmaResult (error, stdout, stderr)
+    {
         if (error) {
             console.log(`error: ${error}`);
-            return;
         }
 
         console.log(stdout);
-
         done();
-    });
+    }
 }
