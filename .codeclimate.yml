@@ -1,3 +1,7 @@
 exclude_paths:
 - dist/**/*
 - example/**/*
+- spec/**/*
+- assets/**/*
+- config/**/*
+- test/**/*
