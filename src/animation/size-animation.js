@@ -31,7 +31,7 @@ class SizeAnimation extends Animation
      */
     onTick (percentageComplete)
     {
-        const size = (this.to - this.from) * (percentageComplete) + this.from;
+        const size = parseInt((this.to - this.from) * (percentageComplete) + this.from, 10);
 
         this.currentValue = `${size}px`;
         super.onTick();
