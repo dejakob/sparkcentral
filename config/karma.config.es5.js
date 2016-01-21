@@ -8,7 +8,8 @@ module.exports = KarmaConfigCreator;
  * Set the configuration for karma/jasmine unit tests
  */
 function KarmaConfigCreator (karmaConfig) {
-    var port = 8666;
+    var port = 8080;
+    var hostname = 'localhost';
     var autoWatch = false;
     var basePath = './../';
     var files = paths.mocks;
@@ -38,7 +39,6 @@ function KarmaConfigCreator (karmaConfig) {
 
     var plugins = [
         'karma-babel-preprocessor',
-        'karma-html2js-preprocessor',
         'karma-phantomjs-launcher',
         'karma-jasmine',
         'karma-coverage'
@@ -48,18 +48,18 @@ function KarmaConfigCreator (karmaConfig) {
     var coverageReporter = {
         reporters: [{
             type: 'cobertura',
-            dir: '../test/coverage/xml/',
+            dir: './test/coverage/xml/',
             file: 'coverage.xml'
         }, {
             type: 'html',
-            dir: '../test/coverage/html/'
+            dir: './test/coverage/html/'
         }]
     };
 
     var singleRun = true;
 
     karmaConfig.set({
-        autoWatch: autoWatch, basePath: basePath, frameworks: frameworks, files: files,
+        autoWatch: autoWatch, basePath: basePath, frameworks: frameworks, files: files, hostname: hostname,
         preprocessors: preprocessors, babelPreprocessor: babelPreprocessor, port: port, plugins: plugins,
         reporters: reporters, coverageReporter: coverageReporter, singleRun: singleRun, browsers: browsers
     });
