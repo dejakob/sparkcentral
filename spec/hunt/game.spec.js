@@ -61,7 +61,6 @@ describe('Game class ', () => {
 
         beforeEach(() => {
             const div = document.createElement('div');
-
             game = new Game(500, 500);
             game.init(div);
         });
@@ -155,11 +154,28 @@ describe('Game class ', () => {
         let game = null;
 
         beforeEach(() => {
+            const div = document.createElement('div');
             game = new Game(500, 500);
+            game.init(div);
         });
 
         it('should be defined', () => {
             expect(game.destroy).toBeDefined();
+        });
+
+        it('should remove the 2d context', () => {
+            game.destroy();
+            expect(game._context).not.toBeDefined();
+        });
+
+        it('should remove the content of the canvas element', () => {
+            game.destroy();
+            expect(game._canvas.innerHTML).not.toBe('');
+        });
+
+        it('should remove the content of the scoreBoard element', () => {
+            game.destroy();
+            expect(game._scoreBoard.innerHTML).not.toBe('');
         });
     });
 });
