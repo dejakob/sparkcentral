@@ -4,6 +4,8 @@
     "indent": [ 2, 4 ],
     "comma-dangle": 0,
     "space-before-function-paren": 0,
-    "brace-style": [2, "allman"]
+    "strict": [ 2, "global" ],
+    "no-unused-vars": 0,
+    "no-trailing-spaces": 0
   }
 }
