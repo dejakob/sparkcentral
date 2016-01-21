@@ -24,4 +24,20 @@ describe('RgbColor class ', () => {
         expect(rgbColor.toString).toBeDefined();
         expect(rgbColor.toString()).toBe('rgb(255,161,72)');
     });
+
+    describe('fromHex method ', () => {
+        it('should be defined', () => {
+            expect(RgbColor.fromHex).toBeDefined();
+        });
+
+        it('should throw when the argument was not a string', () => {
+            const ERROR_MSG = 'Please enter a string to create a RgbColor';
+
+            expect(() => RgbColor.fromHex(null)).toThrowError(ERROR_MSG);
+            expect(() => RgbColor.fromHex()).toThrowError(ERROR_MSG);
+            expect(() => RgbColor.fromHex(5435346)).toThrowError(ERROR_MSG);
+        });
+
+
+    });
 });
