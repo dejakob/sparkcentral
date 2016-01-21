@@ -108,8 +108,6 @@ class Game
      */
     start ()
     {
-        console.log('START THE GAME', this);
-
         const TICK = Math.round(1000 / GAME_FPS);
         this._interval = setInterval(this._onTick.bind(this), TICK);
     }

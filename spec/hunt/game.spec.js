@@ -102,6 +102,18 @@ describe('Game class ', () => {
         it('should be defined', () => {
             expect(game.start).toBeDefined();
         });
+
+        it('should start a timer', () => {
+            const RESULT = 'result';
+            spyOn(window, 'setInterval').and.callFake(() => RESULT);
+
+            game.start();
+
+            expect(game._interval).toBe(RESULT);
+            expect(window.setInterval).toHaveBeenCalled();
+            expect(window.setInterval.calls.mostRecent().args[0].toString()).toBe(game._onTick.bind(game).toString());
+            expect(window.setInterval.calls.mostRecent().args[1]).toBe(Math.round(1000 / GAME_FPS));
+        });
     });
 
     describe('stop method ', () => {
@@ -109,10 +121,33 @@ describe('Game class ', () => {
 
         beforeEach(() => {
             game = new Game(500, 500);
+            game._canvas = { removeEventListener: () => {} };
         });
 
         it('should be defined', () => {
             expect(game.stop).toBeDefined();
+        });
+
+        it('should clear the interval', () => {
+            const RESULT = 'result';
+
+            spyOn(window, 'clearInterval').and.callFake(() => RESULT);
+            game.stop();
+            expect(window.clearInterval).toHaveBeenCalledWith(game._interval);
+        });
+
+        it('should trigger the onWin callback in case of winning', () => {
+            game._options.onWin = () => {};
+            spyOn(game._options, 'onWin').and.callThrough();
+            game.stop(GAME_STOP_REASON.WIN);
+            expect(game._options.onWin).toHaveBeenCalled();
+        });
+
+        it('should trigger the onFail callback in case of game over', () => {
+            game._options.onFail = () => {};
+            spyOn(game._options, 'onFail').and.callThrough();
+            game.stop(GAME_STOP_REASON.LOOSE);
+            expect(game._options.onFail).toHaveBeenCalled();
         });
     });
 
