@@ -154,7 +154,10 @@ class Game
         }
 
         if (this._profiles.length > 0) {
-            this._profiles.forEach(moveProfile.bind(this));
+            const profilesClone = [];
+
+            this._profiles.forEach(profile => profilesClone.push(profile));
+            profilesClone.forEach(profile => moveProfile.call(this, profile));
             this.repaint();
         }
         else if (this._currentTick > this._lastProfileTick) {

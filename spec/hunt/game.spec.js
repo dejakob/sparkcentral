@@ -201,9 +201,26 @@ describe('Game class ', () => {
 
             game._onTick();
             expect(game._profiles[0].x).toBe(GAME_DEFAULT_SPEED);
+            expect(game._profiles[1].x).toBe(- GAME_DEFAULT_SPEED);
+            expect(game._profiles[2].x).toBe(GAME_FASTER_SPEED);
 
             game._onTick();
             expect(game._profiles[0].x).toBe(GAME_DEFAULT_SPEED * 2);
+            expect(game._profiles[1].x).toBe(- GAME_DEFAULT_SPEED * 2);
+            expect(game._profiles[2].x).toBe(GAME_FASTER_SPEED * 2);
+        });
+
+        it('should remove profiles that are out of the screen', () => {
+            const profile1 = new GameProfile(GAME_DIRECTION.LTR);
+            const profile2 = new GameProfile(GAME_DIRECTION.RTL);
+
+            profile1.x = profile1.width + game._width;
+            profile2.x = - profile2.width;
+
+            game._profiles = [ profile1, profile2 ];
+            game._onTick();
+
+            expect(game._profiles).toEqual([]);
         });
     });
 
