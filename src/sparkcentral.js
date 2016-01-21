@@ -117,7 +117,7 @@ class SparkCentral
         const height = window.innerHeight - 200;
         const width = window.innerWidth * 0.8;
 
-        vm.huntGame = new HuntGame(
+        vm.game = new Game(
             height,
             width,
             {
@@ -130,8 +130,8 @@ class SparkCentral
         );
 
         DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
-        vm.huntGame.init(vm.elements.homeJumbotron);
-        setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
+        vm.game.init(vm.elements.homeJumbotron);
+        setTimeout(vm.game.start.bind(vm.game), 1000);
 
         return this;
 
@@ -158,8 +158,8 @@ class SparkCentral
          */
         function destroyGame ()
         {
-            vm.huntGame.destroy();
-            delete vm.huntGame;
+            vm.game.destroy();
+            delete vm.game;
         }
 
         /**

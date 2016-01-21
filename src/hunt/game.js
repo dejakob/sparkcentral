@@ -1,10 +1,10 @@
 /**
- * HuntGame class
+ * Game class
  */
-class HuntGame
+class Game
 {
     /**
-     * Constructor HuntGame
+     * Constructor Game
      * @param {Number} height
      * @param {Number} width
      * @param {Object} [options]
@@ -37,6 +37,10 @@ class HuntGame
      */
     init (rootElement)
     {
+        if (!(rootElement instanceof HTMLElement)) {
+            throw new Error('a root element needs to be defined to initialize the game');
+        }
+
         const gameVM = this;
 
         this._canvas = addCanvasToDOM();
@@ -211,8 +215,6 @@ class HuntGame
 
         if (hitted) {
             this.repaint();
-
-            console.log(this._score);
 
             if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
                 this.stop(GAME_STOP_REASON.WIN);
