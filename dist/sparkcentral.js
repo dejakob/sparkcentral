@@ -6,8 +6,6 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -392,8 +390,8 @@ var DomHelper = function () {
          */
 
     }, {
-        key: 'createButton',
-        value: function createButton(link, description) {
+        key: 'createLinkButton',
+        value: function createLinkButton(link, description) {
             var webButton = document.createElement('a');
 
             webButton.setAttribute('class', 'btn btn-secondary');
@@ -423,6 +421,10 @@ var RgbColor = function () {
         this.red = parseInt(red, 10);
         this.green = parseInt(green, 10);
         this.blue = parseInt(blue, 10);
+
+        if (isNaN(this.red) || isNaN(this.green) || isNaN(this.blue)) {
+            throw new Error('All colors should be defined with a number');
+        }
     }
 
     /**
@@ -433,7 +435,26 @@ var RgbColor = function () {
     _createClass(RgbColor, [{
         key: 'toString',
         value: function toString() {
-            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ');';
+            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+        }
+
+        /**
+         * Create rgbColor from colors array
+         * @param {Array.<Number>} colors
+         */
+
+    }], [{
+        key: 'fromArray',
+        value: function fromArray(colors) {
+            console.log('COLORS', colors);
+
+            if (typeof colors !== 'undefined' || !Array.isArray(colors) || colors.length !== 3 || colors.filter(function (color) {
+                return typeof color === 'number' && !isNaN(color);
+            }).length !== 3) {
+                throw new Error('Could not create RgbColor of ' + colors);
+            }
+
+            return new RgbColor(colors[0], colors[1], colors[2]);
         }
 
         /**
@@ -442,10 +463,12 @@ var RgbColor = function () {
          * @returns {RgbColor}
          */
 
-    }], [{
+    }, {
         key: 'fromHex',
         value: function fromHex(hexString) {
-            console.log('from HEX', hexString);
+            if (typeof hexString !== 'string') {
+                throw new Error('Please enter a string to create a RgbColor');
+            }
 
             var hexStringLength = hexString.length;
 
@@ -465,10 +488,7 @@ var RgbColor = function () {
                 var decimalColors = splittedHex.map(function (colorHex) {
                     return parseInt(colorHex, 16);
                 });
-
-                console.log('decimal colors', decimalColors);
-
-                return new (Function.prototype.bind.apply(RgbColor, [null].concat(_toConsumableArray(decimalColors))))();
+                return RgbColor.fromArray(decimalColors);
             } else {
                 throw new Error(hexString + ' is not a valid hex color value');
             }
@@ -499,7 +519,7 @@ var StringHelper = function () {
                 throw new Error(value + ' should be a string.');
             }
 
-            var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
+            var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])*)/g;
             var camelMatches = value.match(CAMEL_REGEX);
 
             if (camelMatches === null || camelMatches.length === 0) {
@@ -1254,9 +1274,9 @@ var SparkCentral = function () {
                 var buttonGroup = vm.elements.homeButtonGroup;
 
                 buttonGroup.innerHTML = '';
-                buttonGroup.appendChild(DomHelper.createButton('http://dejakob.com/?sparkcentral', 'Web'));
-                buttonGroup.appendChild(DomHelper.createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
-                buttonGroup.appendChild(DomHelper.createButton('http://github.com/dejakob', 'GitHub'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://dejakob.com/?sparkcentral', 'Web'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://github.com/dejakob', 'GitHub'));
 
                 DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
             }

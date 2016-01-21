@@ -25,6 +25,16 @@ describe('RgbColor class ', () => {
         expect(rgbColor.toString()).toBe('rgb(255,161,72)');
     });
 
+    describe('fromArray method ', () => {
+        it('should be defined', () => {
+            expect(RgbColor.fromArray).toBeDefined();
+        });
+
+        it('should create an rgbColor from an array', () => {
+            expect(RgbColor.fromArray([ 60, 89, 127 ]).toString()).toBe('rgb(60,89,127)');
+        });
+    });
+
     describe('fromHex method ', () => {
         it('should be defined', () => {
             expect(RgbColor.fromHex).toBeDefined();
@@ -38,6 +48,10 @@ describe('RgbColor class ', () => {
             expect(() => RgbColor.fromHex(5435346)).toThrowError(ERROR_MSG);
         });
 
-
+        it('should convert colors from hex to rgb', () => {
+            expect(RgbColor.fromHex('#ffffff').toString()).toBe('rgb(255,255,255)');
+            expect(RgbColor.fromHex('000').toString()).toBe('rgb(0,0,0)');
+            expect(RgbColor.fromHex('689435').toString()).toBe('rgb(104,148,53)');
+        });
     });
 });
