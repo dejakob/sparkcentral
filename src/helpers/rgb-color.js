@@ -12,6 +12,10 @@ class RgbColor
         this.red = parseInt(red, 10);
         this.green = parseInt(green, 10);
         this.blue = parseInt(blue, 10);
+
+        if (isNaN(this.red) || isNaN(this.green) || isNaN(this.blue)) {
+            throw new Error('All colors should be defined with a number');
+        }
     }
 
     /**
@@ -20,7 +24,7 @@ class RgbColor
      */
     toString ()
     {
-        return `rgb(${this.red},${this.green},${this.blue});`;
+        return `rgb(${this.red},${this.green},${this.blue})`;
     }
 
     /**
