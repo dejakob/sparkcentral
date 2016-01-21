@@ -405,6 +405,9 @@ var DomHelper = function () {
 
     return DomHelper;
 }();
+/**
+ * RgbColor class
+ */
 
 var RgbColor = function () {
     /**
@@ -446,9 +449,7 @@ var RgbColor = function () {
     }], [{
         key: 'fromArray',
         value: function fromArray(colors) {
-            console.log('COLORS', colors);
-
-            if (typeof colors !== 'undefined' || !Array.isArray(colors) || colors.length !== 3 || colors.filter(function (color) {
+            if (typeof colors === 'undefined' || !Array.isArray(colors) || colors.length !== 3 || colors.filter(function (color) {
                 return typeof color === 'number' && !isNaN(color);
             }).length !== 3) {
                 throw new Error('Could not create RgbColor of ' + colors);
@@ -489,14 +490,15 @@ var RgbColor = function () {
                     return parseInt(colorHex, 16);
                 });
                 return RgbColor.fromArray(decimalColors);
-            } else {
-                throw new Error(hexString + ' is not a valid hex color value');
             }
+
+            throw new Error(hexString + ' is not a valid hex color value');
         }
     }]);
 
     return RgbColor;
 }();
+
 /**
  * Helper methods for String manipulation
  */
@@ -552,6 +554,7 @@ var StringHelper = function () {
 
     return StringHelper;
 }();
+
 /**
  * GameProfile class
  */
