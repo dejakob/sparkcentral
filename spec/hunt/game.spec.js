@@ -170,12 +170,12 @@ describe('Game class ', () => {
 
         it('should remove the content of the canvas element', () => {
             game.destroy();
-            expect(game._canvas.innerHTML).not.toBe('');
+            expect(game._canvas).not.toBeDefined();
         });
 
         it('should remove the content of the scoreBoard element', () => {
             game.destroy();
-            expect(game._scoreBoard.innerHTML).not.toBe('');
+            expect(game._scoreBoard).not.toBeDefined();
         });
     });
 });
