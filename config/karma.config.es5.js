@@ -22,7 +22,7 @@ function KarmaConfigCreator (karmaConfig) {
 
     var preprocessors = {
         './spec/**/*.js': [ 'babel' ],
-        './src/**/*.js': [ 'babel', 'coverage' ]
+        './src/**/*.js': [ 'coverage', 'babel' ]
     };
     var babelPreprocessor = {
         options: {
