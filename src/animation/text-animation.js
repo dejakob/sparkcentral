@@ -22,15 +22,61 @@ class TextAnimation extends Animation
         super(options);
 
         this.type = ANIMATION_TYPE.TEXT;
-        this.from = options.from;
-        this.to = options.to;
+        this._from = options.from;
+        this._to = options.to;
+        this._updateDifference();
+    }
 
+    /**
+     * Getter for from property
+     * @returns {String}
+     */
+    get from ()
+    {
+        return this._from;
+    }
+
+    /**
+     * Setter for from property
+     * @param {String} value
+     */
+    set from (value)
+    {
+        this._from = value;
+        this._updateDifference();
+    }
+
+    /**
+     * Getter for to property
+     * @returns {String}
+     */
+    get to ()
+    {
+        return this._to;
+    }
+
+    /**
+     * Setter for to property
+     * @param {String} value
+     */
+    set to (value)
+    {
+        this._to = value;
+        this._updateDifference();
+    }
+
+    /**
+     * Update the difference between from and to
+     * @private
+     */
+    _updateDifference ()
+    {
         if (this.to.length > this.from.length) {
-            this.textDifference = this.to.substring(this.from.length - 1, this.to.length);
+            this.textDifference = this.to.substring(this.from.length, this.to.length);
             this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
         }
         else {
-            this.textDifference = this.from.substring(this.to.length - 1, this.from.length);
+            this.textDifference = this.from.substring(this.to.length, this.from.length);
             this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
         }
     }

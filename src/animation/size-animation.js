@@ -22,8 +22,57 @@ class SizeAnimation extends Animation
         super(options);
 
         this.type = ANIMATION_TYPE.SIZE;
-        this.from = parseInt(options.from, 10);
-        this.to = parseInt(options.to, 10);
+        this._from = options.from;
+        this._to = options.to;
+        this._updateProps();
+    }
+
+    /**
+     * Getter of the from propery
+     * @returns {RgbColor}
+     */
+    get from ()
+    {
+        return this._from;
+    }
+
+    /**
+     * Setter of the from property
+     * @param {RgbColor} value
+     */
+    set from (value)
+    {
+        this._from = value;
+        this._updateProps();
+    }
+
+    /**
+     * Getter of the to property
+     * @returns {RgbColor}
+     */
+    get to ()
+    {
+        return this._to;
+    }
+
+    /**
+     * Setter of the to property
+     * @param {RgbColor} value
+     */
+    set to (value)
+    {
+        this._to = value;
+        this._updateProps();
+    }
+
+    /**
+     * Update from and to properties
+     * @private
+     */
+    _updateProps ()
+    {
+        this._from = parseInt(this._from, 10);
+        this._to = parseInt(this._to, 10);
     }
 
     /**
@@ -31,7 +80,7 @@ class SizeAnimation extends Animation
      */
     onTick (percentageComplete)
     {
-        const size = parseInt((this.to - this.from) * (percentageComplete) + this.from, 10);
+        const size = parseInt((this._to - this._from) * (percentageComplete) + this._from, 10);
 
         this.currentValue = `${size}px`;
         super.onTick();
