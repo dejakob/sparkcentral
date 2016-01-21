@@ -25,10 +25,10 @@ describe('DomHelper class ', () => {
         });
 
         it('should append previous styling', () => {
-            spyOn(HTMLElement.prototype, 'setAttribute').and.callFake(() => {});
-
             const htmlElement = document.createElement('div');
-            htmlElement.setAttribute('style', 'color:#ff0000;font-size:16px');
+            htmlElement.setAttribute('style', 'color:#ff0000;opacity:1');
+
+            spyOn(HTMLElement.prototype, 'setAttribute').and.callFake(() => {});
 
             const style = {
                 color: '#556677',
@@ -38,7 +38,8 @@ describe('DomHelper class ', () => {
 
             DomHelper.attachStyle(htmlElement, style);
 
-            expect(htmlElement.setAttribute).toHaveBeenCalledWith('style', 'color:#556677;font-size:16px;background-color:#ffffff');
+            expect(htmlElement.setAttribute)
+                .toHaveBeenCalledWith('style', 'color:#556677;opacity:1;font-size:16px;background-color:#ffffff');
         });
     });
 
