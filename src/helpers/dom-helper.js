@@ -47,7 +47,7 @@ class DomHelper
      * @returns {Element}
      * @static
      */
-    static createButton (link, description)
+    static createLinkButton (link, description)
     {
         const webButton = document.createElement('a');
 

@@ -175,9 +175,9 @@ class SparkCentral
             const buttonGroup = vm.elements.homeButtonGroup;
 
             buttonGroup.innerHTML = '';
-            buttonGroup.appendChild(DomHelper.createButton('http://dejakob.com/?sparkcentral', 'Web'));
-            buttonGroup.appendChild(DomHelper.createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
-            buttonGroup.appendChild(DomHelper.createButton('http://github.com/dejakob', 'GitHub'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://dejakob.com/?sparkcentral', 'Web'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://github.com/dejakob', 'GitHub'));
 
             DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
         }
