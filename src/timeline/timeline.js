@@ -38,7 +38,7 @@ class Timeline
         }
 
         if (!(animation instanceof Animation)) {
-            throw new Error(`${animation} is not a valid end time.`);
+            throw new Error(`${animation} is not a valid animation.`);
         }
 
         return this.insert([ [ from, to, animation ] ]);
