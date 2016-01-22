@@ -68,7 +68,6 @@ class Timeline
         {
             const from = sequenceItem[0];
             const to = sequenceItem[1];
-            const animation = sequenceItem[2];
 
             timelineVm.items.push(sequenceItem);
 

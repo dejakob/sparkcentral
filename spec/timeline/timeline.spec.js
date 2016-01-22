@@ -36,4 +36,16 @@ describe('Timeline class ', () => {
             expect(timeline.insert.calls.mostRecent().args[0]).toEqual([ [ 10, 80, animation ] ]);
         });
     });
+
+    describe('insert method', () => {
+        let timeline = null;
+
+        beforeEach(() => {
+            timeline = new Timeline();
+        });
+
+        it('should be defined', () => {
+            expect(timeline.insert).toBeDefined();
+        });
+    });
 });
