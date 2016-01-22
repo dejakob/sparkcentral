@@ -1,3 +1,8 @@
+const TIMELINE_FPS = 30;
+
+/**
+ * Timeline class
+ */
 class Timeline
 {
     /**
@@ -7,7 +12,7 @@ class Timeline
     constructor ()
     {
         // 30 fps
-        this.tick = parseInt(1000 / 30, 10);
+        this.tick = parseInt(1000 / TIMELINE_FPS, 10);
         this.items = [];
 
         this._selectedIndex = 0;
