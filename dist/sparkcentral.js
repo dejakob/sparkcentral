@@ -230,22 +230,76 @@ var SizeAnimation = function (_Animation2) {
         var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SizeAnimation).call(this, options));
 
         _this2.type = ANIMATION_TYPE.SIZE;
-        _this2.from = parseInt(options.from, 10);
-        _this2.to = parseInt(options.to, 10);
+        _this2._from = options.from;
+        _this2._to = options.to;
+        _this2._updateProps();
         return _this2;
     }
 
     /**
-     * @param {Number} percentageComplete
+     * Getter of the from propery
+     * @returns {RgbColor}
      */
 
     _createClass(SizeAnimation, [{
+        key: '_updateProps',
+
+        /**
+         * Update from and to properties
+         * @private
+         */
+        value: function _updateProps() {
+            this._from = parseInt(this._from, 10);
+            this._to = parseInt(this._to, 10);
+        }
+
+        /**
+         * @param {Number} percentageComplete
+         */
+
+    }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
-            var size = (this.to - this.from) * percentageComplete + this.from;
+            var size = parseInt((this._to - this._from) * percentageComplete + this._from, 10);
 
             this.currentValue = size + 'px';
             _get(Object.getPrototypeOf(SizeAnimation.prototype), 'onTick', this).call(this);
+        }
+    }, {
+        key: 'from',
+        get: function get() {
+            return this._from;
+        }
+
+        /**
+         * Setter of the from property
+         * @param {RgbColor} value
+         */
+        ,
+        set: function set(value) {
+            this._from = value;
+            this._updateProps();
+        }
+
+        /**
+         * Getter of the to property
+         * @returns {RgbColor}
+         */
+
+    }, {
+        key: 'to',
+        get: function get() {
+            return this._to;
+        }
+
+        /**
+         * Setter of the to property
+         * @param {RgbColor} value
+         */
+        ,
+        set: function set(value) {
+            this._to = value;
+            this._updateProps();
         }
     }]);
 
@@ -281,24 +335,39 @@ var TextAnimation = function (_Animation3) {
         var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(TextAnimation).call(this, options));
 
         _this3.type = ANIMATION_TYPE.TEXT;
-        _this3.from = options.from;
-        _this3.to = options.to;
-
-        if (_this3.to.length > _this3.from.length) {
-            _this3.textDifference = _this3.to.substring(_this3.from.length - 1, _this3.to.length);
-            _this3.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
-        } else {
-            _this3.textDifference = _this3.from.substring(_this3.to.length - 1, _this3.from.length);
-            _this3.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
-        }
+        _this3._from = options.from;
+        _this3._to = options.to;
+        _this3._updateDifference();
         return _this3;
     }
 
     /**
-     * @param {Number} percentageComplete
+     * Getter for from property
+     * @returns {String}
      */
 
     _createClass(TextAnimation, [{
+        key: '_updateDifference',
+
+        /**
+         * Update the difference between from and to
+         * @private
+         */
+        value: function _updateDifference() {
+            if (this.to.length > this.from.length) {
+                this.textDifference = this.to.substring(this.from.length, this.to.length);
+                this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
+            } else {
+                this.textDifference = this.from.substring(this.to.length, this.from.length);
+                this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
+            }
+        }
+
+        /**
+         * @param {Number} percentageComplete
+         */
+
+    }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
             var text = null;
@@ -325,6 +394,42 @@ var TextAnimation = function (_Animation3) {
             this.currentValue = this.to;
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onComplete', this).call(this);
+        }
+    }, {
+        key: 'from',
+        get: function get() {
+            return this._from;
+        }
+
+        /**
+         * Setter for from property
+         * @param {String} value
+         */
+        ,
+        set: function set(value) {
+            this._from = value;
+            this._updateDifference();
+        }
+
+        /**
+         * Getter for to property
+         * @returns {String}
+         */
+
+    }, {
+        key: 'to',
+        get: function get() {
+            return this._to;
+        }
+
+        /**
+         * Setter for to property
+         * @param {String} value
+         */
+        ,
+        set: function set(value) {
+            this._to = value;
+            this._updateDifference();
         }
     }]);
 
@@ -685,12 +790,12 @@ var GAME_LEVEL = {
     815: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTEST_SPEED)
 };
 /**
- * HuntGame class
+ * Game class
  */
 
-var HuntGame = function () {
+var Game = function () {
     /**
-     * Constructor HuntGame
+     * Constructor Game
      * @param {Number} height
      * @param {Number} width
      * @param {Object} [options]
@@ -699,11 +804,11 @@ var HuntGame = function () {
      * @param {Object} [style]
      */
 
-    function HuntGame(height, width) {
+    function Game(height, width) {
         var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
         var style = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
-        _classCallCheck(this, HuntGame);
+        _classCallCheck(this, Game);
 
         this._height = height;
         this._width = width;
@@ -729,9 +834,13 @@ var HuntGame = function () {
      * @param {HTMLElement} rootElement
      */
 
-    _createClass(HuntGame, [{
+    _createClass(Game, [{
         key: 'init',
         value: function init(rootElement) {
+            if (!(rootElement instanceof HTMLElement)) {
+                throw new Error('a root element needs to be defined to initialize the game');
+            }
+
             var gameVM = this;
 
             this._canvas = addCanvasToDOM();
@@ -800,8 +909,6 @@ var HuntGame = function () {
     }, {
         key: 'start',
         value: function start() {
-            console.log('START THE GAME', this);
-
             var TICK = Math.round(1000 / GAME_FPS);
             this._interval = setInterval(this._onTick.bind(this), TICK);
         }
@@ -835,6 +942,8 @@ var HuntGame = function () {
         value: function destroy() {
             this._canvas.parentNode.removeChild(this._canvas);
             this._scoreBoard.parentNode.removeChild(this._scoreBoard);
+            delete this._canvas;
+            delete this._scoreBoard;
             delete this._context;
         }
 
@@ -846,6 +955,8 @@ var HuntGame = function () {
     }, {
         key: '_onTick',
         value: function _onTick() {
+            var _this4 = this;
+
             var profileToAdd = GAME_LEVEL[this._currentTick];
 
             if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
@@ -853,8 +964,17 @@ var HuntGame = function () {
             }
 
             if (this._profiles.length > 0) {
-                this._profiles.forEach(moveProfile.bind(this));
-                this.repaint();
+                (function () {
+                    var profilesClone = [];
+
+                    _this4._profiles.forEach(function (profile) {
+                        return profilesClone.push(profile);
+                    });
+                    profilesClone.forEach(function (profile) {
+                        return moveProfile.call(_this4, profile);
+                    });
+                    _this4.repaint();
+                })();
             } else if (this._currentTick > this._lastProfileTick) {
                 this.stop();
             }
@@ -912,8 +1032,6 @@ var HuntGame = function () {
             if (hitted) {
                 this.repaint();
 
-                console.log(this._score);
-
                 if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
                     this.stop(GAME_STOP_REASON.WIN);
                 }
@@ -941,8 +1059,14 @@ var HuntGame = function () {
         }
     }]);
 
-    return HuntGame;
+    return Game;
 }();
+
+var TIMELINE_FPS = 30;
+
+/**
+ * Timeline class
+ */
 
 var Timeline = function () {
     /**
@@ -954,7 +1078,7 @@ var Timeline = function () {
         _classCallCheck(this, Timeline);
 
         // 30 fps
-        this.tick = parseInt(1000 / 30, 10);
+        this.tick = parseInt(1000 / TIMELINE_FPS, 10);
         this.items = [];
 
         this._selectedIndex = 0;
@@ -982,7 +1106,7 @@ var Timeline = function () {
             }
 
             if (!(animation instanceof Animation)) {
-                throw new Error(animation + ' is not a valid end time.');
+                throw new Error(animation + ' is not a valid animation.');
             }
 
             return this.insert([[from, to, animation]]);
@@ -1015,7 +1139,6 @@ var Timeline = function () {
             function cacheHashMapForTimeline(sequenceItem) {
                 var from = sequenceItem[0];
                 var to = sequenceItem[1];
-                var animation = sequenceItem[2];
 
                 timelineVm.items.push(sequenceItem);
 
@@ -1229,7 +1352,7 @@ var SparkCentral = function () {
             var height = window.innerHeight - 200;
             var width = window.innerWidth * 0.8;
 
-            vm.huntGame = new HuntGame(height, width, {
+            vm.game = new Game(height, width, {
                 onWin: onWin, onFail: onFail
             }, {
                 top: top, left: left, position: position, border: border, borderRadius: borderRadius, cursor: cursor,
@@ -1237,8 +1360,8 @@ var SparkCentral = function () {
             });
 
             DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
-            vm.huntGame.init(vm.elements.homeJumbotron);
-            setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
+            vm.game.init(vm.elements.homeJumbotron);
+            setTimeout(vm.game.start.bind(vm.game), 1000);
 
             return this;
 
@@ -1262,8 +1385,8 @@ var SparkCentral = function () {
              * Clean everything related to the game
              */
             function destroyGame() {
-                vm.huntGame.destroy();
-                delete vm.huntGame;
+                vm.game.destroy();
+                delete vm.game;
             }
 
             /**
