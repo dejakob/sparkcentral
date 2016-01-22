@@ -236,5 +236,23 @@ describe('Game class ', () => {
         it('should be defined', () => {
             expect(game._onClick).toBeDefined();
         });
+
+        it('should increase the score on hit', () => {
+            const profile1 = new GameProfile(GAME_DIRECTION.LTR);
+            const profile2 = new GameProfile(GAME_DIRECTION.RTL);
+
+            profile1.x = 20;
+            profile1.y = 5;
+            profile2.x = 200;
+            profile2.y = 200;
+
+            const eventData = { clientX: 25, clientY: 10 };
+
+            game._profiles = [ profile1, profile2 ];
+            game._onClick(eventData);
+
+            expect(game._profiles).not.toContain(profile1);
+            expect(game._profiles).toContain(profile2);
+        });
     });
 });
