@@ -117,7 +117,7 @@ class SparkCentral
         const height = window.innerHeight - 200;
         const width = window.innerWidth * 0.8;
 
-        vm.huntGame = new HuntGame(
+        vm.game = new Game(
             height,
             width,
             {
@@ -130,8 +130,8 @@ class SparkCentral
         );
 
         DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
-        vm.huntGame.init(vm.elements.homeJumbotron);
-        setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
+        vm.game.init(vm.elements.homeJumbotron);
+        setTimeout(vm.game.start.bind(vm.game), 1000);
 
         return this;
 
@@ -158,8 +158,8 @@ class SparkCentral
          */
         function destroyGame ()
         {
-            vm.huntGame.destroy();
-            delete vm.huntGame;
+            vm.game.destroy();
+            delete vm.game;
         }
 
         /**
@@ -175,9 +175,9 @@ class SparkCentral
             const buttonGroup = vm.elements.homeButtonGroup;
 
             buttonGroup.innerHTML = '';
-            buttonGroup.appendChild(DomHelper.createButton('http://dejakob.com/?sparkcentral', 'Web'));
-            buttonGroup.appendChild(DomHelper.createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
-            buttonGroup.appendChild(DomHelper.createButton('http://github.com/dejakob', 'GitHub'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://dejakob.com/?sparkcentral', 'Web'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+            buttonGroup.appendChild(DomHelper.createLinkButton('http://github.com/dejakob', 'GitHub'));
 
             DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
         }
@@ -208,5 +208,3 @@ class SparkCentral
         }
     }
 }
-
-window.SparkCentralJobApplication = new SparkCentral();

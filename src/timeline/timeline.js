@@ -1,3 +1,8 @@
+const TIMELINE_FPS = 30;
+
+/**
+ * Timeline class
+ */
 class Timeline
 {
     /**
@@ -7,7 +12,7 @@ class Timeline
     constructor ()
     {
         // 30 fps
-        this.tick = parseInt(1000 / 30, 10);
+        this.tick = parseInt(1000 / TIMELINE_FPS, 10);
         this.items = [];
 
         this._selectedIndex = 0;
@@ -33,7 +38,7 @@ class Timeline
         }
 
         if (!(animation instanceof Animation)) {
-            throw new Error(`${animation} is not a valid end time.`);
+            throw new Error(`${animation} is not a valid animation.`);
         }
 
         return this.insert([ [ from, to, animation ] ]);
@@ -63,7 +68,6 @@ class Timeline
         {
             const from = sequenceItem[0];
             const to = sequenceItem[1];
-            const animation = sequenceItem[2];
 
             timelineVm.items.push(sequenceItem);
 

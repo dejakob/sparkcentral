@@ -1,10 +1,10 @@
 /**
- * HuntGame class
+ * Game class
  */
-class HuntGame
+class Game
 {
     /**
-     * Constructor HuntGame
+     * Constructor Game
      * @param {Number} height
      * @param {Number} width
      * @param {Object} [options]
@@ -37,6 +37,10 @@ class HuntGame
      */
     init (rootElement)
     {
+        if (!(rootElement instanceof HTMLElement)) {
+            throw new Error('a root element needs to be defined to initialize the game');
+        }
+
         const gameVM = this;
 
         this._canvas = addCanvasToDOM();
@@ -104,8 +108,6 @@ class HuntGame
      */
     start ()
     {
-        console.log('START THE GAME', this);
-
         const TICK = Math.round(1000 / GAME_FPS);
         this._interval = setInterval(this._onTick.bind(this), TICK);
     }
@@ -134,6 +136,8 @@ class HuntGame
     {
         this._canvas.parentNode.removeChild(this._canvas);
         this._scoreBoard.parentNode.removeChild(this._scoreBoard);
+        delete this._canvas;
+        delete this._scoreBoard;
         delete this._context;
     }
 
@@ -150,7 +154,10 @@ class HuntGame
         }
 
         if (this._profiles.length > 0) {
-            this._profiles.forEach(moveProfile.bind(this));
+            const profilesClone = [];
+
+            this._profiles.forEach(profile => profilesClone.push(profile));
+            profilesClone.forEach(profile => moveProfile.call(this, profile));
             this.repaint();
         }
         else if (this._currentTick > this._lastProfileTick) {
@@ -211,8 +218,6 @@ class HuntGame
 
         if (hitted) {
             this.repaint();
-
-            console.log(this._score);
 
             if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
                 this.stop(GAME_STOP_REASON.WIN);

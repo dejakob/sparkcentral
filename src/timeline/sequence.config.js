@@ -69,7 +69,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         4500,
         new TextAnimation({
             from: '',
-            to: 'You can help them a hand by finding the perfect fit...',
+            to: 'You can help the company by finding the perfect fit...',
             onChange: text => elements.homeParagraph.innerHTML = text
         })
     ],

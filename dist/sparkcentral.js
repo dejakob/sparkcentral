@@ -6,8 +6,6 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -74,7 +72,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         }
     })], [3500, 4500, new TextAnimation({
         from: '',
-        to: 'You can help them a hand by finding the perfect fit...',
+        to: 'You can help the company by finding the perfect fit...',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
         }
@@ -232,22 +230,76 @@ var SizeAnimation = function (_Animation2) {
         var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(SizeAnimation).call(this, options));
 
         _this2.type = ANIMATION_TYPE.SIZE;
-        _this2.from = parseInt(options.from, 10);
-        _this2.to = parseInt(options.to, 10);
+        _this2._from = options.from;
+        _this2._to = options.to;
+        _this2._updateProps();
         return _this2;
     }
 
     /**
-     * @param {Number} percentageComplete
+     * Getter of the from propery
+     * @returns {RgbColor}
      */
 
     _createClass(SizeAnimation, [{
+        key: '_updateProps',
+
+        /**
+         * Update from and to properties
+         * @private
+         */
+        value: function _updateProps() {
+            this._from = parseInt(this._from, 10);
+            this._to = parseInt(this._to, 10);
+        }
+
+        /**
+         * @param {Number} percentageComplete
+         */
+
+    }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
-            var size = (this.to - this.from) * percentageComplete + this.from;
+            var size = parseInt((this._to - this._from) * percentageComplete + this._from, 10);
 
             this.currentValue = size + 'px';
             _get(Object.getPrototypeOf(SizeAnimation.prototype), 'onTick', this).call(this);
+        }
+    }, {
+        key: 'from',
+        get: function get() {
+            return this._from;
+        }
+
+        /**
+         * Setter of the from property
+         * @param {RgbColor} value
+         */
+        ,
+        set: function set(value) {
+            this._from = value;
+            this._updateProps();
+        }
+
+        /**
+         * Getter of the to property
+         * @returns {RgbColor}
+         */
+
+    }, {
+        key: 'to',
+        get: function get() {
+            return this._to;
+        }
+
+        /**
+         * Setter of the to property
+         * @param {RgbColor} value
+         */
+        ,
+        set: function set(value) {
+            this._to = value;
+            this._updateProps();
         }
     }]);
 
@@ -283,24 +335,39 @@ var TextAnimation = function (_Animation3) {
         var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(TextAnimation).call(this, options));
 
         _this3.type = ANIMATION_TYPE.TEXT;
-        _this3.from = options.from;
-        _this3.to = options.to;
-
-        if (_this3.to.length > _this3.from.length) {
-            _this3.textDifference = _this3.to.substring(_this3.from.length - 1, _this3.to.length);
-            _this3.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
-        } else {
-            _this3.textDifference = _this3.from.substring(_this3.to.length - 1, _this3.from.length);
-            _this3.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
-        }
+        _this3._from = options.from;
+        _this3._to = options.to;
+        _this3._updateDifference();
         return _this3;
     }
 
     /**
-     * @param {Number} percentageComplete
+     * Getter for from property
+     * @returns {String}
      */
 
     _createClass(TextAnimation, [{
+        key: '_updateDifference',
+
+        /**
+         * Update the difference between from and to
+         * @private
+         */
+        value: function _updateDifference() {
+            if (this.to.length > this.from.length) {
+                this.textDifference = this.to.substring(this.from.length, this.to.length);
+                this.animationDirection = TEXT_ANIMATION_DIRECTIONS.ADD;
+            } else {
+                this.textDifference = this.from.substring(this.to.length, this.from.length);
+                this.animationDirection = TEXT_ANIMATION_DIRECTIONS.REMOVE;
+            }
+        }
+
+        /**
+         * @param {Number} percentageComplete
+         */
+
+    }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
             var text = null;
@@ -328,10 +395,271 @@ var TextAnimation = function (_Animation3) {
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onComplete', this).call(this);
         }
+    }, {
+        key: 'from',
+        get: function get() {
+            return this._from;
+        }
+
+        /**
+         * Setter for from property
+         * @param {String} value
+         */
+        ,
+        set: function set(value) {
+            this._from = value;
+            this._updateDifference();
+        }
+
+        /**
+         * Getter for to property
+         * @returns {String}
+         */
+
+    }, {
+        key: 'to',
+        get: function get() {
+            return this._to;
+        }
+
+        /**
+         * Setter for to property
+         * @param {String} value
+         */
+        ,
+        set: function set(value) {
+            this._to = value;
+            this._updateDifference();
+        }
     }]);
 
     return TextAnimation;
 }(Animation);
+/**
+ * Helper methods for DOM manipulation
+ */
+
+var DomHelper = function () {
+    function DomHelper() {
+        _classCallCheck(this, DomHelper);
+    }
+
+    _createClass(DomHelper, null, [{
+        key: 'attachStyle',
+
+        /**
+         * Attach style properties to a DOM element
+         * @param {HTMLElement} element
+         * @param {Object} styleProps
+         * @static
+         */
+        value: function attachStyle(element, styleProps) {
+            var originalStyleString = element.getAttribute('style') || '';
+            var allProps = {};
+
+            if (originalStyleString.trim() === '') {
+                allProps = styleProps;
+            } else {
+                originalStyleString.split(';').filter(function (declaration) {
+                    return declaration.trim() !== '';
+                }).map(function (declaration) {
+                    return declaration.split(':').map(function (prop) {
+                        return prop.trim();
+                    });
+                }).forEach(function (property) {
+                    return allProps[StringHelper.dashToCamel(property[0])] = property[1];
+                });
+
+                Object.keys(styleProps).forEach(function (propName) {
+                    if (styleProps.hasOwnProperty(propName)) {
+                        allProps[StringHelper.dashToCamel(propName)] = styleProps[propName];
+                    }
+                });
+            }
+
+            var styleString = Object.keys(allProps).filter(function (propName) {
+                return allProps.hasOwnProperty(propName);
+            }).map(function (propName) {
+                return StringHelper.camelToDash(propName) + ':' + allProps[propName];
+            }).join(';');
+
+            element.setAttribute('style', styleString);
+        }
+
+        /**
+         * Create a button (link HTML element)
+         * @param {String} link
+         * @param {String} description
+         * @returns {Element}
+         * @static
+         */
+
+    }, {
+        key: 'createLinkButton',
+        value: function createLinkButton(link, description) {
+            var webButton = document.createElement('a');
+
+            webButton.setAttribute('class', 'btn btn-secondary');
+            webButton.setAttribute('target', '_blank');
+            webButton.setAttribute('href', link);
+            webButton.innerHTML = description;
+
+            return webButton;
+        }
+    }]);
+
+    return DomHelper;
+}();
+/**
+ * RgbColor class
+ */
+
+var RgbColor = function () {
+    /**
+     * RgbColor Constuctor
+     * @param {Number} red
+     * @param {Number} green
+     * @param {Number} blue
+     * @constructor
+     */
+
+    function RgbColor(red, green, blue) {
+        _classCallCheck(this, RgbColor);
+
+        this.red = parseInt(red, 10);
+        this.green = parseInt(green, 10);
+        this.blue = parseInt(blue, 10);
+
+        if (isNaN(this.red) || isNaN(this.green) || isNaN(this.blue)) {
+            throw new Error('All colors should be defined with a number');
+        }
+    }
+
+    /**
+     * toString method
+     * @override
+     */
+
+    _createClass(RgbColor, [{
+        key: 'toString',
+        value: function toString() {
+            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+        }
+
+        /**
+         * Create rgbColor from colors array
+         * @param {Array.<Number>} colors
+         */
+
+    }], [{
+        key: 'fromArray',
+        value: function fromArray(colors) {
+            if (typeof colors === 'undefined' || !Array.isArray(colors) || colors.length !== 3 || colors.filter(function (color) {
+                return typeof color === 'number' && !isNaN(color);
+            }).length !== 3) {
+                throw new Error('Could not create RgbColor of ' + colors);
+            }
+
+            return new RgbColor(colors[0], colors[1], colors[2]);
+        }
+
+        /**
+         * Create rgbColor from hexString
+         * @param {String} hexString
+         * @returns {RgbColor}
+         */
+
+    }, {
+        key: 'fromHex',
+        value: function fromHex(hexString) {
+            if (typeof hexString !== 'string') {
+                throw new Error('Please enter a string to create a RgbColor');
+            }
+
+            var hexStringLength = hexString.length;
+
+            if (hexString.indexOf('#') === 0) {
+                hexString = hexString.substr(1, hexStringLength - 1);
+            }
+
+            if (hexString.length === 3) {
+                hexString = hexString.split('').map(function (tint) {
+                    return '' + tint + tint;
+                }).join('');
+            }
+
+            var splittedHex = hexString.match(/.{2}/g);
+
+            if (Array.isArray(splittedHex) && splittedHex.length === 3) {
+                var decimalColors = splittedHex.map(function (colorHex) {
+                    return parseInt(colorHex, 16);
+                });
+                return RgbColor.fromArray(decimalColors);
+            }
+
+            throw new Error(hexString + ' is not a valid hex color value');
+        }
+    }]);
+
+    return RgbColor;
+}();
+
+/**
+ * Helper methods for String manipulation
+ */
+
+var StringHelper = function () {
+    function StringHelper() {
+        _classCallCheck(this, StringHelper);
+    }
+
+    _createClass(StringHelper, null, [{
+        key: 'camelToDash',
+
+        /**
+         * Convert camel case format to dash CSS format
+         * @param {String} value
+         * @static
+         */
+        value: function camelToDash(value) {
+            if (typeof value !== 'string') {
+                throw new Error(value + ' should be a string.');
+            }
+
+            var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])*)/g;
+            var camelMatches = value.match(CAMEL_REGEX);
+
+            if (camelMatches === null || camelMatches.length === 0) {
+                throw new Error(value + ' is not a valid string in camelCase.');
+            }
+
+            return camelMatches.map(function (camelMatch) {
+                return camelMatch.toLowerCase();
+            }).join('-');
+        }
+
+        /**
+         * Convert dash CSS format to camel case format
+         * @param {String} value
+         * @static
+         */
+
+    }, {
+        key: 'dashToCamel',
+        value: function dashToCamel(value) {
+            var valueParts = value.split('-');
+
+            return valueParts[0] + value.split('-').filter(function (valuePart) {
+                return valuePart !== valueParts[0];
+            }).map(function (valuePart) {
+                return '' + valuePart[0].toUpperCase() + valuePart.substring(1, valuePart.length);
+            }).join('');
+        }
+    }]);
+
+    return StringHelper;
+}();
+
 /**
  * GameProfile class
  */
@@ -462,12 +790,12 @@ var GAME_LEVEL = {
     815: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTEST_SPEED)
 };
 /**
- * HuntGame class
+ * Game class
  */
 
-var HuntGame = function () {
+var Game = function () {
     /**
-     * Constructor HuntGame
+     * Constructor Game
      * @param {Number} height
      * @param {Number} width
      * @param {Object} [options]
@@ -476,11 +804,11 @@ var HuntGame = function () {
      * @param {Object} [style]
      */
 
-    function HuntGame(height, width) {
+    function Game(height, width) {
         var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
         var style = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
-        _classCallCheck(this, HuntGame);
+        _classCallCheck(this, Game);
 
         this._height = height;
         this._width = width;
@@ -506,9 +834,13 @@ var HuntGame = function () {
      * @param {HTMLElement} rootElement
      */
 
-    _createClass(HuntGame, [{
+    _createClass(Game, [{
         key: 'init',
         value: function init(rootElement) {
+            if (!(rootElement instanceof HTMLElement)) {
+                throw new Error('a root element needs to be defined to initialize the game');
+            }
+
             var gameVM = this;
 
             this._canvas = addCanvasToDOM();
@@ -577,8 +909,6 @@ var HuntGame = function () {
     }, {
         key: 'start',
         value: function start() {
-            console.log('START THE GAME', this);
-
             var TICK = Math.round(1000 / GAME_FPS);
             this._interval = setInterval(this._onTick.bind(this), TICK);
         }
@@ -612,6 +942,8 @@ var HuntGame = function () {
         value: function destroy() {
             this._canvas.parentNode.removeChild(this._canvas);
             this._scoreBoard.parentNode.removeChild(this._scoreBoard);
+            delete this._canvas;
+            delete this._scoreBoard;
             delete this._context;
         }
 
@@ -623,6 +955,8 @@ var HuntGame = function () {
     }, {
         key: '_onTick',
         value: function _onTick() {
+            var _this4 = this;
+
             var profileToAdd = GAME_LEVEL[this._currentTick];
 
             if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
@@ -630,8 +964,17 @@ var HuntGame = function () {
             }
 
             if (this._profiles.length > 0) {
-                this._profiles.forEach(moveProfile.bind(this));
-                this.repaint();
+                (function () {
+                    var profilesClone = [];
+
+                    _this4._profiles.forEach(function (profile) {
+                        return profilesClone.push(profile);
+                    });
+                    profilesClone.forEach(function (profile) {
+                        return moveProfile.call(_this4, profile);
+                    });
+                    _this4.repaint();
+                })();
             } else if (this._currentTick > this._lastProfileTick) {
                 this.stop();
             }
@@ -689,8 +1032,6 @@ var HuntGame = function () {
             if (hitted) {
                 this.repaint();
 
-                console.log(this._score);
-
                 if (this._score >= GAME_SCORE_NEEDED_TO_WIN) {
                     this.stop(GAME_STOP_REASON.WIN);
                 }
@@ -718,74 +1059,14 @@ var HuntGame = function () {
         }
     }]);
 
-    return HuntGame;
+    return Game;
 }();
 
-var RgbColor = function () {
-    /**
-     * RgbColor Constuctor
-     * @param {Number} red
-     * @param {Number} green
-     * @param {Number} blue
-     * @constructor
-     */
+var TIMELINE_FPS = 30;
 
-    function RgbColor(red, green, blue) {
-        _classCallCheck(this, RgbColor);
-
-        this.red = parseInt(red, 10);
-        this.green = parseInt(green, 10);
-        this.blue = parseInt(blue, 10);
-    }
-
-    /**
-     * toString method
-     * @override
-     */
-
-    _createClass(RgbColor, [{
-        key: 'toString',
-        value: function toString() {
-            return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ');';
-        }
-
-        /**
-         * Create rgbColor from hexString
-         * @param {String} hexString
-         * @returns {RgbColor}
-         */
-
-    }], [{
-        key: 'fromHex',
-        value: function fromHex(hexString) {
-            var hexStringLength = hexString.length;
-
-            if (hexString.indexOf('#') === 0) {
-                hexString = hexString.substr(1, hexStringLength - 1);
-            }
-
-            if (hexString.length === 3) {
-                hexString = hexString.split('').map(function (tint) {
-                    return '' + tint + tint;
-                }).join('');
-            }
-
-            var splittedHex = hexString.match(/.{2}/g);
-
-            if (Array.isArray(splittedHex) && splittedHex.length === 3) {
-                var decimalColors = splittedHex.map(function (colorHex) {
-                    return parseInt(colorHex, 16);
-                });
-
-                return new (Function.prototype.bind.apply(RgbColor, [null].concat(_toConsumableArray(decimalColors))))();
-            } else {
-                throw new Error(hexString + ' is not a valid hex color value');
-            }
-        }
-    }]);
-
-    return RgbColor;
-}();
+/**
+ * Timeline class
+ */
 
 var Timeline = function () {
     /**
@@ -797,7 +1078,7 @@ var Timeline = function () {
         _classCallCheck(this, Timeline);
 
         // 30 fps
-        this.tick = parseInt(1000 / 30, 10);
+        this.tick = parseInt(1000 / TIMELINE_FPS, 10);
         this.items = [];
 
         this._selectedIndex = 0;
@@ -825,7 +1106,7 @@ var Timeline = function () {
             }
 
             if (!(animation instanceof Animation)) {
-                throw new Error(animation + ' is not a valid end time.');
+                throw new Error(animation + ' is not a valid animation.');
             }
 
             return this.insert([[from, to, animation]]);
@@ -858,7 +1139,6 @@ var Timeline = function () {
             function cacheHashMapForTimeline(sequenceItem) {
                 var from = sequenceItem[0];
                 var to = sequenceItem[1];
-                var animation = sequenceItem[2];
 
                 timelineVm.items.push(sequenceItem);
 
@@ -943,108 +1223,6 @@ var Timeline = function () {
     }]);
 
     return Timeline;
-}();
-/**
- * Helper methods for DOM manipulation
- */
-
-var DomHelper = function () {
-    function DomHelper() {
-        _classCallCheck(this, DomHelper);
-    }
-
-    _createClass(DomHelper, null, [{
-        key: 'attachStyle',
-
-        /**
-         * Attach style properties to a DOM element
-         * @param {HTMLElement} element
-         * @param {Object} styleProps
-         * @static
-         */
-        value: function attachStyle(element, styleProps) {
-            var originalStyleString = element.getAttribute('style') || '';
-            var allProps = {};
-
-            if (originalStyleString.trim() === '') {
-                allProps = styleProps;
-            } else {
-                originalStyleString.split(';').filter(function (declaration) {
-                    return declaration.trim() !== '';
-                }).map(function (declaration) {
-                    return declaration.split(':').map(function (prop) {
-                        return prop.trim();
-                    });
-                }).forEach(function (property) {
-                    return allProps[dashToCamel(property[0])] = property[1];
-                });
-
-                Object.keys(styleProps).forEach(function (propName) {
-                    if (styleProps.hasOwnProperty(propName)) {
-                        allProps[dashToCamel(propName)] = styleProps[propName];
-                    }
-                });
-            }
-
-            var styleString = Object.keys(allProps).filter(function (propName) {
-                return allProps.hasOwnProperty(propName);
-            }).map(function (propName) {
-                return camelToDash(propName) + ':' + allProps[propName];
-            }).join(';');
-
-            element.setAttribute('style', styleString);
-
-            /**
-             * Convert camel case format to dash CSS format
-             * @param {String} value
-             */
-            function camelToDash(value) {
-                var CAMEL_REGEX = /(^[a-z]+)|([A-Z]([a-z])+)/g;
-                var camelMatches = value.match(CAMEL_REGEX);
-
-                return camelMatches.map(function (camelMatch) {
-                    return camelMatch.toLowerCase();
-                }).join('-');
-            }
-
-            /**
-             * Convert dash CSS format to camel case format
-             * @param {String} value
-             */
-            function dashToCamel(value) {
-                var valueParts = value.split('-');
-
-                return valueParts[0] + value.split('-').filter(function (valuePart) {
-                    return valuePart !== valueParts[0];
-                }).map(function (valuePart) {
-                    return '' + valuePart[0].toUpperCase() + valuePart.substring(1, valuePart.length);
-                }).join('');
-            }
-        }
-
-        /**
-         * Create a button (link HTML element)
-         * @param {String} link
-         * @param {String} description
-         * @returns {Element}
-         * @static
-         */
-
-    }, {
-        key: 'createButton',
-        value: function createButton(link, description) {
-            var webButton = document.createElement('a');
-
-            webButton.setAttribute('class', 'btn btn-secondary');
-            webButton.setAttribute('target', '_blank');
-            webButton.setAttribute('href', link);
-            webButton.innerHTML = description;
-
-            return webButton;
-        }
-    }]);
-
-    return DomHelper;
 }();
 /**
  * @author Jakob Kerkhove
@@ -1174,7 +1352,7 @@ var SparkCentral = function () {
             var height = window.innerHeight - 200;
             var width = window.innerWidth * 0.8;
 
-            vm.huntGame = new HuntGame(height, width, {
+            vm.game = new Game(height, width, {
                 onWin: onWin, onFail: onFail
             }, {
                 top: top, left: left, position: position, border: border, borderRadius: borderRadius, cursor: cursor,
@@ -1182,8 +1360,8 @@ var SparkCentral = function () {
             });
 
             DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'hidden' });
-            vm.huntGame.init(vm.elements.homeJumbotron);
-            setTimeout(vm.huntGame.start.bind(vm.huntGame), 1000);
+            vm.game.init(vm.elements.homeJumbotron);
+            setTimeout(vm.game.start.bind(vm.game), 1000);
 
             return this;
 
@@ -1207,8 +1385,8 @@ var SparkCentral = function () {
              * Clean everything related to the game
              */
             function destroyGame() {
-                vm.huntGame.destroy();
-                delete vm.huntGame;
+                vm.game.destroy();
+                delete vm.game;
             }
 
             /**
@@ -1222,9 +1400,9 @@ var SparkCentral = function () {
                 var buttonGroup = vm.elements.homeButtonGroup;
 
                 buttonGroup.innerHTML = '';
-                buttonGroup.appendChild(DomHelper.createButton('http://dejakob.com/?sparkcentral', 'Web'));
-                buttonGroup.appendChild(DomHelper.createButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
-                buttonGroup.appendChild(DomHelper.createButton('http://github.com/dejakob', 'GitHub'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://dejakob.com/?sparkcentral', 'Web'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://linkedin.com/in/jakob-kerkhove-4a987281', 'LinkedIN'));
+                buttonGroup.appendChild(DomHelper.createLinkButton('http://github.com/dejakob', 'GitHub'));
 
                 DomHelper.attachStyle(vm.elements.homeContainer, { visibility: 'visible' });
             }
@@ -1257,5 +1435,8 @@ var SparkCentral = function () {
 
     return SparkCentral;
 }();
+/**
+ * Start the application
+ */
 
 window.SparkCentralJobApplication = new SparkCentral();
