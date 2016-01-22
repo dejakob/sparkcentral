@@ -33,6 +33,21 @@ describe('RgbColor class ', () => {
         it('should create an rgbColor from an array', () => {
             expect(RgbColor.fromArray([ 60, 89, 127 ]).toString()).toBe('rgb(60,89,127)');
         });
+
+        it('should throw when no color can be created with the input', () => {
+            expect(() => RgbColor.fromArray())
+                .toThrowError('Could not create RgbColor of undefined');
+            expect(() => RgbColor.fromArray([]))
+                .toThrowError('Could not create RgbColor of ');
+            expect(() => RgbColor.fromArray([ 18, 36 ]))
+                .toThrowError('Could not create RgbColor of 18,36');
+            expect(() => RgbColor.fromArray([ 18, 36, NaN ]))
+                .toThrowError('Could not create RgbColor of 18,36,NaN');
+            expect(() => RgbColor.fromArray([ 18, 36, '56' ]))
+                .toThrowError('Could not create RgbColor of 18,36,56');
+            expect(() => RgbColor.fromArray([ 18, 36, 56, 98 ]))
+                .toThrowError('Could not create RgbColor of 18,36,56,98');
+        });
     });
 
     describe('fromHex method ', () => {
@@ -52,6 +67,11 @@ describe('RgbColor class ', () => {
             expect(RgbColor.fromHex('#ffffff').toString()).toBe('rgb(255,255,255)');
             expect(RgbColor.fromHex('000').toString()).toBe('rgb(0,0,0)');
             expect(RgbColor.fromHex('689435').toString()).toBe('rgb(104,148,53)');
+        });
+
+        it('should throw when the string could not be converted', () => {
+            expect(() => RgbColor.fromHex('Just a string'))
+                .toThrowError('Just a string is not a valid hex color value');
         });
     });
 });
