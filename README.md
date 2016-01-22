@@ -1,4 +1,4 @@
-# Sparkcentral job application
+# Sparkcentral job application [![build status](https://travis-ci.org/dejakob/sparkcentral.svg?branch=master)](https://travis-ci.org/dejakob/sparkcentral)
 Code sample for my job application for Sparkcentral
 
 ## How to Reproduce
@@ -7,6 +7,9 @@ Code sample for my job application for Sparkcentral
 2. Go to [sparkcentral.com](http://sparkcentral.com)
 3. Open the browser console
 4. Paste the code and press enter
+
+## Screencast
+http://www.youtube.com/embed/7RG3r-W1ysA (spoiler alert)
 
 ## Set up for development
 ```
