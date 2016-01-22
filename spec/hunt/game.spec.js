@@ -254,5 +254,18 @@ describe('Game class ', () => {
             expect(game._profiles).not.toContain(profile1);
             expect(game._profiles).toContain(profile2);
         });
+
+        it('should stop the game with a win state', () => {
+
+            const profile1 = new GameProfile(GAME_DIRECTION.LTR);
+            const profile2 = new GameProfile(GAME_DIRECTION.RTL);
+
+            spyOn(game, 'stop').and.callThrough();
+            game._score = GAME_SCORE_NEEDED_TO_WIN;
+            game._profiles = [ profile1 ];
+            game._onClick({ clientX: 25, clientY: 10 });
+
+            expect(game.stop).toHaveBeenCalledWith(GAME_STOP_REASON.WIN);
+        });
     });
 });
