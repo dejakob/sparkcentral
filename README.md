@@ -25,3 +25,8 @@ gulp
 ```
 gulp karma
 ```
+
+## Check code styling
+```
+gulp eslint
+```
