@@ -14,7 +14,10 @@ class SizeAnimation extends Animation
             'string'
         ];
 
-        if (VALID_TYPES.indexOf(typeof options.from) === -1 || VALID_TYPES.indexOf(typeof options.to) === -1) {
+        if (
+            VALID_TYPES.indexOf(typeof options.from) === -1 ||
+            VALID_TYPES.indexOf(typeof options.to) === -1
+        ) {
             throw new Error('from and to option should be defined to create a resize animation.');
         }
 

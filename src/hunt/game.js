@@ -181,18 +181,20 @@ class Game
          * @param {GameProfile} profile
          */
         function moveProfile (profile) {
-            if (profile.direction === GAME_DIRECTION.LTR) {
-                profile.x += profile.speed;
+            const currentProfile = profile;
+            
+            if (currentProfile.direction === GAME_DIRECTION.LTR) {
+                currentProfile.x += currentProfile.speed;
 
-                if (profile.x > this._width + profile.width) {
-                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.x > this._width + currentProfile.width) {
+                    this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                 }
             }
             else {
-                profile.x -= profile.speed;
+                currentProfile.x -= currentProfile.speed;
 
-                if (profile.x < - profile.width) {
-                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.x < - currentProfile.width) {
+                    this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                 }
             }
         }

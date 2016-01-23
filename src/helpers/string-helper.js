@@ -36,7 +36,9 @@ class StringHelper
         return valueParts[0] + value
                 .split('-')
                 .filter(valuePart => valuePart !== valueParts[0])
-                .map(valuePart => `${valuePart[0].toUpperCase()}${valuePart.substring(1, valuePart.length)}`)
+                .map(valuePart =>
+                    `${valuePart[0].toUpperCase()}${valuePart.substring(1, valuePart.length)}`
+                )
                 .join('');
     }
 }

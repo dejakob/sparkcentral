@@ -90,7 +90,7 @@ class TextAnimation extends Animation
             text = this.to + this.textDifference.substring(0, lengthOfDifference);
         }
 
-        this.currentValue = text || '&nbsp;';
+        this.currentValue = text === '' ? '&nbsp;' : text;
         super.onTick();
     }
 

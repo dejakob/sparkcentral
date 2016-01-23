@@ -54,27 +54,28 @@ class RgbColor
         if (typeof hexString !== 'string') {
             throw new Error('Please enter a string to create a RgbColor');
         }
+        
+        let newHexString = hexString;
+        const newHexStringLength = hexString.length;
 
-        const hexStringLength = hexString.length;
-
-        if (hexString.indexOf('#') === 0) {
-            hexString = hexString.substr(1, hexStringLength - 1);
+        if (newHexString.indexOf('#') === 0) {
+            newHexString = newHexString.substr(1, newHexStringLength - 1);
         }
 
-        if (hexString.length === 3) {
-            hexString = hexString
+        if (newHexString.length === 3) {
+            newHexString = newHexString
                 .split('')
                 .map(tint => `${tint}${tint}`)
                 .join('');
         }
 
-        const splittedHex = hexString.match(/.{2}/g);
+        const splittedHex = newHexString.match(/.{2}/g);
 
         if (Array.isArray(splittedHex) && splittedHex.length === 3) {
             const decimalColors = splittedHex.map(colorHex => parseInt(colorHex, 16));
             return RgbColor.fromArray(decimalColors);
         }
 
-        throw new Error(`${hexString} is not a valid hex color value`);
+        throw new Error(`${newHexString} is not a valid hex color value`);
     }
 }
