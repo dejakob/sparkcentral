@@ -20,3 +20,8 @@ npm i dejakob/sparkcentral
 ```
 gulp
 ```
+
+## Run unit tests
+```
+gulp karma
+```
