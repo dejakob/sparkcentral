@@ -15,8 +15,7 @@ class Animation
      *  @param {Function} [options.from]
      *  @param {Function} [options.to]
      */
-    constructor (options = {})
-    {
+    constructor (options = {}) {
         this.type = options.type;
         this._onChange = options.onChange;
         this._onComplete = options.onComplete;
@@ -32,8 +31,7 @@ class Animation
      * Event gets triggered on each tick
      * @param {Number} percentageComplete
      */
-    onTick (percentageComplete)
-    {
+    onTick (percentageComplete) {
         if (typeof percentageComplete === 'number') {
             const value = (this.to - this.from) * (percentageComplete) + this.from;
             this.currentValue = Math.round(value * 100) / 100;
@@ -47,8 +45,7 @@ class Animation
     /**
      * When the animation is complete
      */
-    onComplete ()
-    {
+    onComplete () {
         if (typeof this._onComplete === 'function') {
             this._onComplete();
         }

@@ -8,8 +8,7 @@ class StringHelper
      * @param {String} value
      * @static
      */
-    static camelToDash (value)
-    {
+    static camelToDash (value) {
         if (typeof value !== 'string') {
             throw new Error(`${value} should be a string.`);
         }
@@ -31,8 +30,7 @@ class StringHelper
      * @param {String} value
      * @static
      */
-    static dashToCamel (value)
-    {
+    static dashToCamel (value) {
         const valueParts = value.split('-');
 
         return valueParts[0] + value

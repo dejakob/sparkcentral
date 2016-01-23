@@ -8,8 +8,7 @@
  */
 class ColorAnimation extends Animation
 {
-    constructor (options = {})
-    {
+    constructor (options = {}) {
         if (!(options.from instanceof RgbColor && options.to instanceof RgbColor)) {
             throw new Error('from and to option should be defined to create a color animation.');
         }
@@ -24,8 +23,7 @@ class ColorAnimation extends Animation
     /**
      * @param {Number} percentageComplete
      */
-    onTick (percentageComplete)
-    {
+    onTick (percentageComplete) {
         const red = (this.to.red - this.from.red) * (percentageComplete) + this.from.red;
         const green = (this.to.green - this.from.green) * (percentageComplete) + this.from.green;
         const blue = (this.to.blue - this.from.blue) * (percentageComplete) + this.from.blue;

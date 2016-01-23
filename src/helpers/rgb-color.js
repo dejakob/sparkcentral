@@ -10,8 +10,7 @@ class RgbColor
      * @param {Number} blue
      * @constructor
      */
-    constructor (red, green, blue)
-    {
+    constructor (red, green, blue) {
         this.red = parseInt(red, 10);
         this.green = parseInt(green, 10);
         this.blue = parseInt(blue, 10);
@@ -25,8 +24,7 @@ class RgbColor
      * toString method
      * @override
      */
-    toString ()
-    {
+    toString () {
         return `rgb(${this.red},${this.green},${this.blue})`;
     }
 
@@ -34,8 +32,7 @@ class RgbColor
      * Create rgbColor from colors array
      * @param {Array.<Number>} colors
      */
-    static fromArray (colors)
-    {
+    static fromArray (colors) {
         if (
             typeof colors === 'undefined' ||
             !Array.isArray(colors) ||
@@ -53,8 +50,7 @@ class RgbColor
      * @param {String} hexString
      * @returns {RgbColor}
      */
-    static fromHex (hexString)
-    {
+    static fromHex (hexString) {
         if (typeof hexString !== 'string') {
             throw new Error('Please enter a string to create a RgbColor');
         }

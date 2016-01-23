@@ -8,8 +8,7 @@
  */
 class SizeAnimation extends Animation
 {
-    constructor (options = {})
-    {
+    constructor (options = {}) {
         const VALID_TYPES = [
             'number',
             'string'
@@ -31,8 +30,7 @@ class SizeAnimation extends Animation
      * Getter of the from propery
      * @returns {RgbColor}
      */
-    get from ()
-    {
+    get from () {
         return this._from;
     }
 
@@ -40,8 +38,7 @@ class SizeAnimation extends Animation
      * Setter of the from property
      * @param {RgbColor} value
      */
-    set from (value)
-    {
+    set from (value) {
         this._from = value;
         this._updateProps();
     }
@@ -50,8 +47,7 @@ class SizeAnimation extends Animation
      * Getter of the to property
      * @returns {RgbColor}
      */
-    get to ()
-    {
+    get to () {
         return this._to;
     }
 
@@ -59,8 +55,7 @@ class SizeAnimation extends Animation
      * Setter of the to property
      * @param {RgbColor} value
      */
-    set to (value)
-    {
+    set to (value) {
         this._to = value;
         this._updateProps();
     }
@@ -69,8 +64,7 @@ class SizeAnimation extends Animation
      * Update from and to properties
      * @private
      */
-    _updateProps ()
-    {
+    _updateProps () {
         if (typeof this._from === 'string') {
             this._from = Number(this._from.replace('px', ''));
         }
@@ -83,8 +77,7 @@ class SizeAnimation extends Animation
     /**
      * @param {Number} percentageComplete
      */
-    onTick (percentageComplete)
-    {
+    onTick (percentageComplete) {
         const size = Number((this._to - this._from) * percentageComplete + this._from);
 
         this.currentValue = `${size}px`;
