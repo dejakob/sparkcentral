@@ -107,7 +107,8 @@ class Timeline
         {
             const indexesOfSequenceItems = timelineVm._timelineMapping[currentTick];
 
-            if (typeof indexesOfSequenceItems !== 'undefined' && Array.isArray(indexesOfSequenceItems)) {
+            if (typeof indexesOfSequenceItems !== 'undefined' &&
+                Array.isArray(indexesOfSequenceItems)) {
                 indexesOfSequenceItems.forEach(callAnimationOfSequenceItem);
             }
 
