@@ -1,13 +1,16 @@
 /**
- * Resize Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * SizeAnimation class
  */
 class SizeAnimation extends Animation
 {
+    /**
+     * Resize Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
     constructor (options = {}) {
         const VALID_TYPES = [
             'number',

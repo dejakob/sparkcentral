@@ -14,6 +14,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @author Jakob Kerkhove (@dejakob)
+ * @source http://github.com/dejakob/sparkcentral
  * @description
  *  Code example for my Job application at SparkCentral
  *  Go to http://www.sparkcentral.com/ and paste all code into the console.
@@ -97,6 +98,10 @@ var ANIMATION_TYPE = {
     TEXT: 'text'
 };
 
+/**
+ * Animation class
+ */
+
 var Animation = function () {
     /**
      * Animation constructor
@@ -159,16 +164,20 @@ var Animation = function () {
 }();
 
 /**
- * Color Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * ColorAnimation class
  */
 
 var ColorAnimation = function (_Animation) {
     _inherits(ColorAnimation, _Animation);
+
+    /**
+     * Color Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function ColorAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -208,16 +217,20 @@ var ColorAnimation = function (_Animation) {
 }(Animation);
 
 /**
- * Resize Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * SizeAnimation class
  */
 
 var SizeAnimation = function (_Animation2) {
     _inherits(SizeAnimation, _Animation2);
+
+    /**
+     * Resize Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function SizeAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -320,16 +333,20 @@ var TEXT_ANIMATION_DIRECTIONS = {
 };
 
 /**
- * Color Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * TextAnimation class
  */
 
 var TextAnimation = function (_Animation3) {
     _inherits(TextAnimation, _Animation3);
+
+    /**
+     * Color Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function TextAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -388,7 +405,7 @@ var TextAnimation = function (_Animation3) {
                 text = this.to + this.textDifference.substring(0, lengthOfDifference);
             }
 
-            this.currentValue = text || '&nbsp;';
+            this.currentValue = text === '' ? '&nbsp;' : text;
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
         }
 
@@ -496,8 +513,7 @@ var DomHelper = function () {
         }
 
         /**
-         * Create a button (link HTML element)
-         * @param {String} link
+         * Create a button (link HTML element) {String} link
          * @param {String} description
          * @returns {Element}
          * @static
@@ -586,19 +602,20 @@ var RgbColor = function () {
                 throw new Error('Please enter a string to create a RgbColor');
             }
 
-            var hexStringLength = hexString.length;
+            var newHexString = hexString;
+            var newHexStringLength = hexString.length;
 
-            if (hexString.indexOf('#') === 0) {
-                hexString = hexString.substr(1, hexStringLength - 1);
+            if (newHexString.indexOf('#') === 0) {
+                newHexString = newHexString.substr(1, newHexStringLength - 1);
             }
 
-            if (hexString.length === 3) {
-                hexString = hexString.split('').map(function (tint) {
+            if (newHexString.length === 3) {
+                newHexString = newHexString.split('').map(function (tint) {
                     return '' + tint + tint;
                 }).join('');
             }
 
-            var splittedHex = hexString.match(/.{2}/g);
+            var splittedHex = newHexString.match(/.{2}/g);
 
             if (Array.isArray(splittedHex) && splittedHex.length === 3) {
                 var decimalColors = splittedHex.map(function (colorHex) {
@@ -607,7 +624,7 @@ var RgbColor = function () {
                 return RgbColor.fromArray(decimalColors);
             }
 
-            throw new Error(hexString + ' is not a valid hex color value');
+            throw new Error(newHexString + ' is not a valid hex color value');
         }
     }]);
 
@@ -1019,17 +1036,19 @@ var Game = function () {
              * @param {GameProfile} profile
              */
             function moveProfile(profile) {
-                if (profile.direction === GAME_DIRECTION.LTR) {
-                    profile.x += profile.speed;
+                var currentProfile = profile;
 
-                    if (profile.x > this._width + profile.width) {
-                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.direction === GAME_DIRECTION.LTR) {
+                    currentProfile.x += currentProfile.speed;
+
+                    if (currentProfile.x > this._width + currentProfile.width) {
+                        this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                     }
                 } else {
-                    profile.x -= profile.speed;
+                    currentProfile.x -= currentProfile.speed;
 
-                    if (profile.x < -profile.width) {
-                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                    if (currentProfile.x < -currentProfile.width) {
+                        this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                     }
                 }
             }
@@ -1416,7 +1435,6 @@ var SparkCentral = function () {
              * Show the winners page
              */
             function showWinnersPage() {
-
                 vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' + 'You found a perfect fit for the job \'Front End Developer\'.';
                 vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
 
@@ -1457,6 +1475,7 @@ var SparkCentral = function () {
 
     return SparkCentral;
 }();
+
 /**
  * Start the application
  */

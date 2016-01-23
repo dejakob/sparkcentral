@@ -4,15 +4,18 @@ const TEXT_ANIMATION_DIRECTIONS = {
 };
 
 /**
- * Color Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * TextAnimation class
  */
 class TextAnimation extends Animation
 {
+    /**
+     * Color Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
     constructor (options = {}) {
         if (typeof options.from !== 'string' || typeof options.to !== 'string') {
             throw new Error('from and to option should be strings to create a text animation.');

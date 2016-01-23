@@ -4,6 +4,9 @@ const ANIMATION_TYPE = {
     TEXT: 'text'
 };
 
+/**
+ * Animation class
+ */
 class Animation
 {
     /**
