@@ -71,8 +71,13 @@ class SizeAnimation extends Animation
      */
     _updateProps ()
     {
-        this._from = parseInt(this._from, 10);
-        this._to = parseInt(this._to, 10);
+        if (typeof this._from === 'string') {
+            this._from = Number(this._from.replace('px', ''));
+        }
+
+        if (typeof this._to === 'string') {
+            this._to = Number(this._to.replace('px', ''));
+        }
     }
 
     /**
@@ -80,7 +85,7 @@ class SizeAnimation extends Animation
      */
     onTick (percentageComplete)
     {
-        const size = parseInt((this._to - this._from) * (percentageComplete) + this._from, 10);
+        const size = Number((this._to - this._from) * percentageComplete + this._from);
 
         this.currentValue = `${size}px`;
         super.onTick();

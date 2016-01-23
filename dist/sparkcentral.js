@@ -252,8 +252,13 @@ var SizeAnimation = function (_Animation2) {
          * @private
          */
         value: function _updateProps() {
-            this._from = parseInt(this._from, 10);
-            this._to = parseInt(this._to, 10);
+            if (typeof this._from === 'string') {
+                this._from = Number(this._from.replace('px', ''));
+            }
+
+            if (typeof this._to === 'string') {
+                this._to = Number(this._to.replace('px', ''));
+            }
         }
 
         /**
@@ -263,7 +268,7 @@ var SizeAnimation = function (_Animation2) {
     }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
-            var size = parseInt((this._to - this._from) * percentageComplete + this._from, 10);
+            var size = Number((this._to - this._from) * percentageComplete + this._from);
 
             this.currentValue = size + 'px';
             _get(Object.getPrototypeOf(SizeAnimation.prototype), 'onTick', this).call(this);
@@ -913,6 +918,7 @@ var Game = function () {
 
         /**
          * Start the game
+         * @cascade
          */
 
     }, {
@@ -920,11 +926,13 @@ var Game = function () {
         value: function start() {
             var TICK = Math.round(1000 / GAME_FPS);
             this._interval = setInterval(this._onTick.bind(this), TICK);
+            return this;
         }
 
         /**
          * Stop the game
          * @param {Boolean} [reason]
+         * @cascade
          */
 
     }, {
@@ -940,6 +948,8 @@ var Game = function () {
             } else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
                 this._options.onWin.call(this);
             }
+
+            return this;
         }
 
         /**
@@ -1424,7 +1434,6 @@ var SparkCentral = function () {
              * Show the winners page
              */
             function showLosersPage() {
-
                 vm.elements.homeTitle.innerHTML = 'Game over!';
                 vm.elements.homeParagraph.innerHTML = 'You failed, but remember: <br />' + 'Success is the result of perfection, ' + 'hard work, learning from failure, loyalty, and persistence. (Colin Powell)';
 
