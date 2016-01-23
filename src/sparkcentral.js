@@ -41,7 +41,8 @@ class SparkCentral
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeContainer = elements.homeJumbotron.querySelector('.container');
-        elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.homeParagraph =
+            elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homeButtonGroup = elements.homeJumbotron.querySelector('.btn-container');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
@@ -158,7 +159,6 @@ class SparkCentral
          * Show the winners page
          */
         function showWinnersPage () {
-
             vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' +
                 'You found a perfect fit for the job \'Front End Developer\'.';
             vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';

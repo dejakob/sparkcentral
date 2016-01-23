@@ -86,7 +86,8 @@ class TextAnimation extends Animation
             text = this.from + this.textDifference.substring(0, lengthOfDifference);
         }
         else {
-            const lengthOfDifference = Math.round(this.textDifference.length * (1 - percentageComplete));
+            const lengthOfDifference =
+                Math.round(this.textDifference.length * (1 - percentageComplete));
             text = this.to + this.textDifference.substring(0, lengthOfDifference);
         }
 
