@@ -8,6 +8,7 @@
     "no-unused-vars": 0,
     "no-trailing-spaces": 0,
     "no-use-before-define": [ 2, "nofunc" ],
-    "brace-style": [ 2, "1tbs" ]
+    "brace-style": [ 2, "1tbs" ],
+    "no-undef": 0
   }
 }
