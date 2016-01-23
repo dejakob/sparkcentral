@@ -40,7 +40,7 @@ const GAME_LEVEL = {
     360: new GameProfile(GAME_DIRECTION.RTL),
     370: new GameProfile(GAME_DIRECTION.LTR),
     375: new GameProfile(GAME_DIRECTION.RTL),
-    395:  new GameProfile(GAME_DIRECTION.RTL),
+    395: new GameProfile(GAME_DIRECTION.RTL),
     400: new GameProfile(GAME_DIRECTION.LTR, GAME_FAST_SPEED),
     405: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),
     410: new GameProfile(GAME_DIRECTION.RTL, GAME_FAST_SPEED),

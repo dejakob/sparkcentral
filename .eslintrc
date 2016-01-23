@@ -6,6 +6,11 @@
     "space-before-function-paren": 0,
     "strict": [ 2, "global" ],
     "no-unused-vars": 0,
-    "no-trailing-spaces": 0
+    "no-trailing-spaces": 0,
+    "no-use-before-define": [ 2, "nofunc" ],
+    "brace-style": [ 2, "stroustrup" ],
+    "no-undef": 0,
+    "new-cap": 0,
+    "no-irregular-whitespace": 0
   }
 }

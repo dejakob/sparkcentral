@@ -5,3 +5,4 @@ exclude_paths:
 - assets/**/*
 - config/**/*
 - test/**/*
+- node_modules/**/*

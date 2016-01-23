@@ -8,8 +8,7 @@ class SparkCentral
      * Constructor for SparkCentral class
      * @cascade
      */
-    constructor ()
-    {
+    constructor () {
         this.elements = null;
         this.design = null;
         this.timeline = null;
@@ -33,8 +32,7 @@ class SparkCentral
      * Cache all the elements needed
      * @private
      */
-    _cacheElements ()
-    {
+    _cacheElements () {
         const elements = {};
 
         elements.mainHeader = document.querySelector('.main-header');
@@ -43,7 +41,8 @@ class SparkCentral
         elements.homeJumbotron = document.querySelector('.jumbotron.home');
         elements.homeTitle = elements.homeJumbotron.querySelector('h1');
         elements.homeContainer = elements.homeJumbotron.querySelector('.container');
-        elements.homeParagraph = elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
+        elements.homeParagraph =
+            elements.homeJumbotron.querySelector('.col-md-10.col-md-offset-1.col-sm-12');
         elements.homeButtonGroup = elements.homeJumbotron.querySelector('.btn-container');
         elements.homePrimaryButton = elements.homeJumbotron.querySelector('.btn-primary');
         elements.homeSecondaryButton = elements.homeJumbotron.querySelector('.btn-secondary');
@@ -57,8 +56,7 @@ class SparkCentral
      * Set all the defaults for styling
      * @private
      */
-    _initDefaultDesign ()
-    {
+    _initDefaultDesign () {
         const SPARK_CENTRAL_BLUE = '#468FDC';
         const DARK_BLUE = '#3358A2';
 
@@ -86,8 +84,7 @@ class SparkCentral
      * Initialize the timeline
      * @private
      */
-    _initTimeline ()
-    {
+    _initTimeline () {
         const timeline = new Timeline();
 
         timeline.insert(ANIMATION_SEQUENCE(this.design, this.elements));
@@ -100,8 +97,7 @@ class SparkCentral
      * Hunt for job candidates
      * @cascade
      */
-    hunt ()
-    {
+    hunt () {
         const vm = this;
 
         const top = '150px';
@@ -138,8 +134,7 @@ class SparkCentral
         /**
          * When the user won the game
          */
-        function onWin ()
-        {
+        function onWin () {
             destroyGame();
             showWinnersPage();
         }
@@ -147,8 +142,7 @@ class SparkCentral
         /**
          * Game over...
          */
-        function onFail ()
-        {
+        function onFail () {
             destroyGame();
             showLosersPage();
         }
@@ -156,8 +150,7 @@ class SparkCentral
         /**
          * Clean everything related to the game
          */
-        function destroyGame ()
-        {
+        function destroyGame () {
             vm.game.destroy();
             delete vm.game;
         }
@@ -165,9 +158,7 @@ class SparkCentral
         /**
          * Show the winners page
          */
-        function showWinnersPage ()
-        {
-
+        function showWinnersPage () {
             vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' +
                 'You found a perfect fit for the job \'Front End Developer\'.';
             vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
@@ -185,9 +176,7 @@ class SparkCentral
         /**
          * Show the winners page
          */
-        function showLosersPage ()
-        {
-
+        function showLosersPage () {
             vm.elements.homeTitle.innerHTML = 'Game over!';
             vm.elements.homeParagraph.innerHTML = 'You failed, but remember: <br />' +
                 'Success is the result of perfection, ' +

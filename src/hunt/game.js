@@ -12,8 +12,7 @@ class Game
      *  @param {Function} [options.onFail]
      * @param {Object} [style]
      */
-    constructor (height, width, options = {}, style = {})
-    {
+    constructor (height, width, options = {}, style = {}) {
         this._height = height;
         this._width = width;
         this._top = parseInt(style.top || 0, 10);
@@ -35,8 +34,7 @@ class Game
      * Initialize the game
      * @param {HTMLElement} rootElement
      */
-    init (rootElement)
-    {
+    init (rootElement) {
         if (!(rootElement instanceof HTMLElement)) {
             throw new Error('a root element needs to be defined to initialize the game');
         }
@@ -54,8 +52,7 @@ class Game
          * Add a new canvas element to the DOM
          * @returns {HTMLCanvasElement}
          */
-        function addCanvasToDOM ()
-        {
+        function addCanvasToDOM () {
             const canvas = document.createElement('canvas');
 
             canvas.height = gameVM._height;
@@ -67,8 +64,7 @@ class Game
             return canvas;
         }
 
-        function addScoreBoardToDOM ()
-        {
+        function addScoreBoardToDOM () {
             const div = document.createElement('div');
             const style = GAME_LAYOUT.SCORE_BOARD;
 
@@ -86,8 +82,7 @@ class Game
     /**
      * Clean and paint frame
      */
-    repaint ()
-    {
+    repaint () {
         const gameVM = this;
 
         this._context.clearRect(0, 0, this._width, this._height);
@@ -97,27 +92,27 @@ class Game
          * Paint a profile/target on the canvas
          * @param {GameProfile} profile
          */
-        function paintProfile (profile)
-        {
+        function paintProfile (profile) {
             profile.paint(gameVM._context);
         }
     }
 
     /**
      * Start the game
+     * @cascade
      */
-    start ()
-    {
+    start () {
         const TICK = Math.round(1000 / GAME_FPS);
         this._interval = setInterval(this._onTick.bind(this), TICK);
+        return this;
     }
 
     /**
      * Stop the game
      * @param {Boolean} [reason]
+     * @cascade
      */
-    stop (reason = GAME_STOP_REASON.LOOSE)
-    {
+    stop (reason = GAME_STOP_REASON.LOOSE) {
         clearInterval(this._interval);
         this._canvas.removeEventListener('click', this._onClick.bind(this));
 
@@ -127,13 +122,14 @@ class Game
         else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
             this._options.onWin.call(this);
         }
+
+        return this;
     }
 
     /**
      * Destroy the game
      */
-    destroy ()
-    {
+    destroy () {
         this._canvas.parentNode.removeChild(this._canvas);
         this._scoreBoard.parentNode.removeChild(this._scoreBoard);
         delete this._canvas;
@@ -145,8 +141,7 @@ class Game
      * Tick event for each interval tick
      * @private
      */
-    _onTick ()
-    {
+    _onTick () {
         const profileToAdd = GAME_LEVEL[this._currentTick];
 
         if (this._timesToAddProfile.indexOf(this._currentTick) > -1) {
@@ -169,8 +164,7 @@ class Game
         /**
          * Add a new profile to the list of profiles
          */
-        function addNewProfile ()
-        {
+        function addNewProfile () {
             if (profileToAdd.direction === GAME_DIRECTION.LTR) {
                 profileToAdd.x = - profileToAdd.width;
             }
@@ -186,20 +180,21 @@ class Game
          * Move the profile one step in the right direction
          * @param {GameProfile} profile
          */
-        function moveProfile (profile)
-        {
-            if (profile.direction === GAME_DIRECTION.LTR) {
-                profile.x += profile.speed;
+        function moveProfile (profile) {
+            const currentProfile = profile;
+            
+            if (currentProfile.direction === GAME_DIRECTION.LTR) {
+                currentProfile.x += currentProfile.speed;
 
-                if (profile.x > this._width + profile.width) {
-                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.x > this._width + currentProfile.width) {
+                    this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                 }
             }
             else {
-                profile.x -= profile.speed;
+                currentProfile.x -= currentProfile.speed;
 
-                if (profile.x < - profile.width) {
-                    this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.x < - currentProfile.width) {
+                    this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                 }
             }
         }
@@ -210,8 +205,7 @@ class Game
      * @param {MouseEvent} eventData
      * @private
      */
-    _onClick (eventData)
-    {
+    _onClick (eventData) {
         let hitted = false;
 
         this._profiles.forEach(testHit.bind(this));
@@ -224,8 +218,7 @@ class Game
             }
         }
 
-        function testHit (profile)
-        {
+        function testHit (profile) {
             if (
                 hitted === false &&
                 profile.hitTest(- this._left + eventData.clientX, - this._top + eventData.clientY)
@@ -242,8 +235,7 @@ class Game
      * Notify the DOM that the score changed
      * @private
      */
-    _updateScore ()
-    {
+    _updateScore () {
         this._scoreBoard.innerHTML = this._score;
     }
 }

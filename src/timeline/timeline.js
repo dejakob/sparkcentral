@@ -9,8 +9,7 @@ class Timeline
      * Timeline constructor
      * @constructor
      */
-    constructor ()
-    {
+    constructor () {
         // 30 fps
         this.tick = parseInt(1000 / TIMELINE_FPS, 10);
         this.items = [];
@@ -27,8 +26,7 @@ class Timeline
      * @param {Animation} animation
      * @cascade
      */
-    add (from, to, animation)
-    {
+    add (from, to, animation) {
         if (typeof from !== 'number') {
             throw new Error(`${from} is not a valid start time.`);
         }
@@ -41,7 +39,7 @@ class Timeline
             throw new Error(`${animation} is not a valid animation.`);
         }
 
-        return this.insert([ [ from, to, animation ] ]);
+        return this.insert([[from, to, animation]]);
     }
 
     /**
@@ -49,13 +47,11 @@ class Timeline
      * @param {Array.<Array>} sequence
      * @cascade
      */
-    insert (sequence)
-    {
+    insert (sequence) {
         const timelineVm = this;
         let i = 0;
 
         sequence.forEach(cacheHashMapForTimeline);
-
         this.items.sort((a, b) => a.from > b.from);
         this._endTimeOfSequence = i;
 
@@ -64,10 +60,17 @@ class Timeline
         /**
          * Cache a hash map of the timeline moments to optimize the interval
          */
-        function cacheHashMapForTimeline (sequenceItem)
-        {
+        function cacheHashMapForTimeline (sequenceItem) {
             const from = sequenceItem[0];
             const to = sequenceItem[1];
+
+            if (typeof from !== 'number') {
+                throw new Error('start time should be a valid number');
+            }
+
+            if (typeof to !== 'number') {
+                throw new Error('end time should be a valid number');
+            }
 
             timelineVm.items.push(sequenceItem);
 
@@ -81,7 +84,7 @@ class Timeline
                     timelineVm._timelineMapping[i].push(indexOfItem);
                 }
                 else {
-                    timelineVm._timelineMapping[i] = [ indexOfItem ];
+                    timelineVm._timelineMapping[i] = [indexOfItem];
                 }
             }
         }
@@ -91,23 +94,20 @@ class Timeline
      * Start the timeline sequence
      * @cascade
      */
-    start ()
-    {
+    start () {
         const timelineVm = this;
         let currentTick = 0;
 
         this._interval = setInterval(eachTick, timelineVm.tick);
 
-        return this;
-
         /**
          * Method gets called on each tick of the interval
          */
-        function eachTick ()
-        {
+        function eachTick () {
             const indexesOfSequenceItems = timelineVm._timelineMapping[currentTick];
 
-            if (typeof indexesOfSequenceItems !== 'undefined' && Array.isArray(indexesOfSequenceItems)) {
+            if (typeof indexesOfSequenceItems !== 'undefined' &&
+                Array.isArray(indexesOfSequenceItems)) {
                 indexesOfSequenceItems.forEach(callAnimationOfSequenceItem);
             }
 
@@ -124,22 +124,19 @@ class Timeline
          * Call the onTick of the animation related to the sequenceItem given
          * @param {Number} sequenceItemIndex
          */
-        function callAnimationOfSequenceItem (sequenceItemIndex)
-        {
+        function callAnimationOfSequenceItem (sequenceItemIndex) {
             const sequenceItem = timelineVm.items[sequenceItemIndex];
             const from = sequenceItem[0];
             const to = sequenceItem[1];
             const animation = sequenceItem[2];
 
-            if (!(animation instanceof Animation)) {
-                throw new Error(`${animation} is not an Animation`);
-            }
+            if (animation instanceof Animation) {
+                const percentage = (currentTick - from) / (to - from);
+                animation.onTick(percentage);
 
-            const percentage = (currentTick - from) / (to - from);
-            animation.onTick(percentage);
-
-            if (currentTick > to - timelineVm.tick) {
-                animation.onComplete();
+                if (currentTick > to - timelineVm.tick) {
+                    animation.onComplete();
+                }
             }
         }
     }
@@ -148,8 +145,7 @@ class Timeline
     /**
      * Stop the timeline sequence
      */
-    stop ()
-    {
+    stop () {
         clearInterval(this._interval);
     }
 }

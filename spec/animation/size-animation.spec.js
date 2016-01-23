@@ -44,7 +44,7 @@ describe('SizeAnimation class ', () => {
             sizeAnimation.onTick(0.2);
             expect(sizeAnimation.currentValue).toBe('32px');
             sizeAnimation.onTick(0.26);
-            expect(sizeAnimation.currentValue).toBe('35px');
+            expect(sizeAnimation.currentValue).toBe('35.6px');
             sizeAnimation.onTick(0.5);
             expect(sizeAnimation.currentValue).toBe('50px');
             sizeAnimation.onTick(0.75);

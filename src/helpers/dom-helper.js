@@ -9,8 +9,7 @@ class DomHelper
      * @param {Object} styleProps
      * @static
      */
-    static attachStyle (element, styleProps)
-    {
+    static attachStyle (element, styleProps) {
         const originalStyleString = element.getAttribute('style') || '';
         let allProps = {};
 
@@ -22,12 +21,12 @@ class DomHelper
                 .split(';')
                 .filter(declaration => declaration.trim() !== '')
                 .map(declaration => declaration.split(':').map(prop => prop.trim()))
-                .forEach(property => allProps[ StringHelper.dashToCamel(property[0]) ] = property[1]);
+                .forEach(property => allProps[StringHelper.dashToCamel(property[0])] = property[1]);
 
             Object.keys(styleProps)
                 .forEach(propName => {
                     if (styleProps.hasOwnProperty(propName)) {
-                        allProps[ StringHelper.dashToCamel(propName) ] = styleProps[propName];
+                        allProps[StringHelper.dashToCamel(propName)] = styleProps[propName];
                     }
                 });
         }
@@ -41,14 +40,12 @@ class DomHelper
     }
 
     /**
-     * Create a button (link HTML element)
-     * @param {String} link
+     * Create a button (link HTML element) {String} link
      * @param {String} description
      * @returns {Element}
      * @static
      */
-    static createLinkButton (link, description)
-    {
+    static createLinkButton (link, description) {
         const webButton = document.createElement('a');
 
         webButton.setAttribute('class', 'btn btn-secondary');

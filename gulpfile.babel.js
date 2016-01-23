@@ -8,11 +8,14 @@ import uglify from 'gulp-uglify';
 import rename from 'gulp-rename';
 import paths from './config/paths.config.es5.js';
 import childProcess from 'child_process';
+import eslint from 'gulp-eslint';
 
 gulp.task('default', defaultTask);
 gulp.task('watch', watchTask);
-gulp.task('test', testTask);
-gulp.task('karma', [ 'test' ]);
+
+gulp.task('karma', karmaTask);
+gulp.task('eslint', esLintTask);
+gulp.task('test', ['karma', 'eslint']);
 
 /**
  * Default gulp task
@@ -36,7 +39,7 @@ function watchTask ()
     return watch('./src/**/*.js', defaultTask);
 }
 
-function testTask (done)
+function karmaTask (done)
 {
     const shell = false;
     const exec = childProcess.exec;
@@ -56,4 +59,16 @@ function testTask (done)
         console.log(stdout);
         done();
     }
+}
+
+function esLintTask ()
+{
+    let esLintFiles = paths.src;
+    esLintFiles.push('!./src/**/*.config.js');
+    esLintFiles.push('!./src/**/description.js');
+
+    return gulp.src(esLintFiles)
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 }

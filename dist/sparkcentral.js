@@ -14,6 +14,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @author Jakob Kerkhove (@dejakob)
+ * @source http://github.com/dejakob/sparkcentral
  * @description
  *  Code example for my Job application at SparkCentral
  *  Go to http://www.sparkcentral.com/ and paste all code into the console.
@@ -44,7 +45,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return DomHelper.attachStyle(elements.hiringBanner, { fontSize: fontSize });
         }
     })], [2000, 3000, new TextAnimation({
-        from: elements.homeTitle.innerText,
+        from: elements.homeTitle.innerText || elements.homeTitle.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homeTitle.innerHTML = text;
@@ -59,7 +60,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return elements.homeTitle.innerHTML = text;
         }
     })], [2500, 3500, new TextAnimation({
-        from: elements.homeParagraph.innerText,
+        from: elements.homeParagraph.innerText || elements.homeParagraph.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
@@ -77,7 +78,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return elements.homeParagraph.innerHTML = text;
         }
     })], [3700, 4200, new TextAnimation({
-        from: elements.homePrimaryButton.innerText,
+        from: elements.homePrimaryButton.innerText || elements.homePrimaryButton.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homePrimaryButton.innerHTML = text;
@@ -90,11 +91,16 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         }
     })]];
 };
+
 var ANIMATION_TYPE = {
     COLOR: 'color',
     SIZE: 'size',
     TEXT: 'text'
 };
+
+/**
+ * Animation class
+ */
 
 var Animation = function () {
     /**
@@ -156,17 +162,22 @@ var Animation = function () {
 
     return Animation;
 }();
+
 /**
- * Color Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * ColorAnimation class
  */
 
 var ColorAnimation = function (_Animation) {
     _inherits(ColorAnimation, _Animation);
+
+    /**
+     * Color Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function ColorAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -204,17 +215,22 @@ var ColorAnimation = function (_Animation) {
 
     return ColorAnimation;
 }(Animation);
+
 /**
- * Resize Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * SizeAnimation class
  */
 
 var SizeAnimation = function (_Animation2) {
     _inherits(SizeAnimation, _Animation2);
+
+    /**
+     * Resize Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function SizeAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -249,8 +265,13 @@ var SizeAnimation = function (_Animation2) {
          * @private
          */
         value: function _updateProps() {
-            this._from = parseInt(this._from, 10);
-            this._to = parseInt(this._to, 10);
+            if (typeof this._from === 'string') {
+                this._from = Number(this._from.replace('px', ''));
+            }
+
+            if (typeof this._to === 'string') {
+                this._to = Number(this._to.replace('px', ''));
+            }
         }
 
         /**
@@ -260,7 +281,7 @@ var SizeAnimation = function (_Animation2) {
     }, {
         key: 'onTick',
         value: function onTick(percentageComplete) {
-            var size = parseInt((this._to - this._from) * percentageComplete + this._from, 10);
+            var size = Number((this._to - this._from) * percentageComplete + this._from);
 
             this.currentValue = size + 'px';
             _get(Object.getPrototypeOf(SizeAnimation.prototype), 'onTick', this).call(this);
@@ -312,16 +333,20 @@ var TEXT_ANIMATION_DIRECTIONS = {
 };
 
 /**
- * Color Animation constructor
- * @param {Object} [options]
- *  @param {RgbColor} options.from
- *  @param {RgbColor} options.to
- * @extends {Animation}
- * @constructor
+ * TextAnimation class
  */
 
 var TextAnimation = function (_Animation3) {
     _inherits(TextAnimation, _Animation3);
+
+    /**
+     * Color Animation constructor
+     * @param {Object} [options]
+     *  @param {RgbColor} options.from
+     *  @param {RgbColor} options.to
+     * @extends {Animation}
+     * @constructor
+     */
 
     function TextAnimation() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -380,7 +405,7 @@ var TextAnimation = function (_Animation3) {
                 text = this.to + this.textDifference.substring(0, lengthOfDifference);
             }
 
-            this.currentValue = text || '&nbsp;';
+            this.currentValue = text === '' ? '&nbsp;' : text;
             _get(Object.getPrototypeOf(TextAnimation.prototype), 'onTick', this).call(this);
         }
 
@@ -435,6 +460,7 @@ var TextAnimation = function (_Animation3) {
 
     return TextAnimation;
 }(Animation);
+
 /**
  * Helper methods for DOM manipulation
  */
@@ -487,8 +513,7 @@ var DomHelper = function () {
         }
 
         /**
-         * Create a button (link HTML element)
-         * @param {String} link
+         * Create a button (link HTML element) {String} link
          * @param {String} description
          * @returns {Element}
          * @static
@@ -510,6 +535,7 @@ var DomHelper = function () {
 
     return DomHelper;
 }();
+
 /**
  * RgbColor class
  */
@@ -576,19 +602,20 @@ var RgbColor = function () {
                 throw new Error('Please enter a string to create a RgbColor');
             }
 
-            var hexStringLength = hexString.length;
+            var newHexString = hexString;
+            var newHexStringLength = hexString.length;
 
-            if (hexString.indexOf('#') === 0) {
-                hexString = hexString.substr(1, hexStringLength - 1);
+            if (newHexString.indexOf('#') === 0) {
+                newHexString = newHexString.substr(1, newHexStringLength - 1);
             }
 
-            if (hexString.length === 3) {
-                hexString = hexString.split('').map(function (tint) {
+            if (newHexString.length === 3) {
+                newHexString = newHexString.split('').map(function (tint) {
                     return '' + tint + tint;
                 }).join('');
             }
 
-            var splittedHex = hexString.match(/.{2}/g);
+            var splittedHex = newHexString.match(/.{2}/g);
 
             if (Array.isArray(splittedHex) && splittedHex.length === 3) {
                 var decimalColors = splittedHex.map(function (colorHex) {
@@ -597,7 +624,7 @@ var RgbColor = function () {
                 return RgbColor.fromArray(decimalColors);
             }
 
-            throw new Error(hexString + ' is not a valid hex color value');
+            throw new Error(newHexString + ' is not a valid hex color value');
         }
     }]);
 
@@ -690,11 +717,13 @@ var GameProfile = function () {
     _createClass(GameProfile, [{
         key: 'paint',
         value: function paint(context) {
-            context.beginPath();
-            context.strokeStyle = '#fff';
-            context.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
-            context.stroke();
-            context.closePath();
+            var canvasContext = context;
+
+            canvasContext.beginPath();
+            canvasContext.strokeStyle = '#fff';
+            canvasContext.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
+            canvasContext.stroke();
+            canvasContext.closePath();
         }
 
         /**
@@ -721,6 +750,7 @@ var GameProfile = function () {
 
 var GAME_PROFILE_IMAGE = new Image();
 GAME_PROFILE_IMAGE.src = 'data:image/jpeg;base64,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';
+
 var GAME_FPS = 30;
 var GAME_SCORE_NEEDED_TO_WIN = 1000;
 
@@ -789,6 +819,7 @@ var GAME_LEVEL = {
     800: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTER_SPEED),
     815: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTEST_SPEED)
 };
+
 /**
  * Game class
  */
@@ -904,6 +935,7 @@ var Game = function () {
 
         /**
          * Start the game
+         * @cascade
          */
 
     }, {
@@ -911,11 +943,13 @@ var Game = function () {
         value: function start() {
             var TICK = Math.round(1000 / GAME_FPS);
             this._interval = setInterval(this._onTick.bind(this), TICK);
+            return this;
         }
 
         /**
          * Stop the game
          * @param {Boolean} [reason]
+         * @cascade
          */
 
     }, {
@@ -931,6 +965,8 @@ var Game = function () {
             } else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
                 this._options.onWin.call(this);
             }
+
+            return this;
         }
 
         /**
@@ -1000,17 +1036,19 @@ var Game = function () {
              * @param {GameProfile} profile
              */
             function moveProfile(profile) {
-                if (profile.direction === GAME_DIRECTION.LTR) {
-                    profile.x += profile.speed;
+                var currentProfile = profile;
 
-                    if (profile.x > this._width + profile.width) {
-                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                if (currentProfile.direction === GAME_DIRECTION.LTR) {
+                    currentProfile.x += currentProfile.speed;
+
+                    if (currentProfile.x > this._width + currentProfile.width) {
+                        this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                     }
                 } else {
-                    profile.x -= profile.speed;
+                    currentProfile.x -= currentProfile.speed;
 
-                    if (profile.x < -profile.width) {
-                        this._profiles.splice(this._profiles.indexOf(profile), 1);
+                    if (currentProfile.x < -currentProfile.width) {
+                        this._profiles.splice(this._profiles.indexOf(currentProfile), 1);
                     }
                 }
             }
@@ -1125,7 +1163,6 @@ var Timeline = function () {
             var i = 0;
 
             sequence.forEach(cacheHashMapForTimeline);
-
             this.items.sort(function (a, b) {
                 return a.from > b.from;
             });
@@ -1139,6 +1176,14 @@ var Timeline = function () {
             function cacheHashMapForTimeline(sequenceItem) {
                 var from = sequenceItem[0];
                 var to = sequenceItem[1];
+
+                if (typeof from !== 'number') {
+                    throw new Error('start time should be a valid number');
+                }
+
+                if (typeof to !== 'number') {
+                    throw new Error('end time should be a valid number');
+                }
 
                 timelineVm.items.push(sequenceItem);
 
@@ -1166,8 +1211,6 @@ var Timeline = function () {
             var currentTick = 0;
 
             this._interval = setInterval(eachTick, timelineVm.tick);
-
-            return this;
 
             /**
              * Method gets called on each tick of the interval
@@ -1198,15 +1241,13 @@ var Timeline = function () {
                 var to = sequenceItem[1];
                 var animation = sequenceItem[2];
 
-                if (!(animation instanceof Animation)) {
-                    throw new Error(animation + ' is not an Animation');
-                }
+                if (animation instanceof Animation) {
+                    var percentage = (currentTick - from) / (to - from);
+                    animation.onTick(percentage);
 
-                var percentage = (currentTick - from) / (to - from);
-                animation.onTick(percentage);
-
-                if (currentTick > to - timelineVm.tick) {
-                    animation.onComplete();
+                    if (currentTick > to - timelineVm.tick) {
+                        animation.onComplete();
+                    }
                 }
             }
         }
@@ -1224,6 +1265,7 @@ var Timeline = function () {
 
     return Timeline;
 }();
+
 /**
  * @author Jakob Kerkhove
  * @description Code example for job application
@@ -1393,7 +1435,6 @@ var SparkCentral = function () {
              * Show the winners page
              */
             function showWinnersPage() {
-
                 vm.elements.homeTitle.innerHTML = 'Congratulations! <br />' + 'You found a perfect fit for the job \'Front End Developer\'.';
                 vm.elements.homeParagraph.innerHTML = 'Feel free to contact the candidate...';
 
@@ -1411,7 +1452,6 @@ var SparkCentral = function () {
              * Show the winners page
              */
             function showLosersPage() {
-
                 vm.elements.homeTitle.innerHTML = 'Game over!';
                 vm.elements.homeParagraph.innerHTML = 'You failed, but remember: <br />' + 'Success is the result of perfection, ' + 'hard work, learning from failure, loyalty, and persistence. (Colin Powell)';
 
@@ -1435,6 +1475,7 @@ var SparkCentral = function () {
 
     return SparkCentral;
 }();
+
 /**
  * Start the application
  */
