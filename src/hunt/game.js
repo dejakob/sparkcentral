@@ -105,16 +105,19 @@ class Game
 
     /**
      * Start the game
+     * @cascade
      */
     start ()
     {
         const TICK = Math.round(1000 / GAME_FPS);
         this._interval = setInterval(this._onTick.bind(this), TICK);
+        return this;
     }
 
     /**
      * Stop the game
      * @param {Boolean} [reason]
+     * @cascade
      */
     stop (reason = GAME_STOP_REASON.LOOSE)
     {
@@ -127,6 +130,8 @@ class Game
         else if (reason === GAME_STOP_REASON.WIN && typeof this._options.onWin === 'function') {
             this._options.onWin.call(this);
         }
+
+        return this;
     }
 
     /**

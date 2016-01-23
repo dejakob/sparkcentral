@@ -187,7 +187,6 @@ class SparkCentral
          */
         function showLosersPage ()
         {
-
             vm.elements.homeTitle.innerHTML = 'Game over!';
             vm.elements.homeParagraph.innerHTML = 'You failed, but remember: <br />' +
                 'Success is the result of perfection, ' +

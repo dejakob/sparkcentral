@@ -90,6 +90,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
         }
     })]];
 };
+
 var ANIMATION_TYPE = {
     COLOR: 'color',
     SIZE: 'size',
@@ -156,6 +157,7 @@ var Animation = function () {
 
     return Animation;
 }();
+
 /**
  * Color Animation constructor
  * @param {Object} [options]
@@ -204,6 +206,7 @@ var ColorAnimation = function (_Animation) {
 
     return ColorAnimation;
 }(Animation);
+
 /**
  * Resize Animation constructor
  * @param {Object} [options]
@@ -435,6 +438,7 @@ var TextAnimation = function (_Animation3) {
 
     return TextAnimation;
 }(Animation);
+
 /**
  * Helper methods for DOM manipulation
  */
@@ -510,6 +514,7 @@ var DomHelper = function () {
 
     return DomHelper;
 }();
+
 /**
  * RgbColor class
  */
@@ -690,11 +695,13 @@ var GameProfile = function () {
     _createClass(GameProfile, [{
         key: 'paint',
         value: function paint(context) {
-            context.beginPath();
-            context.strokeStyle = '#fff';
-            context.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
-            context.stroke();
-            context.closePath();
+            var canvasContext = context;
+
+            canvasContext.beginPath();
+            canvasContext.strokeStyle = '#fff';
+            canvasContext.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
+            canvasContext.stroke();
+            canvasContext.closePath();
         }
 
         /**
@@ -721,6 +728,7 @@ var GameProfile = function () {
 
 var GAME_PROFILE_IMAGE = new Image();
 GAME_PROFILE_IMAGE.src = 'data:image/jpeg;base64,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';
+
 var GAME_FPS = 30;
 var GAME_SCORE_NEEDED_TO_WIN = 1000;
 
@@ -789,6 +797,7 @@ var GAME_LEVEL = {
     800: new GameProfile(GAME_DIRECTION.RTL, GAME_FASTER_SPEED),
     815: new GameProfile(GAME_DIRECTION.LTR, GAME_FASTEST_SPEED)
 };
+
 /**
  * Game class
  */
@@ -1125,7 +1134,6 @@ var Timeline = function () {
             var i = 0;
 
             sequence.forEach(cacheHashMapForTimeline);
-
             this.items.sort(function (a, b) {
                 return a.from > b.from;
             });
@@ -1139,6 +1147,14 @@ var Timeline = function () {
             function cacheHashMapForTimeline(sequenceItem) {
                 var from = sequenceItem[0];
                 var to = sequenceItem[1];
+
+                if (typeof from !== 'number') {
+                    throw new Error('start time should be a valid number');
+                }
+
+                if (typeof to !== 'number') {
+                    throw new Error('end time should be a valid number');
+                }
 
                 timelineVm.items.push(sequenceItem);
 
@@ -1166,8 +1182,6 @@ var Timeline = function () {
             var currentTick = 0;
 
             this._interval = setInterval(eachTick, timelineVm.tick);
-
-            return this;
 
             /**
              * Method gets called on each tick of the interval
@@ -1198,15 +1212,13 @@ var Timeline = function () {
                 var to = sequenceItem[1];
                 var animation = sequenceItem[2];
 
-                if (!(animation instanceof Animation)) {
-                    throw new Error(animation + ' is not an Animation');
-                }
+                if (animation instanceof Animation) {
+                    var percentage = (currentTick - from) / (to - from);
+                    animation.onTick(percentage);
 
-                var percentage = (currentTick - from) / (to - from);
-                animation.onTick(percentage);
-
-                if (currentTick > to - timelineVm.tick) {
-                    animation.onComplete();
+                    if (currentTick > to - timelineVm.tick) {
+                        animation.onComplete();
+                    }
                 }
             }
         }
@@ -1224,6 +1236,7 @@ var Timeline = function () {
 
     return Timeline;
 }();
+
 /**
  * @author Jakob Kerkhove
  * @description Code example for job application

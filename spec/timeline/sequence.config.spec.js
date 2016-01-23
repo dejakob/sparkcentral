@@ -2,6 +2,7 @@ describe('ANIMATION_SEQUENCE config ', () => {
     let sparkCentral = null;
 
     beforeEach(() => {
+        document.body.innerHTML = DOM_MOCK;
         sparkCentral = new SparkCentral();
     });
 
