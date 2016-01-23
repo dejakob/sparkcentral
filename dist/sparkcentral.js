@@ -45,7 +45,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return DomHelper.attachStyle(elements.hiringBanner, { fontSize: fontSize });
         }
     })], [2000, 3000, new TextAnimation({
-        from: elements.homeTitle.innerText,
+        from: elements.homeTitle.innerText || elements.homeTitle.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homeTitle.innerHTML = text;
@@ -60,7 +60,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return elements.homeTitle.innerHTML = text;
         }
     })], [2500, 3500, new TextAnimation({
-        from: elements.homeParagraph.innerText,
+        from: elements.homeParagraph.innerText || elements.homeParagraph.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homeParagraph.innerHTML = text;
@@ -78,7 +78,7 @@ var ANIMATION_SEQUENCE = function ANIMATION_SEQUENCE(design, elements) {
             return elements.homeParagraph.innerHTML = text;
         }
     })], [3700, 4200, new TextAnimation({
-        from: elements.homePrimaryButton.innerText,
+        from: elements.homePrimaryButton.innerText || elements.homePrimaryButton.innerHTML,
         to: '',
         onChange: function onChange(text) {
             return elements.homePrimaryButton.innerHTML = text;

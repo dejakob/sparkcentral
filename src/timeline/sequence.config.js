@@ -31,7 +31,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         2000,
         3000,
         new TextAnimation({
-            from: elements.homeTitle.innerText,
+            from: elements.homeTitle.innerText || elements.homeTitle.innerHTML,
             to: '',
             onChange: text => elements.homeTitle.innerHTML = text,
             onComplete: () => elements.homeSecondaryButton.parentNode.removeChild(elements.homeSecondaryButton)
@@ -50,7 +50,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         2500,
         3500,
         new TextAnimation({
-            from: elements.homeParagraph.innerText,
+            from: elements.homeParagraph.innerText || elements.homeParagraph.innerHTML,
             to: '',
             onChange: text => elements.homeParagraph.innerHTML = text
         })
@@ -77,7 +77,7 @@ const ANIMATION_SEQUENCE = (design, elements) => [
         3700,
         4200,
         new TextAnimation({
-            from: elements.homePrimaryButton.innerText,
+            from: elements.homePrimaryButton.innerText || elements.homePrimaryButton.innerHTML,
             to: '',
             onChange: text => elements.homePrimaryButton.innerHTML = text
         })
