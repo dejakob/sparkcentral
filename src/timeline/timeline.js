@@ -41,7 +41,7 @@ class Timeline
             throw new Error(`${animation} is not a valid animation.`);
         }
 
-        return this.insert([ [ from, to, animation ] ]);
+        return this.insert([[from, to, animation]]);
     }
 
     /**
@@ -81,7 +81,7 @@ class Timeline
                     timelineVm._timelineMapping[i].push(indexOfItem);
                 }
                 else {
-                    timelineVm._timelineMapping[i] = [ indexOfItem ];
+                    timelineVm._timelineMapping[i] = [indexOfItem];
                 }
             }
         }
