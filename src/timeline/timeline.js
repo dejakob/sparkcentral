@@ -55,7 +55,6 @@ class Timeline
         let i = 0;
 
         sequence.forEach(cacheHashMapForTimeline);
-
         this.items.sort((a, b) => a.from > b.from);
         this._endTimeOfSequence = i;
 
@@ -68,6 +67,14 @@ class Timeline
         {
             const from = sequenceItem[0];
             const to = sequenceItem[1];
+
+            if (typeof from !== 'number') {
+                throw new Error('start time should be a valid number');
+            }
+
+            if (typeof to !== 'number') {
+                throw new Error('end time should be a valid number');
+            }
 
             timelineVm.items.push(sequenceItem);
 
@@ -97,8 +104,6 @@ class Timeline
         let currentTick = 0;
 
         this._interval = setInterval(eachTick, timelineVm.tick);
-
-        return this;
 
         /**
          * Method gets called on each tick of the interval
@@ -132,15 +137,13 @@ class Timeline
             const to = sequenceItem[1];
             const animation = sequenceItem[2];
 
-            if (!(animation instanceof Animation)) {
-                throw new Error(`${animation} is not an Animation`);
-            }
+            if (animation instanceof Animation) {
+                const percentage = (currentTick - from) / (to - from);
+                animation.onTick(percentage);
 
-            const percentage = (currentTick - from) / (to - from);
-            animation.onTick(percentage);
-
-            if (currentTick > to - timelineVm.tick) {
-                animation.onComplete();
+                if (currentTick > to - timelineVm.tick) {
+                    animation.onComplete();
+                }
             }
         }
     }
