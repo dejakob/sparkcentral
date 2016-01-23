@@ -21,11 +21,13 @@ class GameProfile
      */
     paint (context)
     {
-        context.beginPath();
-        context.strokeStyle = '#fff';
-        context.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
-        context.stroke();
-        context.closePath();
+        const canvasContext = context;
+
+        canvasContext.beginPath();
+        canvasContext.strokeStyle = '#fff';
+        canvasContext.drawImage(GAME_PROFILE_IMAGE, this.x, this.y, this.width, this.height);
+        canvasContext.stroke();
+        canvasContext.closePath();
     }
 
     /**
