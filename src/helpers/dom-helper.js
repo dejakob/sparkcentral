@@ -22,12 +22,12 @@ class DomHelper
                 .split(';')
                 .filter(declaration => declaration.trim() !== '')
                 .map(declaration => declaration.split(':').map(prop => prop.trim()))
-                .forEach(property => allProps[ StringHelper.dashToCamel(property[0]) ] = property[1]);
+                .forEach(property => allProps[StringHelper.dashToCamel(property[0])] = property[1]);
 
             Object.keys(styleProps)
                 .forEach(propName => {
                     if (styleProps.hasOwnProperty(propName)) {
-                        allProps[ StringHelper.dashToCamel(propName) ] = styleProps[propName];
+                        allProps[StringHelper.dashToCamel(propName)] = styleProps[propName];
                     }
                 });
         }

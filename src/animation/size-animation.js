@@ -16,7 +16,7 @@ class SizeAnimation extends Animation
         ];
 
         if (VALID_TYPES.indexOf(typeof options.from) === -1 || VALID_TYPES.indexOf(typeof options.to) === -1) {
-            throw new Error('from and to option should be defined to create a resize animation.')
+            throw new Error('from and to option should be defined to create a resize animation.');
         }
 
         super(options);

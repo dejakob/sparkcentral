@@ -11,7 +11,7 @@ class ColorAnimation extends Animation
     constructor (options = {})
     {
         if (!(options.from instanceof RgbColor && options.to instanceof RgbColor)) {
-            throw new Error('from and to option should be defined to create a color animation.')
+            throw new Error('from and to option should be defined to create a color animation.');
         }
 
         super(options);

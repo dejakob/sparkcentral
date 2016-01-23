@@ -16,7 +16,7 @@ class TextAnimation extends Animation
     constructor (options = {})
     {
         if (typeof options.from !== 'string' || typeof options.to !== 'string') {
-            throw new Error('from and to option should be strings to create a text animation.')
+            throw new Error('from and to option should be strings to create a text animation.');
         }
 
         super(options);
